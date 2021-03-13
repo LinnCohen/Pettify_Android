@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/userslist_list"
+        android:name="com.pettify.ui.UserList"
+        android:label="fragment_student_list"
+        tools:layout="@layout/fragment_user_list" />
+
+    <fragment
         android:id="@+id/nav_gallery"
         android:name="com.pettify.ui.gallery.GalleryFragment"
         android:label="@string/menu_gallery"
