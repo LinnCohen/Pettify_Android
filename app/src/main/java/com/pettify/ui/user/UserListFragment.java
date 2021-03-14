@@ -1,4 +1,4 @@
-package com.pettify.ui;
+package com.pettify.ui.user;
 
 import android.os.Bundle;
 
@@ -16,12 +16,12 @@ import android.widget.TextView;
 
 import com.pettify.R;
 import com.pettify.model.user.User;
-import com.pettify.model.user.UserModel;
+import com.pettify.model.user.UserModelSql;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class UserList extends Fragment {
+public class UserListFragment extends Fragment {
 
     List<User> userList = new LinkedList<User>();
     ProgressBar pb;
@@ -53,13 +53,13 @@ public class UserList extends Fragment {
         user.setId(""+id);
         user.setName("name " + id);
         pb.setVisibility(View.VISIBLE);
-        UserModel.instance.addUser(user, () -> reloadData());
+        UserModelSql.instance.addUser(user, () -> reloadData());
     }
 
     void reloadData(){
         pb.setVisibility(View.VISIBLE);
         addBtn.setEnabled(false);
-        UserModel.instance.getAllUsers(data -> {
+        UserModelSql.instance.getAllUsers(data -> {
             userList = data;
             for (User user : data) {
                 Log.d("TAG","user id: " + user.getId());

@@ -11,7 +11,21 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class UserFireBase {
+import java.util.List;
+
+public class UserModelFireBase {
+    public static final UserModelFireBase instance = new UserModelFireBase();
+
+    private UserModelFireBase() {
+    }
+
+    public void getAllUsers(UserModelSql.Listener<List<User>> listener) {
+
+    }
+
+    public void addUser(User user, UserModelSql.EmptyListener listener) {
+
+    }
 //
 //    public static User getCurrentUser() {
 //        FirebaseAuth auth = FirebaseAuth.getInstance();
