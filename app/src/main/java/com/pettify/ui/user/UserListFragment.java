@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.pettify.R;
 import com.pettify.model.user.User;
+import com.pettify.model.user.UserModel;
 import com.pettify.model.user.UserModelSql;
 
 import java.util.LinkedList;
@@ -53,13 +54,13 @@ public class UserListFragment extends Fragment {
         user.setId(""+id);
         user.setName("name " + id);
         pb.setVisibility(View.VISIBLE);
-        UserModelSql.instance.addUser(user, () -> reloadData());
+        UserModel.instance.addUser(user, () -> reloadData());
     }
 
     void reloadData(){
         pb.setVisibility(View.VISIBLE);
         addBtn.setEnabled(false);
-        UserModelSql.instance.getAllUsers(data -> {
+        UserModel.instance.getAllUsers(data -> {
             userList = data;
             for (User user : data) {
                 Log.d("TAG","user id: " + user.getId());
@@ -74,6 +75,9 @@ public class UserListFragment extends Fragment {
 
         @Override
         public int getCount() {
+            if (userList == null) {
+                return 0;
+            }
             return userList.size();
         }
 
