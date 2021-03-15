@@ -22,7 +22,7 @@ public class ReportModel {
         reportModelFireBase.getAllReports(listener);
     }
 
-    public void addUser(final Report report, final ReportModelSql.EmptyListener listener) {
+    public void addReport(final Report report, final ReportModelSql.EmptyListener listener) {
         reportModelFireBase.addReport(report, listener);
     }
 
