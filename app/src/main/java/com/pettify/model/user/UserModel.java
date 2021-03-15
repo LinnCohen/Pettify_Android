@@ -22,12 +22,17 @@ public class UserModel {
         void onComplete();
     }
 
-    public void getAllUsers(final UserModelSql.Listener<List<User>> listener) {
+    public void getAllUsers(final Listener<List<User>> listener) {
         userModelFireBase.getAllUsers(listener);
     }
 
-    public void addUser(final User user, final UserModelSql.EmptyListener listener) {
+    public void addUser(final User user, final EmptyListener listener) {
         userModelFireBase.addUser(user, listener);
     }
+
+    public void updateUser(final User user, final EmptyListener listener) {
+        userModelFireBase.updateUser(user, listener);
+    }
+
 
 }
