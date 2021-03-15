@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.pettify.R;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModelSql;
+import com.pettify.model.report.ReportModel;
+import com.pettify.model.report.ReportModelFireBase;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -53,13 +55,23 @@ public class ReportListFragment extends Fragment {
         report.setId(""+id);
         report.setDescription("description of report #" + id);
         pb.setVisibility(View.VISIBLE);
-        ReportModelSql.instance.addReport(report, () -> reloadData());
+//        ReportModelSql.instance.addReport(report, () -> reloadData());
+        ReportModelFireBase.instance.addReport(report, () -> reloadData());
     }
 
     void reloadData(){
         pb.setVisibility(View.VISIBLE);
         addBtn.setEnabled(false);
-        ReportModelSql.instance.getAllReports(data -> {
+//        ReportModel.instance.getAllReports(data -> {
+//            reportList = data;
+//            for (Report report : data) {
+//                Log.d("TAG","report id: " + report.getId());
+//            }
+//            pb.setVisibility(View.INVISIBLE);
+//            addBtn.setEnabled(true);
+//            adapter.notifyDataSetChanged();
+//        });
+        ReportModel.instance.getAllReports(data -> {
             reportList = data;
             for (Report report : data) {
                 Log.d("TAG","report id: " + report.getId());
