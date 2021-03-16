@@ -1,5 +1,8 @@
 package com.pettify.model.report;
 
+import com.pettify.model.user.User;
+import com.pettify.model.user.UserModel;
+
 import java.util.List;
 
 public class ReportModel {
@@ -18,12 +21,16 @@ public class ReportModel {
         void onComplete();
     }
 
-    public void getAllReports(final ReportModelSql.Listener<List<Report>> listener) {
+    public void getAllReports(final Listener<List<Report>> listener) {
         reportModelFireBase.getAllReports(listener);
     }
 
     public void addReport(final Report report, final ReportModelSql.EmptyListener listener) {
         reportModelFireBase.addReport(report, listener);
+    }
+
+    public void updateReport(final Report report, final EmptyListener listener) {
+        reportModelFireBase.updateReport(report, listener);
     }
 
 }
