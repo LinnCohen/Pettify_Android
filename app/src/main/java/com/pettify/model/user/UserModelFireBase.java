@@ -13,7 +13,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -25,37 +28,49 @@ import static android.content.ContentValues.TAG;
 public class UserModelFireBase {
     private static final String USERS_COLLECTION = "users";
     public static final UserModelFireBase instance = new UserModelFireBase();
+    private  FirebaseFirestore db;
 
     private UserModelFireBase() {
+        db = FirebaseFirestore.getInstance();
     }
 
-    public void getAllUsers(UserModelSql.Listener<List<User>> listener) {
+    public void getAllUsers(UserModel.Listener<List<User>> listener) {
         List<User> users = new LinkedList<>();
-        listener.onComplete(users);
-    }
-
-    public void addUser(User user, UserModelSql.EmptyListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> newUser = new HashMap<>();
-        newUser.put("name", user.name);
-        newUser.put("email", user.email);
-
-        // Add a new document with a generated ID
         db.collection(USERS_COLLECTION)
-                .add(newUser)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding document", e);
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            users.add(document.toObject(User.class));
+                        }
+                        listener.onComplete(users);
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
                     }
                 });
+    }
 
+    public void addUser(User user, UserModel.EmptyListener listener) {
+        db.collection(USERS_COLLECTION)
+                .document(user.getId())
+                .set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("TAG", "user with id:" + user.getId() + " was created");
+                        listener.onComplete();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("TAG", "user with id:" + user.getId() + " failed to be created");
+                        listener.onComplete();
+                    }}
+                    );
+    }
+
+    public void updateUser(User user, UserModel.EmptyListener listener) {
+        addUser(user, listener);
     }
 //
 //    public static User getCurrentUser() {
