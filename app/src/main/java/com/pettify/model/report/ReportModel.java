@@ -25,7 +25,7 @@ public class ReportModel {
         reportModelFireBase.getAllReports(listener);
     }
 
-    public void addReport(final Report report, final ReportModelSql.EmptyListener listener) {
+    public void addReport(final Report report, final ReportModel.EmptyListener listener) {
         reportModelFireBase.addReport(report, listener);
     }
 

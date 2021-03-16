@@ -14,13 +14,13 @@
     <fragment
         android:id="@+id/userslist_list"
         android:name="com.pettify.ui.user.UserListFragment"
-        android:label="fragment_student_list"
+        android:label="Users List"
         tools:layout="@layout/fragment_user_list" />
 
     <fragment
         android:id="@+id/reportslist_list"
         android:name="com.pettify.ui.report.ReportListFragment"
-        android:label="fragment_student_list"
+        android:label="Reports Feed"
         tools:layout="@layout/fragment_report_list" />
 
     <fragment
