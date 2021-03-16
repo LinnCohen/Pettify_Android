@@ -53,11 +53,12 @@ public class ReportListFragment extends Fragment {
     private void addReport() {
 //        reportDescription.setText("");
         addBtn.setEnabled(false);
-        int id = reportList.size();
+        int id = reportList.size()+1;
         Report report = new Report();
         report.setId(""+id);
         report.setDescription(reportDescription.getText().toString());
         pb.setVisibility(View.VISIBLE);
+        reportList.add(report);
         ReportModel.instance.addReport(report, () -> reloadData());
 //        ReportModelFireBase.instance.addReport(report, () -> reloadData());
     }
