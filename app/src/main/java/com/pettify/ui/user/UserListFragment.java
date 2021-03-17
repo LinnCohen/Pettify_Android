@@ -3,6 +3,8 @@ package com.pettify.ui.user;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,23 +19,23 @@ import android.widget.TextView;
 import com.pettify.R;
 import com.pettify.model.user.User;
 import com.pettify.model.user.UserModel;
-import com.pettify.model.user.UserModelSql;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class UserListFragment extends Fragment {
 
-    List<User> userList = new LinkedList<User>();
+    private UserListViewModel userListViewModel;
     ProgressBar pb;
     Button addBtn;
     MyAdapter adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_user_list, container, false);
-
+        userListViewModel = new ViewModelProvider(this).get(UserListViewModel.class);
         ListView list = view.findViewById(R.id.userslist_list);
         pb = view.findViewById(R.id.userslist_progress);
         addBtn = view.findViewById(R.id.userslist_add_btn);
@@ -43,13 +45,19 @@ public class UserListFragment extends Fragment {
         list.setAdapter(adapter);
 
         addBtn.setOnClickListener(view1 -> addUser());
+        userListViewModel.getUserList().observe(getViewLifecycleOwner(), new Observer<List<User>>() {
+            @Override
+            public void onChanged(List<User> users) {
+                    adapter.notifyDataSetChanged();
+            }
+        });
         reloadData();
         return view;
     }
 
     private void addUser() {
         addBtn.setEnabled(false);
-        int id = userList.size();
+        int id = userListViewModel.getUserList().getValue().size();
         User user = new User();
         user.setId(""+id);
         user.setName("name " + id);
@@ -60,14 +68,9 @@ public class UserListFragment extends Fragment {
     void reloadData(){
         pb.setVisibility(View.VISIBLE);
         addBtn.setEnabled(false);
-        UserModel.instance.getAllUsers(data -> {
-            userList = data;
-            for (User user : data) {
-                Log.d("TAG","user id: " + user.getId());
-            }
+        UserModel.instance.refreshAllUsers(() -> {
             pb.setVisibility(View.INVISIBLE);
             addBtn.setEnabled(true);
-            adapter.notifyDataSetChanged();
         });
     }
 
@@ -75,10 +78,10 @@ public class UserListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            if (userList == null) {
+            if (userListViewModel.getUserList().getValue() == null) {
                 return 0;
             }
-            return userList.size();
+            return userListViewModel.getUserList().getValue().size();
         }
 
         @Override
@@ -98,7 +101,7 @@ public class UserListFragment extends Fragment {
             }
 
             TextView tv = view.findViewById(R.id.listrow_test_tv);
-            User user = userList.get(i);
+            User user = userListViewModel.getUserList().getValue().get(i);
             tv.setText(user.getId());
             return view;
         }
