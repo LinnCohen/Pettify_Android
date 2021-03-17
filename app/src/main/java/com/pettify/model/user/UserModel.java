@@ -2,6 +2,9 @@ package com.pettify.model.user;
 
 import android.os.AsyncTask;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.pettify.model.AppLocalDb;
 
 import java.util.List;
@@ -22,8 +25,16 @@ public class UserModel {
         void onComplete();
     }
 
-    public void getAllUsers(final Listener<List<User>> listener) {
-        userModelFireBase.getAllUsers(listener);
+    MutableLiveData<List<User>> userList = new MutableLiveData<>();
+    public MutableLiveData<List<User>> getAllUsers() {
+        return userList;
+    }
+
+    public void refreshAllUsers(EmptyListener listener) {
+        userModelFireBase.getAllUsers(data -> {
+            userList.setValue(data);
+            listener.onComplete();
+        });
     }
 
     public void getUser(String id, final Listener<User> listener) {
