@@ -72,6 +72,34 @@ public class UserModelFireBase {
     public void updateUser(User user, UserModel.EmptyListener listener) {
         addUser(user, listener);
     }
+
+    public void getUser(String id, UserModel.Listener<User> listener) {
+        db.collection(USERS_COLLECTION)
+                .document(id)
+                .get()
+                .addOnCompleteListener(task -> {
+                    User user = null;
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot doc = task.getResult();
+                        if (doc != null) {
+                            user = doc.toObject(User.class);
+                        }
+                        listener.onComplete(user);
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                });
+
+    }
+
+    public void deleteUser(String id, UserModel.EmptyListener listener) {
+        db.collection(USERS_COLLECTION)
+                .document(id)
+                .delete()
+                .addOnCompleteListener(task -> {
+                   listener.onComplete();
+                });
+    }
 //
 //    public static User getCurrentUser() {
 //        FirebaseAuth auth = FirebaseAuth.getInstance();

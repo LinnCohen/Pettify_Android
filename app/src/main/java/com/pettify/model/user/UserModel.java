@@ -26,6 +26,10 @@ public class UserModel {
         userModelFireBase.getAllUsers(listener);
     }
 
+    public void getUser(String id, final Listener<User> listener) {
+            userModelFireBase.getUser(id, listener);
+    }
+
     public void addUser(final User user, final EmptyListener listener) {
         userModelFireBase.addUser(user, listener);
     }
@@ -34,5 +38,8 @@ public class UserModel {
         userModelFireBase.updateUser(user, listener);
     }
 
+    public void deleteUser(String id, final EmptyListener listener) {
+        userModelFireBase.deleteUser(id, listener);
+    }
 
 }
