@@ -1,5 +1,7 @@
 package com.pettify.model.report;
 
+import androidx.lifecycle.MutableLiveData;
+
 import com.pettify.model.Model;
 import com.pettify.model.user.User;
 import com.pettify.model.user.UserModel;
@@ -14,8 +16,16 @@ public class ReportModel implements Model {
 
     private ReportModel(){}
 
-    public void getAllReports(final Listener<List<Report>> listener) {
-        reportModelFireBase.getAllReports(listener);
+    MutableLiveData<List<Report>> reportsList = new MutableLiveData<>();
+    public MutableLiveData<List<Report>> getAllReports() {
+        return reportsList;
+    }
+
+    public void refreshAllReports(EmptyListener listener) {
+        reportModelFireBase.getAllReports(data -> {
+            reportsList.setValue(data);
+            listener.onComplete();
+        });
     }
 
     public void addReport(final Report report, final ReportModel.EmptyListener listener) {

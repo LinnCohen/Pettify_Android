@@ -3,6 +3,8 @@ package com.pettify.ui.report;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,16 +18,16 @@ import android.widget.TextView;
 
 import com.pettify.R;
 import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModelSql;
 import com.pettify.model.report.ReportModel;
-import com.pettify.model.report.ReportModelFireBase;
+import com.pettify.model.user.User;
+import com.pettify.model.user.UserModel;
+import com.pettify.ui.user.UserListViewModel;
 
-import java.util.LinkedList;
 import java.util.List;
 
 public class ReportListFragment extends Fragment {
 
-    List<Report> reportList = new LinkedList<Report>();
+    private ReportListViewModel reportListViewModel;
     ProgressBar pb;
     Button addBtn;
     MyAdapter adapter;
@@ -35,6 +37,7 @@ public class ReportListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
+        reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
         ListView list = view.findViewById(R.id.reportslist_list);
         pb = view.findViewById(R.id.reportslist_progress);
@@ -46,44 +49,33 @@ public class ReportListFragment extends Fragment {
         list.setAdapter(adapter);
 
         addBtn.setOnClickListener(view1 -> addReport());
+        reportListViewModel.getReports().observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
+            @Override
+            public void onChanged(List<Report> reports) {
+                adapter.notifyDataSetChanged();
+            }
+        });
         reloadData();
         return view;
     }
 
     private void addReport() {
-//        reportDescription.setText("");
         addBtn.setEnabled(false);
-        Log.d("TAG", String.valueOf(reportList.size()));
-        int id = reportList.size();
+        Log.d("TAG", String.valueOf(reportListViewModel.getReports().getValue().size()));
+        int id = reportListViewModel.getReports().getValue().size();
         Report report = new Report();
         report.setId(""+id);
         report.setDescription(reportDescription.getText().toString());
         pb.setVisibility(View.VISIBLE);
-        reportList.add(report);
         ReportModel.instance.addReport(report, () -> reloadData());
-//        ReportModelFireBase.instance.addReport(report, () -> reloadData());
     }
 
     void reloadData(){
         pb.setVisibility(View.VISIBLE);
         addBtn.setEnabled(false);
-//        ReportModel.instance.getAllReports(data -> {
-//            reportList = data;
-//            for (Report report : data) {
-//                Log.d("TAG","report id: " + report.getId());
-//            }
-//            pb.setVisibility(View.INVISIBLE);
-//            addBtn.setEnabled(true);
-//            adapter.notifyDataSetChanged();
-//        });
-        ReportModel.instance.getAllReports(data -> {
-            reportList = data;
-            for (Report report : data) {
-                Log.d("TAG","report id: " + report.getId());
-            }
+        ReportModel.instance.refreshAllReports(() -> {
             pb.setVisibility(View.INVISIBLE);
             addBtn.setEnabled(true);
-            adapter.notifyDataSetChanged();
         });
     }
 
@@ -91,10 +83,10 @@ public class ReportListFragment extends Fragment {
 
         @Override
         public int getCount() {
-            if (reportList == null) {
+            if (reportListViewModel.getReports().getValue() == null) {
                 return 0;
             }
-            return reportList.size();
+            return reportListViewModel.getReports().getValue().size();
         }
 
         @Override
@@ -114,7 +106,7 @@ public class ReportListFragment extends Fragment {
             }
 
             TextView tv = view.findViewById(R.id.listrow_test_tv);
-            Report report = reportList.get(i);
+            Report report = reportListViewModel.getReports().getValue().get(i);
             tv.setText(report.getId() + " " + report.getDescription());
             return view;
         }
