@@ -1,15 +1,13 @@
 package com.pettify.model.user;
 
-import android.os.AsyncTask;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.pettify.model.AppLocalDb;
+import com.pettify.model.Model;
 
 import java.util.List;
 
-public class UserModel {
+public class UserModel implements Model {
 
     public final static UserModel instance = new UserModel();
     UserModelFireBase userModelFireBase = UserModelFireBase.instance;
@@ -17,13 +15,6 @@ public class UserModel {
 
     private UserModel(){}
 
-    public interface Listener<T> {
-        void onComplete(T data);
-    }
-
-    public interface EmptyListener {
-        void onComplete();
-    }
 
     MutableLiveData<List<User>> userList = new MutableLiveData<>();
     public MutableLiveData<List<User>> getAllUsers() {
