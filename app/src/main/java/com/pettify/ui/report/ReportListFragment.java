@@ -17,6 +17,8 @@ import android.widget.TextView;
 import com.pettify.R;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModelSql;
+import com.pettify.model.report.ReportModel;
+import com.pettify.model.report.ReportModelFireBase;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class ReportListFragment extends Fragment {
     ProgressBar pb;
     Button addBtn;
     MyAdapter adapter;
+    TextView reportDescription;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -36,6 +39,7 @@ public class ReportListFragment extends Fragment {
         ListView list = view.findViewById(R.id.reportslist_list);
         pb = view.findViewById(R.id.reportslist_progress);
         addBtn = view.findViewById(R.id.reportslist_add_btn);
+        reportDescription = view.findViewById(R.id.new_report_description);
         pb.setVisibility(View.INVISIBLE);
 
         adapter = new MyAdapter();
@@ -47,19 +51,31 @@ public class ReportListFragment extends Fragment {
     }
 
     private void addReport() {
+//        reportDescription.setText("");
         addBtn.setEnabled(false);
-        int id = reportList.size();
+        int id = reportList.size()+1;
         Report report = new Report();
         report.setId(""+id);
-        report.setDescription("description of report #" + id);
+        report.setDescription(reportDescription.getText().toString());
         pb.setVisibility(View.VISIBLE);
-        ReportModelSql.instance.addReport(report, () -> reloadData());
+        reportList.add(report);
+        ReportModel.instance.addReport(report, () -> reloadData());
+//        ReportModelFireBase.instance.addReport(report, () -> reloadData());
     }
 
     void reloadData(){
         pb.setVisibility(View.VISIBLE);
         addBtn.setEnabled(false);
-        ReportModelSql.instance.getAllReports(data -> {
+//        ReportModel.instance.getAllReports(data -> {
+//            reportList = data;
+//            for (Report report : data) {
+//                Log.d("TAG","report id: " + report.getId());
+//            }
+//            pb.setVisibility(View.INVISIBLE);
+//            addBtn.setEnabled(true);
+//            adapter.notifyDataSetChanged();
+//        });
+        ReportModel.instance.getAllReports(data -> {
             reportList = data;
             for (Report report : data) {
                 Log.d("TAG","report id: " + report.getId());
@@ -74,6 +90,9 @@ public class ReportListFragment extends Fragment {
 
         @Override
         public int getCount() {
+            if (reportList == null) {
+                return 0;
+            }
             return reportList.size();
         }
 
