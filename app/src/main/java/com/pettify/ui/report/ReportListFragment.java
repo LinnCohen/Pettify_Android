@@ -53,7 +53,8 @@ public class ReportListFragment extends Fragment {
     private void addReport() {
 //        reportDescription.setText("");
         addBtn.setEnabled(false);
-        int id = reportList.size()+1;
+        Log.d("TAG", String.valueOf(reportList.size()));
+        int id = reportList.size();
         Report report = new Report();
         report.setId(""+id);
         report.setDescription(reportDescription.getText().toString());
