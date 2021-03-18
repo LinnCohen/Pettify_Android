@@ -10,10 +10,10 @@ import java.io.Serializable;
 public class User implements Serializable {
     @PrimaryKey
     @NonNull
-    private String id = "";
-    private String name = "";
+    private String id;
+    private String name;
 //    public String lastName = "";
-    private String email = "";
+    private String email;
 //    public String phoneNumber = "";
 //    public UserType userType = UserType.NOTFICATIONS;
 //    public int radius = 0;
@@ -21,8 +21,7 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(@NonNull String id, String name, String email) {
-        this.id = id;
+    public User(String name, String email) {
         this.name = name;
         this.email = email;
     }

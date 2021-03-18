@@ -4,8 +4,12 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -96,23 +100,23 @@ public class UserModelFireBase {
 //        return firebaseUser == null ? null : factory(firebaseUser);
 //    }
 //
-//    public static void register(final User user, String password, final UserModel.Listener<Boolean> listener) {
-//        final FirebaseAuth auth = FirebaseAuth.getInstance();
-//        auth.createUserWithEmailAndPassword(user.email, password)
-//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            updateUserProfile(user, listener);
-//                        } else {
-//                            Log.w("TAG", "Failed to register user", task.getException());
-//                            if (listener != null) {
-//                                listener.onComplete(false);
-//                            }
-//                        }
-//                    }
-//                });
-//    }
+    public void register(final User user, String password, final UserModel.Listener<Boolean> listener) {
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.createUserWithEmailAndPassword(user.getEmail(), password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            listener.onComplete(true);
+                        } else {
+                            Log.w("TAG", "Failed to register user", task.getException());
+                            if (listener != null) {
+                                listener.onComplete(false);
+                            }
+                        }
+                    }
+                });
+    }
 //
 //    public static void login(String email, String password, final UserModel.Listener<Boolean> listener) {
 //        final FirebaseAuth auth = FirebaseAuth.getInstance();

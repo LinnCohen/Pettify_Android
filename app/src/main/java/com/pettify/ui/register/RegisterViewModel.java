@@ -1,19 +1,18 @@
 package com.pettify.ui.register;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.pettify.model.Model;
+import com.pettify.model.user.User;
+import com.pettify.model.user.UserModel;
 
 public class RegisterViewModel extends ViewModel {
 
-    private MutableLiveData<String> mText;
-
     public RegisterViewModel() {
-        mText = new MutableLiveData<>();
-        mText.setValue("This is register fragment");
     }
 
-    public LiveData<String> getText() {
-        return mText;
+    public void registerUser(User user, String password, Model.Listener<Boolean> listener) {
+        UserModel userModel = UserModel.instance;
+        userModel.registerUser(user, password, listener);
     }
 }
