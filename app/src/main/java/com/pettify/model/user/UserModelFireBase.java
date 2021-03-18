@@ -121,18 +121,15 @@ public class UserModelFireBase {
     public static void login(String email, String password, final UserModel.Listener<Boolean> listener) {
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            if (listener != null) {
-                                listener.onComplete(true);
-                            }
-                        } else {
-                            Log.i("TAG", "Failed to login user", task.getException());
-                            if (listener != null) {
-                                listener.onComplete(false);
-                            }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (listener != null) {
+                            listener.onComplete(true);
+                        }
+                    } else {
+                        Log.i("TAG", "Failed to login user", task.getException());
+                        if (listener != null) {
+                            listener.onComplete(false);
                         }
                     }
                 });

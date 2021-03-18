@@ -28,7 +28,7 @@ public class LoginFragment extends Fragment {
         View loginButton = root.findViewById(R.id.login_but);
         loginButton.setOnClickListener(buttonView -> {
             TextView email = root.findViewById(R.id.login_email);
-            TextView password = root.findViewById(R.id.login_email);
+            TextView password = root.findViewById(R.id.login_password);
             authViewModel.loginUser(email.getText().toString(), password.getText().toString(),
                     isSuccess -> {
                         if (isSuccess) {

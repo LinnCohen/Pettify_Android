@@ -37,6 +37,9 @@ public class RegisterFragment extends Fragment {
                             navController.navigateUp();
                             navController.navigateUp();
                         }
+                        else {
+                            //show error
+                        }
                     });
         });
         return root;
