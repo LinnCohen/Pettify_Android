@@ -23,13 +23,13 @@ public class RegisterFragment extends Fragment {
         registerViewModel =
                 new ViewModelProvider(this).get(RegisterViewModel.class);
         View root = inflater.inflate(R.layout.fragment_register, container, false);
-        final TextView textView = root.findViewById(R.id.text_register);
-        registerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
+       // final TextView textView = root.findViewById(R.id.text_register);
+//        registerViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+//            @Override
+//            public void onChanged(@Nullable String s) {
+//                textView.setText(s);
+//            }
+//        });
         return root;
     }
 }
