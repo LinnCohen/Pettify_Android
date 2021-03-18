@@ -6,13 +6,12 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -25,14 +24,17 @@ public class ReportModelFireBase {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void getAllReports(ReportModel.Listener<List<Report>> listener) {
+    public void getAllReports(long lastUpdated, ReportModel.Listener<List<Report>> listener) {
+        Timestamp ts = new Timestamp(lastUpdated,0);
         List<Report> reports = new LinkedList<>();
-        db.collection(REPORTS_COLLECTION)
+        db.collection(REPORTS_COLLECTION).whereGreaterThanOrEqualTo("lastUpdated",ts)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         for (DocumentSnapshot document : task.getResult()) {
-                            reports.add(document.toObject(Report.class));
+                            Report report = new Report();
+                            report.fromMap(document.getData());
+                            reports.add(report);
                         }
                         listener.onComplete(reports);
                     } else {
@@ -44,7 +46,7 @@ public class ReportModelFireBase {
     public void addReport(Report report, ReportModel.EmptyListener listener) {
         db.collection(REPORTS_COLLECTION)
                 .document(report.getId())
-                .set(report)
+                .set(report.toMap())
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {

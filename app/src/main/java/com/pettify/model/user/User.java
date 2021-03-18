@@ -10,14 +10,13 @@ import java.io.Serializable;
 public class User implements Serializable {
     @PrimaryKey
     @NonNull
-    public String id = "";
-    public String name = "";
+    private String id = "";
+    private String name = "";
 //    public String lastName = "";
-    public String email = "";
+    private String email = "";
 //    public String phoneNumber = "";
 //    public UserType userType = UserType.NOTFICATIONS;
 //    public int radius = 0;
-    long lastUpdated;
 
     public User() {
     }
@@ -53,11 +52,4 @@ public class User implements Serializable {
         this.email = email;
     }
 
-    public long getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(long lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
 }

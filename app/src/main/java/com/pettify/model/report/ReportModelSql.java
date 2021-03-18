@@ -1,7 +1,14 @@
 package com.pettify.model.report;
 
 import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.pettify.model.AppLocalDb;
+import com.pettify.model.Model;
+import com.pettify.model.user.User;
+
 import java.util.List;
 
 public class ReportModelSql {
@@ -9,39 +16,13 @@ public class ReportModelSql {
 
     private ReportModelSql() {
     }
-    public interface Listener<T> {
-        void onComplete(T data);
+
+
+    public LiveData<List<Report>> getAllReports() {
+       return AppLocalDb.db.reportDao().getAll();
     }
 
-    public interface EmptyListener {
-        void onComplete();
-    }
-
-    public void getAllReports(final Listener<List<Report>> listener) {
-        class MyAsyncTask extends AsyncTask{
-            List<Report> data;
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                data = AppLocalDb.db.reportDao().getAll();
-                try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(Object o) {
-                super.onPostExecute(o);
-                listener.onComplete(data);
-            }
-        }
-        MyAsyncTask task = new MyAsyncTask();
-        task.execute();
-    }
-
-    public void addReport(final Report report, final EmptyListener listener) {
+    public void addReport(final Report report, final Model.EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
