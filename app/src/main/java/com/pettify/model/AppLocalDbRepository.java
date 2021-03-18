@@ -3,10 +3,10 @@ package com.pettify.model;
 import androidx.room.Database;
 import androidx.room.RoomDatabase;
 
-import com.pettify.model.user.User;
-import com.pettify.model.user.UserDao;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportDao;
+import com.pettify.model.user.User;
+import com.pettify.model.user.UserDao;
 
 @Database(entities = {User.class, Report.class}, version = 2)
 public abstract class AppLocalDbRepository extends RoomDatabase {

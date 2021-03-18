@@ -1,11 +1,6 @@
 package com.pettify.ui.report;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +11,13 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.pettify.R;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
-import com.pettify.model.user.User;
-import com.pettify.model.user.UserModel;
-import com.pettify.ui.user.UserListViewModel;
 
 import java.util.List;
 

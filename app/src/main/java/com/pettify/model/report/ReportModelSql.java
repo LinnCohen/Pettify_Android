@@ -3,11 +3,9 @@ package com.pettify.model.report;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.pettify.model.AppLocalDb;
 import com.pettify.model.Model;
-import com.pettify.model.user.User;
 
 import java.util.List;
 
