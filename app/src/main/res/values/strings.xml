@@ -16,4 +16,5 @@
     <string name="users">users</string>
     <string name="reports">reports</string>
     <string name="add">ADD</string>
+    <string name="menu_register">Sign in / Login</string>
 </resources>
