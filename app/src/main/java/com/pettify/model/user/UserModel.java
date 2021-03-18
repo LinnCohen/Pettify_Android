@@ -49,4 +49,9 @@ public class UserModel implements Model {
     public void registerUser(User user, String password, final UserModel.Listener<Boolean> listener) {
         userModelFireBase.register(user, password, listener);
     }
+
+    public void login(String email, String password, final UserModel.Listener<Boolean> listener) {
+        userModelFireBase.login(email, password, listener);
+    }
+
 }

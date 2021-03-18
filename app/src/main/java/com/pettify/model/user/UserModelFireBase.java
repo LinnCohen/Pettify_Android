@@ -117,26 +117,26 @@ public class UserModelFireBase {
                     }
                 });
     }
-//
-//    public static void login(String email, String password, final UserModel.Listener<Boolean> listener) {
-//        final FirebaseAuth auth = FirebaseAuth.getInstance();
-//        auth.signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        if (task.isSuccessful()) {
-//                            if (listener != null) {
-//                                listener.onComplete(true);
-//                            }
-//                        } else {
-//                            Log.i("TAG", "Failed to login user", task.getException());
-//                            if (listener != null) {
-//                                listener.onComplete(false);
-//                            }
-//                        }
-//                    }
-//                });
-//    }
+
+    public static void login(String email, String password, final UserModel.Listener<Boolean> listener) {
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            if (listener != null) {
+                                listener.onComplete(true);
+                            }
+                        } else {
+                            Log.i("TAG", "Failed to login user", task.getException());
+                            if (listener != null) {
+                                listener.onComplete(false);
+                            }
+                        }
+                    }
+                });
+    }
 //
 //    public static void logout() {
 //        FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -156,12 +156,5 @@ public class UserModelFireBase {
 //        });
 //    }
 //
-//    private static User factory(FirebaseUser firUser) {
-//        return new User(
-//                firUser.getUid(),
-//                firUser.getDisplayName(),
-//                firUser.getEmail()
-//        );
-//    }
 
 }
