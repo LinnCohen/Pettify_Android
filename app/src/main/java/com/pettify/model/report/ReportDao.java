@@ -1,5 +1,6 @@
 package com.pettify.model.report;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -11,8 +12,7 @@ import java.util.List;
 @Dao
 public interface ReportDao {
     @Query("select * from Report")
-    //LiveData<List<Report>> getAll();
-    List<Report> getAll();
+    LiveData<List<Report>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(Report... reports);
