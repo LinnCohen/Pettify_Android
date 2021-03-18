@@ -1,4 +1,4 @@
-package com.pettify.ui.register;
+package com.pettify.ui.auth;
 
 import androidx.lifecycle.ViewModel;
 
