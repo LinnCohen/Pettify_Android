@@ -16,7 +16,7 @@
     <string name="users">users</string>
     <string name="reports">reports</string>
     <string name="add">ADD</string>
-    <string name="menu_register">Sign in</string>
+    <string name="menu_register">Register</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
