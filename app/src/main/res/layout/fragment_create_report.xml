@@ -42,7 +42,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_report_title" />
 
@@ -64,7 +64,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_report_desc" />
 
@@ -130,7 +130,7 @@
             android:layout_marginStart="14dp"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:inputType="textPersonName"
+            android:inputType="text"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/create_address" />
 

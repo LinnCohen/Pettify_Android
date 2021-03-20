@@ -57,9 +57,9 @@ public class CreateReportFragment extends Fragment {
         upload_image_btn = view.findViewById(R.id.create_add_images);
         reportImageView = view.findViewById(R.id.create_image_ph);
         submit_btn = view.findViewById(R.id.create_report_btn);
-        report_title = view.findViewById(R.id.create_report_title);
-        report_description = view.findViewById(R.id.create_report_desc);
-        report_address = view.findViewById(R.id.create_address);
+        report_title = view.findViewById(R.id.create_title_text);
+        report_description = view.findViewById(R.id.create_desc_text);
+        report_address = view.findViewById(R.id.create_report_address);
 
         submit_btn.setOnClickListener(view1 -> addReport());
 
@@ -107,10 +107,7 @@ public class CreateReportFragment extends Fragment {
 
     private void addReport() {
         submit_btn.setEnabled(false);
-//        Log.d("TAG", String.valueOf(reportListViewModel.getReports().getValue().size()));
-//        int id = reportListViewModel.getReports().getValue().size();
         Report report = new Report();
-//        report.setId(""+id);
         report.setDescription(report_description.getText().toString());
         report.setTitle(report_title.getText().toString());
         report.setAddress(report_address.getText().toString());
