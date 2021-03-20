@@ -107,11 +107,16 @@ public class CreateReportFragment extends Fragment {
 
     private void addReport() {
         submit_btn.setEnabled(false);
-        Log.d("TAG", String.valueOf(reportListViewModel.getReports().getValue().size()));
-        int id = reportListViewModel.getReports().getValue().size();
+//        Log.d("TAG", String.valueOf(reportListViewModel.getReports().getValue().size()));
+//        int id = reportListViewModel.getReports().getValue().size();
         Report report = new Report();
-        report.setId(""+id);
+//        report.setId(""+id);
         report.setDescription(report_description.getText().toString());
+        report.setTitle(report_title.getText().toString());
+        report.setAddress(report_address.getText().toString());
+        report.setAnimal_type(report_animal_type);
+        report.setReport_type(report_type);
+        //TODO - set image
         ReportModel.instance.addReport(report, () -> reloadData());
     }
 

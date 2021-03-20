@@ -43,21 +43,21 @@ public class ReportModelFireBase {
 
     public void addReport(Report report, ReportModel.EmptyListener listener) {
         db.collection(REPORTS_COLLECTION)
-                .document(report.getId())
-                .set(report.toMap())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("TAG", "report with id:" + report.getId() + " was created");
-                        listener.onComplete();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d("TAG", "report with id:" + report.getId() + " failed to be created");
-                listener.onComplete();
-            }}
-        );
+//                .document(report.getId())
+                .add(report.toMap());
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {
+//                    @Override
+//                    public void onSuccess(Void aVoid) {
+//                        Log.d("TAG", "report with id:" + report.getId() + " was created");
+//                        listener.onComplete();
+//                    }})
+//                .addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d("TAG", "report with id:" + report.getId() + " failed to be created");
+//                listener.onComplete();
+//            }}
+//        );
     }
 
     public void updateReport(Report report, ReportModel.EmptyListener listener) {
