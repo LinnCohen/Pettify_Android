@@ -36,44 +36,44 @@ public class ReportListFragment extends Fragment {
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
         ListView list = view.findViewById(R.id.reportslist_list);
-        pb = view.findViewById(R.id.reportslist_progress);
-        addBtn = view.findViewById(R.id.reportslist_add_btn);
-        reportDescription = view.findViewById(R.id.new_report_description);
-        pb.setVisibility(View.INVISIBLE);
+//        pb = view.findViewById(R.id.reportslist_progress);
+//        addBtn = view.findViewById(R.id.reportslist_add_btn);
+//        reportDescription = view.findViewById(R.id.new_report_description);
+//        pb.setVisibility(View.INVISIBLE);
 
         adapter = new MyAdapter();
         list.setAdapter(adapter);
 
-        addBtn.setOnClickListener(view1 -> addReport());
+//        addBtn.setOnClickListener(view1 -> addReport());
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
             @Override
             public void onChanged(List<Report> reports) {
                 adapter.notifyDataSetChanged();
             }
         });
-        reloadData();
+//        reloadData();
         return view;
     }
 
-    private void addReport() {
-        addBtn.setEnabled(false);
-        Log.d("TAG", String.valueOf(reportListViewModel.getReports().getValue().size()));
-        int id = reportListViewModel.getReports().getValue().size();
-        Report report = new Report();
-        report.setId(""+id);
-        report.setDescription(reportDescription.getText().toString());
-        pb.setVisibility(View.VISIBLE);
-        ReportModel.instance.addReport(report, () -> reloadData());
-    }
-
-    void reloadData(){
-        pb.setVisibility(View.VISIBLE);
-        addBtn.setEnabled(false);
-        ReportModel.instance.refreshAllReports(() -> {
-            pb.setVisibility(View.INVISIBLE);
-            addBtn.setEnabled(true);
-        });
-    }
+//    private void addReport() {
+//        addBtn.setEnabled(false);
+//        Log.d("TAG", String.valueOf(reportListViewModel.getReports().getValue().size()));
+//        int id = reportListViewModel.getReports().getValue().size();
+//        Report report = new Report();
+//        report.setId(""+id);
+//        report.setDescription(reportDescription.getText().toString());
+////        pb.setVisibility(View.VISIBLE);
+//        ReportModel.instance.addReport(report, () -> reloadData());
+//    }
+//
+//    void reloadData(){
+//        pb.setVisibility(View.VISIBLE);
+//        addBtn.setEnabled(false);
+//        ReportModel.instance.refreshAllReports(() -> {
+//            pb.setVisibility(View.INVISIBLE);
+//            addBtn.setEnabled(true);
+//        });
+//    }
 
     class MyAdapter extends BaseAdapter {
 
