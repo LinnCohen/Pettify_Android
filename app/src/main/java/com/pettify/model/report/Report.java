@@ -21,7 +21,12 @@ public class Report implements Serializable {
     private String address = "";
     private String animal_type = "";
     private String report_type = "";
-    //TODO - how to save image?
+    private String image_url = "";
+
+    public String getImage_url() { return image_url; }
+
+    public void setImage_url(String image_url) { this.image_url = image_url; }
+
     private long lastUpdated;
 
     public String getTitle() { return title; }

@@ -113,7 +113,7 @@ public class CreateReportFragment extends Fragment {
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
         report.setReport_type(report_type);
-        //TODO - set image
+//        report.setImage_url();
         ReportModel.instance.addReport(report, () -> reloadData());
     }
 
