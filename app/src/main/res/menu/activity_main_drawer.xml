@@ -19,10 +19,14 @@
         <item
             android:id="@+id/userslist_list"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="users" />
+            android:title="Users" />
         <item
             android:id="@+id/reportslist_list"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="reports" />
+            android:title="Reports" />
+        <item
+            android:id="@+id/create_report"
+            android:icon="@drawable/create_new_595b40b75ba036ed117d938a"
+            android:title="Create Report" />
     </group>
 </menu>

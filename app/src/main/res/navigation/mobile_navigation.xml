@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_report_list" />
 
     <fragment
+        android:id="@+id/create_report"
+        android:name="com.pettify.ui.report.CreateReportFragment"
+        android:label="Create Report"
+        tools:layout="@layout/fragment_create_report" />
+
+    <fragment
         android:id="@+id/nav_login"
         android:name="com.pettify.ui.auth.LoginFragment"
         android:label="@string/menu_login"
