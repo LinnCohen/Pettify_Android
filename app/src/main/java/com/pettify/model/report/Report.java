@@ -22,12 +22,11 @@ public class Report implements Serializable {
     private String animal_type = "";
     private String report_type = "";
     private String image_url = "";
+    private long lastUpdated;
 
     public String getImage_url() { return image_url; }
 
     public void setImage_url(String image_url) { this.image_url = image_url; }
-
-    private long lastUpdated;
 
     public String getTitle() { return title; }
 
@@ -86,6 +85,7 @@ public class Report implements Serializable {
         result.put("address", this.address);
         result.put("animal type", this.animal_type);
         result.put("report type", this.report_type);
+        result.put("image url", this.image_url);
         //TODO - add image
         result.put("lastUpdated", FieldValue.serverTimestamp());
         return result;
@@ -98,6 +98,7 @@ public class Report implements Serializable {
         this.address = (String)data.get("address");
         this.report_type = (String)data.get("report_type");
         this.animal_type = (String)data.get("animal_type");
+        this.image_url = (String)data.get("image url");
         //TODO - add image
         Timestamp lastUpdatedTS = (Timestamp) data.get("lastUpdated");
         this.lastUpdated = lastUpdatedTS.getSeconds();

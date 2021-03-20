@@ -18,6 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.pettify.model.Model;
 
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
@@ -87,7 +88,7 @@ public class ReportModelFireBase {
         });
     }
 
-    public void uploadImage(Bitmap imageBmp, String name, final ReportModel.UploadImageListener listener){
+    public void uploadImage(Bitmap imageBmp, String name, final Model.UploadImageListener listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference imagesRef = storage.getReference().child("images").child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();

@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.util.Listener;
 import com.pettify.model.Model;
+import com.pettify.model.Model.UploadImageListener;
 import com.pettify.model.PettifyApplication;
 
 import java.util.List;
@@ -21,10 +22,6 @@ public class ReportModel implements Model {
     ReportModelSql reportModelSql = ReportModelSql.instance;
 
     private ReportModel(){}
-
-    public interface UploadImageListener extends com.google.firebase.firestore.util.Listener<String> {
-        void onComplete(String url);
-    }
 
     LiveData<List<Report>> reportsList;
     public LiveData<List<Report>> getAllReports() {
@@ -79,7 +76,7 @@ public class ReportModel implements Model {
         reportModelFireBase.updateReport(report, listener);
     }
 
-    public void uploadImage(Bitmap imageBmp, String name, final UploadImageListener listener) {
+    public void uploadImage(Bitmap imageBmp, String name, final Model.UploadImageListener listener) {
         reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
 
