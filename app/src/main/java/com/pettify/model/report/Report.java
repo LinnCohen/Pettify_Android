@@ -86,7 +86,6 @@ public class Report implements Serializable {
         result.put("animal type", this.animal_type);
         result.put("report type", this.report_type);
         result.put("image url", this.image_url);
-        //TODO - add image
         result.put("lastUpdated", FieldValue.serverTimestamp());
         return result;
     }
@@ -99,7 +98,6 @@ public class Report implements Serializable {
         this.report_type = (String)data.get("report_type");
         this.animal_type = (String)data.get("animal_type");
         this.image_url = (String)data.get("image url");
-        //TODO - add image
         Timestamp lastUpdatedTS = (Timestamp) data.get("lastUpdated");
         this.lastUpdated = lastUpdatedTS.getSeconds();
     }
