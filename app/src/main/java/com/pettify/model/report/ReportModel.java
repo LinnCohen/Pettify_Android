@@ -2,17 +2,17 @@ package com.pettify.model.report;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SnapshotMetadata;
+import com.google.firebase.firestore.util.Listener;
 import com.pettify.model.Model;
+import com.pettify.model.Model.UploadImageListener;
 import com.pettify.model.PettifyApplication;
 
 import java.util.List;
-import java.util.Map;
 
 public class ReportModel implements Model {
 
@@ -74,6 +74,10 @@ public class ReportModel implements Model {
 
     public void updateReport(final Report report, final EmptyListener listener) {
         reportModelFireBase.updateReport(report, listener);
+    }
+
+    public void uploadImage(Bitmap imageBmp, String name, final Model.UploadImageListener listener) {
+        reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
 
 }

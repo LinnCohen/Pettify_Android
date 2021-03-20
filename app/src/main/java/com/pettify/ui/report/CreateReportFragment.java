@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -25,6 +26,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.pettify.R;
+import com.pettify.model.Model;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
@@ -113,8 +115,31 @@ public class CreateReportFragment extends Fragment {
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
         report.setReport_type(report_type);
-        //TODO - set image
-        ReportModel.instance.addReport(report, () -> reloadData());
+        BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
+        Bitmap bitmap = drawable.getBitmap();
+
+        ReportModel.instance.uploadImage(bitmap, report.getTitle(), url -> {
+            if (url == null) {
+                displayFailedError();
+            } else {
+                report.setImage_url(url);
+                ReportModel.instance.addReport(report, () -> reloadData());
+            }
+        });
+//        ReportModel.instance.addReport(report, () -> reloadData());
+    }
+
+    private void displayFailedError() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Operation Failed");
+        builder.setMessage("Saving image failed, please try again later...");
+        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        });
+        builder.show();
     }
 
     //TODO - direct to view report page

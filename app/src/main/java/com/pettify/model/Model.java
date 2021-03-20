@@ -8,4 +8,6 @@ public interface Model {
     interface EmptyListener {
         void onComplete();
     }
+
+    interface UploadImageListener extends Listener<String> { }
 }
