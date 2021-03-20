@@ -4,11 +4,14 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,19 +27,14 @@ public class ReportModelFireBase {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void getAllReports(long lastUpdated, ReportModel.Listener<List<Report>> listener) {
+    public void getAllReports(long lastUpdated, ReportModel.Listener<QuerySnapshot> listener) {
         Timestamp ts = new Timestamp(lastUpdated,0);
         List<Report> reports = new LinkedList<>();
         db.collection(REPORTS_COLLECTION).whereGreaterThanOrEqualTo("lastUpdated",ts)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
-                            Report report = new Report();
-                            report.fromMap(document.getData());
-                            reports.add(report);
-                        }
-                        listener.onComplete(reports);
+                        listener.onComplete(task.getResult());
                     } else {
                         Log.d(TAG, "Error getting documents: ", task.getException());
                     }
@@ -64,5 +62,21 @@ public class ReportModelFireBase {
 
     public void updateReport(Report report, ReportModel.EmptyListener listener) {
         addReport(report, listener);
+    }
+
+    public void deleteReport(String reportId, ReportModel.EmptyListener listener) {
+        db.collection(REPORTS_COLLECTION).document(reportId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    if (listener != null) {
+                        listener.onComplete();
+                    }
+                }
+                else {
+                    Log.w("TAG", "Failed to delete report", task.getException());
+                }
+            }
+        });
     }
 }
