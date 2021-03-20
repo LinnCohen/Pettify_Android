@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
+import com.firebase.client.core.Repo;
 import com.pettify.model.AppLocalDb;
 import com.pettify.model.Model;
 
@@ -20,11 +21,32 @@ public class ReportModelSql {
        return AppLocalDb.db.reportDao().getAll();
     }
 
+    //TODO - fix deprecated code
     public void addReport(final Report report, final Model.EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
                 AppLocalDb.db.reportDao().insertAll(report);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Object o) {
+                super.onPostExecute(o);
+                if (listener != null){
+                    listener.onComplete();
+                }
+            }
+        };
+        MyAsyncTask task = new MyAsyncTask();
+        task.execute();
+    }
+
+    public void deleteReport(Report report,  final Model.EmptyListener listener) {
+        class MyAsyncTask extends AsyncTask {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                AppLocalDb.db.reportDao().delete(report);
                 return null;
             }
 
