@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
@@ -54,6 +55,7 @@ public class ReportModel implements Model {
                 switch (documentChange.getType()) {
                     case ADDED:
                     case MODIFIED:
+                        report.setId(documentChange.getDocument().getId());
                         reportModelSql.addReport(report, null);
                         if (report.getLastUpdated() > newLastUpdated) {
                             newLastUpdated = report.getLastUpdated();

@@ -7,6 +7,9 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
@@ -47,21 +50,10 @@ public class ReportModelFireBase {
 
     public void addReport(Report report, ReportModel.EmptyListener listener) {
         db.collection(REPORTS_COLLECTION)
-//                .document(report.getId())
-                .add(report.toMap());
-//                .addOnSuccessListener(new OnSuccessListener<Void>() {
-//                    @Override
-//                    public void onSuccess(Void aVoid) {
-//                        Log.d("TAG", "report with id:" + report.getId() + " was created");
-//                        listener.onComplete();
-//                    }})
-//                .addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.d("TAG", "report with id:" + report.getId() + " failed to be created");
-//                listener.onComplete();
-//            }}
-//        );
+                .add(report.toMap())
+                .addOnSuccessListener(documentReference -> listener.onComplete())
+                .addOnFailureListener(e -> listener.onComplete()
+                );
     }
 
     public void updateReport(Report report, ReportModel.EmptyListener listener) {
