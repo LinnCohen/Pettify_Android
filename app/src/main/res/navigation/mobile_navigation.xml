@@ -12,20 +12,6 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/create_report"
-        android:name="com.pettify.ui.report.CreateReportFragment"
-        android:label="Create Report"
-        tools:layout="@layout/fragment_create_report" />
-
-    <fragment
-        android:id="@+id/main_nav_host"
-        android:name="androidx.navigation.fragment.NavHostFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph" />
-
-    <fragment
         android:id="@+id/userslist_list"
         android:name="com.pettify.ui.user.UserListFragment"
         android:label="Users List"
@@ -36,6 +22,12 @@
         android:name="com.pettify.ui.report.ReportListFragment"
         android:label="Reports Feed"
         tools:layout="@layout/fragment_report_list" />
+
+    <fragment
+        android:id="@+id/create_report"
+        android:name="com.pettify.ui.report.CreateReportFragment"
+        android:label="Create Report"
+        tools:layout="@layout/fragment_create_report" />
 
     <fragment
         android:id="@+id/nav_login"
