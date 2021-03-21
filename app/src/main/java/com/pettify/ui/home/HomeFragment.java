@@ -1,15 +1,14 @@
 package com.pettify.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -18,11 +17,19 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
+import com.pettify.model.report.Report;
+import com.pettify.model.report.ReportModel;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private HomeFragmentViewModel homeViewModel;
     GoogleMap map;
+    LiveData<List<Report>> liveData;
+    List<Report> data = new LinkedList<>();
+    String lastClicked = "";
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -43,23 +50,37 @@ public class HomeFragment extends Fragment {
         }
     };
 
+    private void setMarkers() {
+    map.clear();
+
+    }
+
+    @Override
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_home, container, false);
-//        final TextView textView = root.findViewById(R.id.text_home);
-//        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//                textView.setText(s);
-//            }
-//        });
+                new ViewModelProvider(this).get(HomeFragmentViewModel.class);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-        return root;
+
+        liveData = homeViewModel.getData();
+//        liveData.observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
+//            @Override
+//            public void onChanged(List<Recipe> recipes) {
+//                List<Recipe> reversedData = reverseData(recipes);
+//                data = reversedData;
+//                setMarkers();
+//            }
+//
+//        });
+        return view;
     }
 }

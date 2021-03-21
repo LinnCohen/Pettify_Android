@@ -1,8 +1,9 @@
 package com.pettify.model;
 
+import android.app.Application;
 import android.content.Context;
 
-public class PettifyApplication extends android.app.Application {
+public class PettifyApplication extends Application {
     public static Context context;
 
     @Override
