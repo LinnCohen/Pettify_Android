@@ -51,7 +51,7 @@ public class ReportListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-//        reloadData();
+        reloadData();
         return view;
     }
 
@@ -66,14 +66,9 @@ public class ReportListFragment extends Fragment {
 //        ReportModel.instance.addReport(report, () -> reloadData());
 //    }
 //
-//    void reloadData(){
-//        pb.setVisibility(View.VISIBLE);
-//        addBtn.setEnabled(false);
-//        ReportModel.instance.refreshAllReports(() -> {
-//            pb.setVisibility(View.INVISIBLE);
-//            addBtn.setEnabled(true);
-//        });
-//    }
+    void reloadData(){
+        ReportModel.instance.refreshAllReports(() -> { });
+    }
 
     class MyAdapter extends BaseAdapter {
 
@@ -103,7 +98,7 @@ public class ReportListFragment extends Fragment {
 
             TextView tv = view.findViewById(R.id.listrow_test_tv);
             Report report = reportListViewModel.getReports().getValue().get(i);
-            tv.setText(report.getId() + " " + report.getDescription());
+            tv.setText(report.getDescription()+" " + report.getAddress());
             return view;
         }
     }
