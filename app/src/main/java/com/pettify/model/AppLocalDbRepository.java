@@ -8,7 +8,7 @@ import com.pettify.model.report.ReportDao;
 import com.pettify.model.user.User;
 import com.pettify.model.user.UserDao;
 
-@Database(entities = {User.class, Report.class}, version = 3)
+@Database(entities = {User.class, Report.class}, version = 4)
 public abstract class AppLocalDbRepository extends RoomDatabase {
     public abstract ReportDao reportDao();
     public abstract UserDao userDao();

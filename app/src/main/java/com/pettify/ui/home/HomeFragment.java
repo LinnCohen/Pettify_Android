@@ -1,6 +1,7 @@
 package com.pettify.ui.home;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
 import com.pettify.model.report.Report;
+import com.pettify.model.report.ReportModel;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +60,7 @@ public class HomeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         homeViewModel =
                 new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
