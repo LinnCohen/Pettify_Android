@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
 import com.pettify.model.Model;
 import com.pettify.model.PettifyApplication;
@@ -108,12 +109,16 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
+        LatLng location = ReportModel.instance.getLocation();
         submit_btn.setEnabled(false);
         Report report = new Report();
         report.setDescription(report_description.getText().toString());
         report.setTitle(report_title.getText().toString());
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
+        report.setLat(new String(String.valueOf(location.latitude)));
+        report.setLng(new String(String.valueOf(location.latitude)));
+
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();

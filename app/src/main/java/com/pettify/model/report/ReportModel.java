@@ -1,16 +1,22 @@
 package com.pettify.model.report;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.util.Listener;
 import com.pettify.model.Model;
-import com.pettify.model.Model.UploadImageListener;
 import com.pettify.model.PettifyApplication;
+
 
 import java.util.List;
 
@@ -21,9 +27,11 @@ public class ReportModel implements Model {
     ReportModelFireBase reportModelFireBase = ReportModelFireBase.instance;
     ReportModelSql reportModelSql = ReportModelSql.instance;
 
-    private ReportModel(){}
+    private ReportModel() {
+    }
 
     LiveData<List<Report>> reportsList;
+
     public LiveData<List<Report>> getAllReports() {
         if (reportsList == null) {
             reportsList = reportModelSql.getAllReports();
@@ -79,5 +87,26 @@ public class ReportModel implements Model {
     public void uploadImage(Bitmap imageBmp, String name, final Model.UploadImageListener listener) {
         reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
+
+    public LatLng getLocation() {
+//            if (ActivityCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+//                return new LatLng(0, 0);
+//            }
+
+        LocationManager locationManager = (LocationManager) PettifyApplication.context.getSystemService(Context.LOCATION_SERVICE);
+        String provider = locationManager.getBestProvider(new Criteria(), true);
+        if (ActivityCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return new LatLng(0, 0);
+        }
+        Location location = locationManager.getLastKnownLocation(provider);
+            return new LatLng(location.getLatitude() , location.getLongitude());
+        }
 
 }
