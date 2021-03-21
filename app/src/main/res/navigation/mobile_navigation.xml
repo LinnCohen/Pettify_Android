@@ -12,6 +12,12 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
+        android:id="@+id/create_report"
+        android:name="com.pettify.ui.report.CreateReportFragment"
+        android:label="Create Report"
+        tools:layout="@layout/fragment_create_report" />
+
+    <fragment
         android:id="@+id/main_nav_host"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
