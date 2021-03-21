@@ -9,12 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,16 +20,16 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.pettify.R;
-import com.pettify.model.Model;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
 
-import org.w3c.dom.Text;
-
-import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
 
 
 public class CreateReportFragment extends Fragment {
@@ -126,19 +121,13 @@ public class CreateReportFragment extends Fragment {
                 ReportModel.instance.addReport(report, () -> reloadData());
             }
         });
-//        ReportModel.instance.addReport(report, () -> reloadData());
     }
 
     private void displayFailedError() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Operation Failed");
         builder.setMessage("Saving image failed, please try again later...");
-        builder.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-            }
-        });
+        builder.setNeutralButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
         builder.show();
     }
 
