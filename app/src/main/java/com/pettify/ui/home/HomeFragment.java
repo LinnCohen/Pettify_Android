@@ -104,7 +104,7 @@ public class HomeFragment extends Fragment {
             case R.id.action_hybrid:
                 map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
                 break;
-            case R.id.satellite:
+            case R.id.action_satellite:
                 map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
                 break;
             case R.id.action_terrain:
