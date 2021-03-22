@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/fragment_view_report"
-        android:name="com.pettify.ui.report.ReportListFragment"
+        android:name="com.pettify.ui.report.ViewReportFragment"
         android:label="View Report"
         tools:layout="@layout/fragment_view_report">
     </fragment>
