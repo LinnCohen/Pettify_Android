@@ -52,8 +52,8 @@ public class ReportModelFireBase {
         db.collection(REPORTS_COLLECTION)
                 .add(report.toMap())
                 .addOnSuccessListener(documentReference -> listener.onComplete())
-                .addOnFailureListener(e -> {
-                    listener.onComplete(); });
+                .addOnFailureListener(e -> listener.onComplete()
+                );
     }
 
     public void updateReport(Report report, ReportModel.EmptyListener listener) {

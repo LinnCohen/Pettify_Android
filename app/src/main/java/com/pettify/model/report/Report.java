@@ -98,7 +98,6 @@ public class Report implements Serializable {
 
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
-        result.put("id", this.id);
         result.put("description", this.description);
         result.put("title", this.title);
         result.put("address", this.address);
@@ -112,7 +111,6 @@ public class Report implements Serializable {
     }
 
     public void fromMap(Map<String, Object> data) {
-        this.id = (String)data.get("id");
         this.description = (String)data.get("description");
         this.title = (String)data.get("title");
         this.address = (String)data.get("address");
