@@ -3,12 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/reportslist_list">
+    app:startDestination="@id/create_report">
 
     <fragment
         android:id="@+id/create_report"
         android:name="com.pettify.ui.report.CreateReportFragment"
         android:label="Create Report"
-        tools:layout="@layout/fragment_create_report" />
+        tools:layout="@layout/fragment_create_report">
+        <action
+            android:id="@+id/action_create_report_to_fragment_view_report"
+            app:destination="@id/fragment_view_report" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_view_report"
+        android:name="com.pettify.ui.report.ReportListFragment"
+        android:label="View Report"
+        tools:layout="@layout/fragment_view_report">
+    </fragment>
 
 </navigation>

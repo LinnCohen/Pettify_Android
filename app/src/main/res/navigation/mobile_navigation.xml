@@ -6,6 +6,15 @@
     app:startDestination="@+id/nav_home">
 
     <fragment
+        android:id="@+id/nav_graph"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" >
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_home"
         android:name="com.pettify.ui.home.HomeFragment"
         android:label="@string/menu_home"
@@ -28,6 +37,12 @@
         android:name="com.pettify.ui.report.CreateReportFragment"
         android:label="Create Report"
         tools:layout="@layout/fragment_create_report" />
+
+    <fragment
+        android:id="@+id/view_report"
+        android:name="com.pettify.ui.report.ViewReportFragment"
+        android:label="View Report"
+        tools:layout="@layout/fragment_view_report" />
 
     <fragment
         android:id="@+id/nav_login"
