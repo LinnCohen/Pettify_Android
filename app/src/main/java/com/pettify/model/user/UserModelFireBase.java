@@ -12,6 +12,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +29,7 @@ public class UserModelFireBase {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void getAllUsers(UserModel.Listener<List<User>> listener) {
+    public void getAllUsers(Listener<List<User>> listener) {
         List<User> users = new LinkedList<>();
         db.collection(USERS_COLLECTION)
                 .get()
@@ -43,7 +45,7 @@ public class UserModelFireBase {
                 });
     }
 
-    public void addUser(User user, UserModel.EmptyListener listener) {
+    public void addUser(User user, EmptyListener listener) {
         db.collection(USERS_COLLECTION)
                 .document(user.getId())
                 .set(user)
@@ -62,11 +64,11 @@ public class UserModelFireBase {
                     );
     }
 
-    public void updateUser(User user, UserModel.EmptyListener listener) {
+    public void updateUser(User user, EmptyListener listener) {
         addUser(user, listener);
     }
 
-    public void getUser(String id, UserModel.Listener<User> listener) {
+    public void getUser(String id, Listener<User> listener) {
         db.collection(USERS_COLLECTION)
                 .document(id)
                 .get()
@@ -85,7 +87,7 @@ public class UserModelFireBase {
 
     }
 
-    public void deleteUser(String id, UserModel.EmptyListener listener) {
+    public void deleteUser(String id, EmptyListener listener) {
         db.collection(USERS_COLLECTION)
                 .document(id)
                 .delete()
@@ -100,7 +102,7 @@ public class UserModelFireBase {
 //        return firebaseUser == null ? null : factory(firebaseUser);
 //    }
 //
-    public void register(final User user, String password, final UserModel.Listener<Boolean> listener) {
+    public void register(final User user, String password, final Listener<Boolean> listener) {
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -118,7 +120,7 @@ public class UserModelFireBase {
                 });
     }
 
-    public static void login(String email, String password, final UserModel.Listener<Boolean> listener) {
+    public static void login(String email, String password, final Listener<Boolean> listener) {
         final FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {

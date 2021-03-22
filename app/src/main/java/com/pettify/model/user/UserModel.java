@@ -1,15 +1,14 @@
 package com.pettify.model.user;
 
 
-import android.content.pm.LabeledIntent;
-
 import androidx.lifecycle.MutableLiveData;
 
-import com.pettify.model.Model;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.util.List;
 
-public class UserModel implements Model {
+public class UserModel {
 
     public final static UserModel instance = new UserModel();
     UserModelFireBase userModelFireBase = UserModelFireBase.instance;
@@ -46,11 +45,11 @@ public class UserModel implements Model {
         userModelFireBase.deleteUser(id, listener);
     }
 
-    public void registerUser(User user, String password, final UserModel.Listener<Boolean> listener) {
+    public void registerUser(User user, String password, final Listener<Boolean> listener) {
         userModelFireBase.register(user, password, listener);
     }
 
-    public void login(String email, String password, final UserModel.Listener<Boolean> listener) {
+    public void login(String email, String password, final Listener<Boolean> listener) {
         userModelFireBase.login(email, password, listener);
     }
 

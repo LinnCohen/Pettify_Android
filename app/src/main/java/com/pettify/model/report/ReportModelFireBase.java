@@ -7,17 +7,15 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.pettify.model.Model;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
@@ -34,7 +32,7 @@ public class ReportModelFireBase {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void getAllReports(long lastUpdated, ReportModel.Listener<QuerySnapshot> listener) {
+    public void getAllReports(long lastUpdated, Listener<QuerySnapshot> listener) {
         Timestamp ts = new Timestamp(lastUpdated,0);
         List<Report> reports = new LinkedList<>();
         db.collection(REPORTS_COLLECTION).whereGreaterThanOrEqualTo("lastUpdated",ts)
@@ -48,7 +46,7 @@ public class ReportModelFireBase {
                 });
     }
 
-    public void addReport(Report report, ReportModel.EmptyListener listener) {
+    public void addReport(Report report, EmptyListener listener) {
         db.collection(REPORTS_COLLECTION)
                 .add(report.toMap())
                 .addOnSuccessListener(documentReference -> listener.onComplete())
@@ -56,11 +54,11 @@ public class ReportModelFireBase {
                 );
     }
 
-    public void updateReport(Report report, ReportModel.EmptyListener listener) {
+    public void updateReport(Report report, EmptyListener listener) {
         addReport(report, listener);
     }
 
-    public void deleteReport(String reportId, ReportModel.EmptyListener listener) {
+    public void deleteReport(String reportId, EmptyListener listener) {
         db.collection(REPORTS_COLLECTION).document(reportId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
@@ -76,7 +74,7 @@ public class ReportModelFireBase {
         });
     }
 
-    public void uploadImage(Bitmap imageBmp, String name, final Model.UploadImageListener listener){
+    public void uploadImage(Bitmap imageBmp, String name, final Listener<String> listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();
         final StorageReference imagesRef = storage.getReference().child("images").child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
