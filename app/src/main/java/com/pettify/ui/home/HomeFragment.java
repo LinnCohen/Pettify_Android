@@ -89,33 +89,33 @@ public class HomeFragment extends Fragment {
         liveData = homeViewModel.getData();
         return view;
     }
-
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.map, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.d("location", String.valueOf(item.getItemId()));
-
-        switch (item.getItemId()) {
-            case R.id.action_normal:
-                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-                break;
-            case R.id.action_hybrid:
-                map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-                break;
-            case R.id.action_satellite:
-                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-                break;
-            case R.id.action_terrain:
-                map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-                break;
-        }
-
-        return true;
-    }
+//
+//    @Override
+//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+//        inflater.inflate(R.menu.map, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        Log.d("location", String.valueOf(item.getItemId()));
+//
+//        switch (item.getItemId()) {
+//            case R.id.action_normal:
+//                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+//                break;
+//            case R.id.action_hybrid:
+//                map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+//                break;
+//            case R.id.action_satellite:
+//                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+//                break;
+//            case R.id.action_terrain:
+//                map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+//                break;
+//        }
+//
+//        return true;
+//    }
 }
