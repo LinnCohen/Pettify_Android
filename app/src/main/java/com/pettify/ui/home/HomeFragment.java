@@ -3,10 +3,14 @@ package com.pettify.ui.home;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,6 +26,7 @@ import com.pettify.model.report.ReportModel;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.zip.Inflater;
 
 public class HomeFragment extends Fragment {
 
@@ -31,8 +36,17 @@ public class HomeFragment extends Fragment {
     List<Report> data = new LinkedList<>();
     String lastClicked = "";
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    public HomeFragment() {
+        setHasOptionsMenu(true);
+    }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    private OnMapReadyCallback callback = new OnMapReadyCallback() {
         /**
          * Manipulates the map once available.
          * This callback is triggered when the map is ready to be used.
@@ -45,19 +59,17 @@ public class HomeFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
-          //  setMarkers();
+            map.setMapType(googleMap.MAP_TYPE_HYBRID);
+            //  setMarkers();
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.0461, 34.8516), 8));
         }
     };
 
-    private void setMarkers() {
-    map.clear();
-
-    }
-
+//    private void setMarkers() {
+//        map.clear();
+//
+//    }
     @Override
-
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -70,17 +82,36 @@ public class HomeFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-
         liveData = homeViewModel.getData();
-//        liveData.observe(getViewLifecycleOwner(), new Observer<List<Recipe>>() {
-//            @Override
-//            public void onChanged(List<Recipe> recipes) {
-//                List<Recipe> reversedData = reverseData(recipes);
-//                data = reversedData;
-//                setMarkers();
-//            }
-//
-//        });
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.map, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.d("location", String.valueOf(item.getItemId()));
+
+        switch (item.getItemId()) {
+            case R.id.action_normal:
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case R.id.action_hybrid:
+                map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case R.id.satellite:
+                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case R.id.action_terrain:
+                map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+        }
+
+        return true;
     }
 }
