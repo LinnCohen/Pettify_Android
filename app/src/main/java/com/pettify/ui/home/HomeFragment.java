@@ -20,6 +20,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.pettify.R;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
@@ -59,16 +61,18 @@ public class HomeFragment extends Fragment {
         @Override
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
-            map.setMapType(googleMap.MAP_TYPE_HYBRID);
-            //  setMarkers();
+            map.setMapType(googleMap.MAP_TYPE_NORMAL);
+            setMarkers();
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.0461, 34.8516), 8));
         }
     };
 
-//    private void setMarkers() {
-//        map.clear();
-//
-//    }
+    private void setMarkers() {
+        map.clear();
+        Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(32.0711775,34.8135377)));
+//        marker.setTag("Injured Dog");
+        marker.setTitle("Injured Dog");
+    }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
