@@ -61,8 +61,11 @@ public final class LocationUtils implements LocationListener {
         }
 
         Location location = locationManager.getLastKnownLocation(provider);
-        LatLng myCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
-        return myCoordinates.toString();
+        if(location !=null) {
+            LatLng myCoordinates = new LatLng(location.getLatitude(), location.getLongitude());
+            return myCoordinates.toString();
+        }
+        return new String("Undefind");
     }
 
 
