@@ -28,9 +28,5 @@
             android:id="@+id/create_report"
             android:icon="@drawable/create_new_595b40b75ba036ed117d938a"
             android:title="Create Report" />
-        <item
-            android:id="@+id/view_report"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="View Report" />
     </group>
 </menu>
