@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.pettify.R;
+import com.pettify.Utilities.LocationUtils;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
 
@@ -69,7 +70,6 @@ public class HomeFragment extends Fragment {
     private void setMarkers() {
         map.clear();
         Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(32.0711775,34.8135377)));
-//        marker.setTag("Injured Dog");
         marker.setTitle("Injured Dog");
     }
     @Override
@@ -86,6 +86,12 @@ public class HomeFragment extends Fragment {
             mapFragment.getMapAsync(callback);
         }
         liveData = homeViewModel.getReports();
+        String coordinates = LocationUtils.instance.getCurrentLocationAsString();
+        if(coordinates != null)
+            Log.d("location",coordinates);
+        else
+            Log.d("location","Location return has null");
+
         return view;
     }
 //

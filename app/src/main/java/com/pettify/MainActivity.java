@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity  {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         //startActivity(new Intent(this,MapsActivity.class));
-        Log.d("Currnet Location",LocationUtils.instance.getCurrentLocationAsString());
+
     }
 
     @Override
