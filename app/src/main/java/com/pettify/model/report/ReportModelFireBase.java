@@ -65,7 +65,6 @@ public class ReportModelFireBase {
                     DocumentSnapshot doc = task.getResult();
                     if (doc != null) {
                         report = new Report();
-                        Log.d("TAG", report.toString());
                         report.fromMap(doc.getData());
                     }
                 }

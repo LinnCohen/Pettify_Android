@@ -28,12 +28,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
-<<<<<<< HEAD
 import com.pettify.model.listeners.*;
-=======
 import com.pettify.Utilities.LocationUtils;
 import com.pettify.model.Model;
->>>>>>> 0bd2f2e35146f71b9ccfc3c2d0c017b43b2bf6fc
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
@@ -120,11 +117,8 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
-<<<<<<< HEAD
        // LatLng location = ReportModel.instance.getLocation();
         Date date = new Date();
-=======
->>>>>>> 0bd2f2e35146f71b9ccfc3c2d0c017b43b2bf6fc
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
         lng = String.valueOf(LocationUtils.instance.getLng());
