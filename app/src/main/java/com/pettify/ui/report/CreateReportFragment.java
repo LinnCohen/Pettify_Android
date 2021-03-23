@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
+import com.pettify.Utilities.LocationUtils;
 import com.pettify.model.Model;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
@@ -45,6 +46,8 @@ public class CreateReportFragment extends Fragment {
     TextView report_address;
     String report_animal_type;
     String report_type;
+    String lat;
+    String lng;
     Spinner animal_type_spinner;
     Spinner report_type_spinner;
     Button upload_image_btn;
@@ -104,20 +107,23 @@ public class CreateReportFragment extends Fragment {
         });;
 
         upload_image_btn.setOnClickListener(v -> uploadImage());
-
+        LatLng location = LocationUtils.instance.getCurrentLocation();
+        lat = String.valueOf(LocationUtils.instance.getLat());
+        lng = String.valueOf(LocationUtils.instance.getLng());
+        Log.d("location","from onViewCreated" + lat + lng);
         return view;
     }
 
     private void addReport() {
-       // LatLng location = ReportModel.instance.getLocation();
         submit_btn.setEnabled(false);
+        Log.d("location","from AddReport" + lat + lng);
         Report report = new Report();
         report.setDescription(report_description.getText().toString());
         report.setTitle(report_title.getText().toString());
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
-//        report.setLat(new String(String.valueOf(location.latitude)));
-//        report.setLng(new String(String.valueOf(location.latitude)));
+        report.setLat(lat);
+        report.setLng(lng);
 
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();

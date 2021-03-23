@@ -66,14 +66,18 @@ public class HomeFragment extends Fragment {
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            setMarkers();
+            Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(32.0711775, 34.8135377)));
+            marker.setTitle("Injured Dog");
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.0461, 34.8516), 8));
         }
     };
 
     private void setMarkers() {
-        Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(32.0711775, 34.8135377)));
-        marker.setTitle("Injured Dog");
+    map.clear();
+    for(Report report : data) {
+        Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))).title(report.getDescription()));
+        marker.setTag(report.getId());
+    }
     }
 
     @Override
