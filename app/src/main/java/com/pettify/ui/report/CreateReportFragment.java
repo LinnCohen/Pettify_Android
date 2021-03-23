@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,8 @@ import com.pettify.model.listeners.*;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
+
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
@@ -108,6 +111,7 @@ public class CreateReportFragment extends Fragment {
 
     private void addReport() {
        // LatLng location = ReportModel.instance.getLocation();
+        Date date = new Date();
         submit_btn.setEnabled(false);
         Report report = new Report();
         report.setDescription(report_description.getText().toString());
@@ -121,7 +125,7 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        ReportModel.instance.uploadImage(bitmap, report.getTitle(), url -> {
+        ReportModel.instance.uploadImage(bitmap, "outfit_image" + date.getTime(), url -> {
             if (url == null) {
                 displayFailedError();
             } else {
@@ -131,6 +135,7 @@ public class CreateReportFragment extends Fragment {
                     public void onComplete() {
                         //do we need to reload data after creating report?
 //                        reloadData();
+                        Log.d("Report ID: ", report.getId());
                         Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_view_report);
                     }
                 });
