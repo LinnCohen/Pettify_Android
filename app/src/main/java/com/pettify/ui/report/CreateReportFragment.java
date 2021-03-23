@@ -68,17 +68,17 @@ public class CreateReportFragment extends Fragment {
         report_description = view.findViewById(R.id.create_desc_text);
         report_address = view.findViewById(R.id.create_report_address);
 
-//        submit_btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addReport();
-//                NavController navController = Navigation.findNavController(v);
-//                navController.navigate(R.id.action_create_report_to_fragment_view_report);
-////                Navigation.createNavigateOnClickListener(R.id.action_create_report_to_fragment_view_report);
-//            }
-//        });
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addReport();
+                NavController navController = Navigation.findNavController(v);
+                navController.navigate(R.id.action_create_report_to_fragment_view_report);
+//                Navigation.createNavigateOnClickListener(R.id.action_create_report_to_fragment_view_report);
+            }
+        });
 
-        submit_btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_create_report_to_fragment_view_report));
+//        submit_btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_create_report_to_fragment_view_report));
 
         //animal type spinner
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
