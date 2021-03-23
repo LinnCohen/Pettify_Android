@@ -124,4 +124,19 @@ public class Report implements Serializable {
     }
 
 
+    @Override
+    public String toString() {
+        return "Report{" +
+                "id='" + id + '\'' +
+                ", description='" + description + '\'' +
+                ", title='" + title + '\'' +
+                ", address='" + address + '\'' +
+                ", animal_type='" + animal_type + '\'' +
+                ", report_type='" + report_type + '\'' +
+                ", image_url='" + image_url + '\'' +
+                ", lastUpdated=" + lastUpdated +
+                ", lat='" + lat + '\'' +
+                ", lng='" + lng + '\'' +
+                '}';
+    }
 }
