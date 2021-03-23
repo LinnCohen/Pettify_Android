@@ -1,5 +1,6 @@
 package com.pettify.ui.home;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.protobuf.StringValue;
 import com.pettify.R;
 import com.pettify.Utilities.LocationUtils;
 import com.pettify.model.report.Report;
@@ -35,6 +38,7 @@ public class HomeFragment extends Fragment {
 
     private HomeFragmentViewModel homeViewModel;
     GoogleMap map;
+    List<Report> data;
     LiveData<List<Report>> liveData;
     String lastClicked = "";
 
@@ -68,31 +72,55 @@ public class HomeFragment extends Fragment {
     };
 
     private void setMarkers() {
-        map.clear();
-        Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(32.0711775,34.8135377)));
+        Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(32.0711775, 34.8135377)));
         marker.setTitle("Injured Dog");
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        homeViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
+    }
+
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeFragmentViewModel.class);
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+
+        liveData = homeViewModel.getReports();
+        liveData.observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
+            @Override
+            public void onChanged(List<Report> reports) {
+                LinkedList<Report> list = new LinkedList<>();
+                for (Report report : reports)
+                    list.add(report);
+                data = list;
+                Log.d("location", String.valueOf(data.size()));
+
+            }
+
+        });
+
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-        liveData = homeViewModel.getReports();
         String coordinates = LocationUtils.instance.getCurrentLocationAsString();
-        if(coordinates != null)
-            Log.d("location",coordinates);
+        if (coordinates != null)
+            Log.d("location", coordinates);
         else
-            Log.d("location","Location return has null");
-
-        return view;
+            Log.d("location", "Location return has null");
     }
 //
 //    @Override
