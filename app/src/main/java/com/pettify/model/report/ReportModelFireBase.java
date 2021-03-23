@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -52,6 +53,25 @@ public class ReportModelFireBase {
                 .addOnSuccessListener(documentReference -> listener.onComplete())
                 .addOnFailureListener(e -> listener.onComplete()
                 );
+    }
+
+    public void getReport(String id, Listener listener) {
+        db.collection(REPORTS_COLLECTION)
+                .document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                Report report = null;
+                if (task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    if (doc != null) {
+                        report = new Report();
+                        Log.d("TAG", report.toString());
+                        report.fromMap(doc.getData());
+                    }
+                }
+                listener.onComplete(report);
+            }
+        });
     }
 
     public void updateReport(Report report, EmptyListener listener) {

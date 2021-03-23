@@ -125,7 +125,7 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        ReportModel.instance.uploadImage(bitmap, "outfit_image" + date.getTime(), url -> {
+        ReportModel.instance.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
             if (url == null) {
                 displayFailedError();
             } else {
@@ -135,13 +135,11 @@ public class CreateReportFragment extends Fragment {
                     public void onComplete() {
                         //do we need to reload data after creating report?
 //                        reloadData();
-                        Log.d("Report ID: ", report.getId());
-                        Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_view_report);
+                        Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list);
                     }
                 });
             }
         });
-//        ReportModel.instance.addReport(report, () -> reloadData());
     }
 
     private void displayFailedError() {
