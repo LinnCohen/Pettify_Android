@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
 
     private HomeFragmentViewModel homeViewModel;
     GoogleMap map;
-    List<Report> data;
+    List<Report> data = new LinkedList<>();;
     LiveData<List<Report>> liveData;
     String lastClicked = "";
 
@@ -73,11 +73,8 @@ public class HomeFragment extends Fragment {
     };
 
     private void setMarkers() {
-    map.clear();
-    for(Report report : data) {
-        Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))).title(report.getDescription()));
-        marker.setTag(report.getId());
-    }
+        Log.d("location",data.toString());
+
     }
 
     @Override
@@ -102,6 +99,7 @@ public class HomeFragment extends Fragment {
                 for (Report report : reports)
                     list.add(report);
                 data = list;
+                setMarkers();
                 Log.d("location", String.valueOf(data.size()));
             }
 
