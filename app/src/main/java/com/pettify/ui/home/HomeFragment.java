@@ -35,7 +35,6 @@ public class HomeFragment extends Fragment {
     private HomeFragmentViewModel homeViewModel;
     GoogleMap map;
     LiveData<List<Report>> liveData;
-    List<Report> data = new LinkedList<>();
     String lastClicked = "";
 
     public HomeFragment() {
@@ -86,7 +85,7 @@ public class HomeFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
-        liveData = homeViewModel.getData();
+        liveData = homeViewModel.getReports();
         return view;
     }
 //
