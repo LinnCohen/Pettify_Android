@@ -85,6 +85,10 @@ public class ReportModel {
         reportModelFireBase.updateReport(report, listener);
     }
 
+    public void getReport(String id, Listener listener) {
+        reportModelFireBase.getReport(id, listener);
+    }
+
     public void uploadImage(Bitmap imageBmp, String name, final Listener<String> listener) {
         reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
