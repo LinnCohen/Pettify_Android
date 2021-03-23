@@ -89,18 +89,16 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-
         liveData = homeViewModel.getReports();
         liveData.observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
             @Override
             public void onChanged(List<Report> reports) {
+
                 LinkedList<Report> list = new LinkedList<>();
                 for (Report report : reports)
                     list.add(report);
                 data = list;
                 Log.d("location", String.valueOf(data.size()));
-
             }
 
         });
