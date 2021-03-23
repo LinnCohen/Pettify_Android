@@ -19,8 +19,8 @@ import com.pettify.model.PettifyApplication;
 public final class LocationUtils implements LocationListener {
     public final static LocationUtils instance = new LocationUtils();
     LocationManager locationManager;
-    double lat = 0.0;
-    double lng = 0.0;
+    private double lat = 0.0;
+    private double lng = 0.0;
 
     private LocationUtils() {
         locationManager = (LocationManager) PettifyApplication.context.getSystemService(Context.LOCATION_SERVICE);
@@ -115,9 +115,9 @@ public final class LocationUtils implements LocationListener {
 
         Location location = locationManager.getLastKnownLocation(provider);
         if (location != null) {
-            lat = location.getLatitude();
-            lng = location.getLongitude();
-            LatLng myCoordinates = new LatLng(lat, lng);
+            setLat(location.getLatitude());
+            setLng(location.getLongitude());
+            LatLng myCoordinates = new LatLng(getLat(), getLng());
             return myCoordinates;
         }
         return new LatLng(0.0, 0.0);

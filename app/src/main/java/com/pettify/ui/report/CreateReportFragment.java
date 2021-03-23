@@ -116,6 +116,8 @@ public class CreateReportFragment extends Fragment {
 
     private void addReport() {
         submit_btn.setEnabled(false);
+        lat = String.valueOf(LocationUtils.instance.getLat());
+        lng = String.valueOf(LocationUtils.instance.getLng());
         Log.d("location","from AddReport" + lat + lng);
         Report report = new Report();
         report.setDescription(report_description.getText().toString());
@@ -124,7 +126,6 @@ public class CreateReportFragment extends Fragment {
         report.setAnimal_type(report_animal_type);
         report.setLat(lat);
         report.setLng(lng);
-
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
