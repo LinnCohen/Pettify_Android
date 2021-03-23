@@ -73,12 +73,9 @@ public class CreateReportFragment extends Fragment {
             public void onClick(View v) {
                 addReport();
                 NavController navController = Navigation.findNavController(v);
-                navController.navigate(R.id.action_create_report_to_fragment_view_report);
-//                Navigation.createNavigateOnClickListener(R.id.action_create_report_to_fragment_view_report);
+//                navController.navigate(R.id.action_create_report_to_fragment_view_report);
             }
         });
-
-//        submit_btn.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_create_report_to_fragment_view_report));
 
         //animal type spinner
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
