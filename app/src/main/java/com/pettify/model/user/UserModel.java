@@ -53,4 +53,11 @@ public class UserModel {
         userModelFireBase.login(email, password, listener);
     }
 
+    public void logout() {
+        userModelFireBase.logout();
+    }
+
+    public User getCurrentUser() {
+        return userModelFireBase.getCurrentUser();
+    }
 }

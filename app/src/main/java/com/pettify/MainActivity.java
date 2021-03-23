@@ -1,14 +1,17 @@
 package com.pettify;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,11 +22,13 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
+import com.pettify.model.user.User;
+import com.pettify.ui.auth.AuthViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
-
+    private AuthViewModel authViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +55,31 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
         //startActivity(new Intent(this,MapsActivity.class));
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView navUsername = headerView.findViewById(R.id.textView_navHeader);
+        Button authButton = headerView.findViewById(R.id.navheader_button);
+
+        authViewModel =
+                new ViewModelProvider(this).get(AuthViewModel.class);
+        User currentUser = authViewModel.getCurrentUser();
+        if (currentUser == null) {
+            navUsername.setText("");
+            authButton.setText("Login / Register");
+            authButton.setOnClickListener(butt -> {
+                navController.navigate(R.id.nav_login);
+                drawer.closeDrawer(GravityCompat.START);
+            });
+
+        } else {
+            navUsername.setText("Hello " + currentUser.getName());
+            authButton.setText("Logout");
+            authButton.setOnClickListener(buttonView -> {
+                authViewModel.logout();
+                navUsername.setText("");
+                authButton.setText("Login / Register");
+            });
+        }
 
     }
 

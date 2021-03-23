@@ -38,4 +38,5 @@
         <item>Injured</item>
     </string-array>
     <string name="title_activity_maps">Map</string>
+    <string name="navheader_button">navheader_button</string>
 </resources>
