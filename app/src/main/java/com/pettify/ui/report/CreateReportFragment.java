@@ -12,13 +12,9 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,12 +27,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
-import com.pettify.model.Model;
+import com.pettify.model.listeners.*;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
-
-import org.w3c.dom.Text;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
@@ -68,14 +62,7 @@ public class CreateReportFragment extends Fragment {
         report_description = view.findViewById(R.id.create_desc_text);
         report_address = view.findViewById(R.id.create_report_address);
 
-        submit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addReport();
-                NavController navController = Navigation.findNavController(v);
-//                navController.navigate(R.id.action_create_report_to_fragment_view_report);
-            }
-        });
+        submit_btn.setOnClickListener(v -> addReport());
 
         //animal type spinner
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
@@ -127,8 +114,8 @@ public class CreateReportFragment extends Fragment {
         report.setTitle(report_title.getText().toString());
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
-        report.setLat(new String(String.valueOf(location.latitude)));
-        report.setLng(new String(String.valueOf(location.latitude)));
+        report.setLat(String.valueOf(location.latitude));
+        report.setLng(String.valueOf(location.latitude));
 
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
@@ -139,7 +126,14 @@ public class CreateReportFragment extends Fragment {
                 displayFailedError();
             } else {
                 report.setImage_url(url);
-                ReportModel.instance.addReport(report, () -> reloadData());
+                ReportModel.instance.addReport(report, new EmptyListener() {
+                    @Override
+                    public void onComplete() {
+                        //do we need to reload data after creating report?
+//                        reloadData();
+                        Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_view_report);
+                    }
+                });
             }
         });
 //        ReportModel.instance.addReport(report, () -> reloadData());
