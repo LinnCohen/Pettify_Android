@@ -3,6 +3,8 @@ package com.pettify.ui.auth;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -40,6 +42,13 @@ public class LoginFragment extends Fragment {
                         }
                     });
         });
+
+        View noAccount = root.findViewById(R.id.noAccount_button);
+        noAccount.setOnClickListener(buttonView -> {
+            NavController navController = Navigation.findNavController(root);
+            navController.navigate(R.id.nav_register);
+        });
+
         return root;
     }
 }

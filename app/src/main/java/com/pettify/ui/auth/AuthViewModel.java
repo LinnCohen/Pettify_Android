@@ -21,4 +21,12 @@ public class AuthViewModel extends ViewModel {
         userModel.login(email, password, listener);
     }
 
+    public User getCurrentUser(){
+        return userModel.getCurrentUser();
+    }
+
+
+    public void logout(){
+        userModel.logout();
+    }
 }
