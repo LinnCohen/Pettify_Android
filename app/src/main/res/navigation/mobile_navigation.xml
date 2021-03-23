@@ -37,7 +37,10 @@
         android:id="@+id/view_report"
         android:name="com.pettify.ui.report.ViewReportFragment"
         android:label="View Report"
-        tools:layout="@layout/fragment_view_report" />
+        tools:layout="@layout/fragment_view_report" >
+        <argument
+            android:name="reportId" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_login"

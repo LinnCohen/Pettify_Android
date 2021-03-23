@@ -17,7 +17,8 @@
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/pettify_login" />
 
     <EditText
         android:id="@+id/login_password"
@@ -49,11 +50,12 @@
         app:backgroundTint="@color/purple_200"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_password"
-        app:layout_constraintVertical_bias="0.173" />
+        app:layout_constraintVertical_bias="0.115" />
 
-        <ProgressBar
+    <ProgressBar
         android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,8 +73,8 @@
 
     <TextView
         android:id="@+id/login_error_msg"
-        android:layout_width="226dp"
-        android:layout_height="57dp"
+        android:layout_width="222dp"
+        android:layout_height="26dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -81,7 +83,37 @@
         android:textSize="18sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.426"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/login_but"
+        app:layout_constraintTop_toBottomOf="@id/login_password"
         tools:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/pettify_login"
+        android:layout_width="96dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="36dp"
+        android:text="PETTIFY"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/purple_200"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/login_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.354" />
+
+    <Button
+        android:id="@+id/noAccount_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:text="Don't have an account? "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_but"
+        app:layout_constraintVertical_bias="0.018" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

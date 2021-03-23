@@ -12,28 +12,9 @@ import androidx.lifecycle.ViewModel;
 import java.util.List;
 
 public class HomeFragmentViewModel extends ViewModel {
+    private LiveData<List<Report>> reports = ReportModel.instance.getAllReports();
 
-    private LiveData<List<Report>> myReports;
-    Report report;
-
-    public LiveData<List<Report>> getData(){
-        if (myReports == null)
-            myReports =  ReportModel.instance.getAllReports();
-
-//        for(Report report : myReports.getValue()) {
-//            Log.d("report",report.getDescription() + report.getId());
-//        }
-        return myReports;
+    public LiveData<List<Report>> getReports() {
+        return reports;
     }
-
-
-
-    public HomeFragmentViewModel() {
-//        mText = new MutableLiveData<>();
-//        mText.setValue("This is home fragment");
-    }
-
-//    public LiveData<String> getText() {
-//        return mText;
-//    }
 }

@@ -10,6 +10,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.pettify.model.listeners.EmptyListener;
@@ -24,9 +26,11 @@ public class UserModelFireBase {
     private static final String USERS_COLLECTION = "users";
     public static final UserModelFireBase instance = new UserModelFireBase();
     private  FirebaseFirestore db;
+    private  FirebaseAuth auth;
 
     private UserModelFireBase() {
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
     public void getAllUsers(Listener<List<User>> listener) {
@@ -95,21 +99,20 @@ public class UserModelFireBase {
                    listener.onComplete();
                 });
     }
-//
-//    public static User getCurrentUser() {
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        FirebaseUser firebaseUser = auth.getCurrentUser();
-//        return firebaseUser == null ? null : factory(firebaseUser);
-//    }
-//
+
+    public User getCurrentUser() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        return firebaseUser == null ? null : new User(firebaseUser.getDisplayName(), firebaseUser.getEmail());
+    }
+
     public void register(final User user, String password, final Listener<Boolean> listener) {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            listener.onComplete(true);
+                            updateUserProfile(user, listener);
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
                             if (listener != null) {
@@ -120,8 +123,7 @@ public class UserModelFireBase {
                 });
     }
 
-    public static void login(String email, String password, final Listener<Boolean> listener) {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
+    public void login(String email, String password, final Listener<Boolean> listener) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -136,24 +138,22 @@ public class UserModelFireBase {
                     }
                 });
     }
-//
-//    public static void logout() {
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        auth.signOut();
-//    }
-//
-//    private static void updateUserProfile(User user, final UserModel.Listener<Boolean> listener) {
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(user.getName()).build();
-//
-//        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                listener.onComplete(task.isSuccessful());
-//            }
-//        });
-//    }
+
+    public void logout() {
+        auth.signOut();
+    }
+
+    private  void updateUserProfile(User user, final Listener<Boolean> listener) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(user.getName()).build();
+
+        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                listener.onComplete(task.isSuccessful());
+            }
+        });
+    }
 //
 
 }

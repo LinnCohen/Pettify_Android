@@ -107,15 +107,15 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
-        LatLng location = ReportModel.instance.getLocation();
+       // LatLng location = ReportModel.instance.getLocation();
         submit_btn.setEnabled(false);
         Report report = new Report();
         report.setDescription(report_description.getText().toString());
         report.setTitle(report_title.getText().toString());
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
-        report.setLat(String.valueOf(location.latitude));
-        report.setLng(String.valueOf(location.latitude));
+//        report.setLat(new String(String.valueOf(location.latitude)));
+//        report.setLng(new String(String.valueOf(location.latitude)));
 
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
