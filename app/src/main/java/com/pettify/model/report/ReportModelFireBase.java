@@ -64,8 +64,10 @@ public class ReportModelFireBase {
                 if (task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     if (doc != null) {
-                        report = new Report();
-                        report.fromMap(doc.getData());
+                        if (doc.exists()) {
+                            report = new Report();
+                            report.fromMap(doc.getData());
+                        }
                     }
                 }
                 listener.onComplete(report);
