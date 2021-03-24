@@ -82,6 +82,7 @@ public class ReportListFragment extends Fragment {
         TextView description;
         ImageView image;
         Button edit_report;
+        Button delete_report;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -89,8 +90,10 @@ public class ReportListFragment extends Fragment {
             title = itemView.findViewById(R.id.listrow_report_title);
             image = itemView.findViewById(R.id.listrow_report_image);
             edit_report = itemView.findViewById(R.id.listrow_edit_report);
+            delete_report = itemView.findViewById(R.id.listrow_delete_report);
 
-            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Button"));
+            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));.
+            delete_report.setOnClickListener(view1 -> Log.d("TAG", "Test Delete Button"));
 
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
