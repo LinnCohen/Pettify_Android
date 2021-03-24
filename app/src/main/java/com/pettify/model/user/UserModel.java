@@ -2,6 +2,7 @@ package com.pettify.model.user;
 
 
 import android.content.pm.LabeledIntent;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
@@ -36,6 +37,7 @@ public class UserModel implements Model {
 
     public void addUser(final User user, final EmptyListener listener) {
         userModelFireBase.addUser(user, listener);
+      //  Log.d("user",user.getEmail());
     }
 
     public void updateUser(final User user, final EmptyListener listener) {

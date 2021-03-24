@@ -44,6 +44,7 @@ public class UserModelFireBase {
     }
 
     public void addUser(User user, UserModel.EmptyListener listener) {
+        Log.d("user",user.getName());
         db.collection(USERS_COLLECTION)
                 .document(user.getId())
                 .set(user)
@@ -107,6 +108,8 @@ public class UserModelFireBase {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            db.collection(USERS_COLLECTION)
+                                    .add(user);
                             listener.onComplete(true);
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
