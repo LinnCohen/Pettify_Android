@@ -94,7 +94,7 @@ public class UserListFragment extends Fragment {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
             if (view == null){
-                view = getLayoutInflater().inflate(R.layout.list_row, null);
+                view = getLayoutInflater().inflate(R.layout.fragment_report_list_item, null);
             }
 
             TextView tv = view.findViewById(R.id.listrow_report_item);
