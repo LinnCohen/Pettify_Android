@@ -9,15 +9,19 @@ import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
+import com.pettify.model.user.User;
+import com.pettify.model.user.UserModel;
 
 import java.util.List;
 
 public class ReportListViewModel extends ViewModel {
     private LiveData<List<Report>> reports = ReportModel.instance.getAllReports();
     private ReportModel reportModel;
+    private UserModel userModel;
 
     public ReportListViewModel() {
         reportModel = ReportModel.instance;
+        userModel = UserModel.instance;
     }
 
     public LiveData<List<Report>> getReports() {
@@ -33,6 +37,10 @@ public class ReportListViewModel extends ViewModel {
     }
 
     public void addReport(Report report, EmptyListener listener) {
+        User user = userModel.getCurrentUser();
+        if (user != null) {
+            report.setReporterId(user.getId());
+        }
         reportModel.addReport(report, listener);
     }
 

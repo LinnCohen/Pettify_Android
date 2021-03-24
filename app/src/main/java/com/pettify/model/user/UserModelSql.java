@@ -15,10 +15,6 @@ public class UserModelSql {
     }
 
 
-//    public User getCurrentUser() {
-//        return UserFireBase.getCurrentUser();
-//    }
-
     public void getAllUsers(final Listener<List<User>> listener) {
         class MyAsyncTask extends AsyncTask{
             List<User> data;
@@ -44,16 +40,6 @@ public class UserModelSql {
     }
 
 
-//
-//    public boolean isUserLoggedIn() {
-//        return this.getCurrentUser() != null;
-//    }
-
-//    public void register(User user, String password, Listener<Boolean> listener) {
-//        UserFireBase.register(user, password, listener);
-//    }
-
-
     public void addUser(final User user, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
@@ -73,13 +59,5 @@ public class UserModelSql {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
-
-//    public void login(String email, String password, Listener<Boolean> listener) {
-//        UserFireBase.login(email, password, listener);
-//    }
-//
-//    public void logout() {
-//        UserFireBase.logout();
-//    }
 
 }

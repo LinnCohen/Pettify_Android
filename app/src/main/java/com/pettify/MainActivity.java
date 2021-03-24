@@ -32,7 +32,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.pettify.Utilities.LocationUtils;
+import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
 import com.pettify.model.user.User;
@@ -80,17 +82,13 @@ public class MainActivity extends AppCompatActivity  {
 
         authViewModel =
                 new ViewModelProvider(this).get(AuthViewModel.class);
-        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() == null) {
-                    setNotLoggedIn(drawer, navController, navUsername, authButton);
-                } else {
-                    setLoggedIn(navUsername, authButton, firebaseAuth.getCurrentUser().getDisplayName());
-                }
+        authViewModel.onUserChange(data -> {
+            if (data == null) {
+                setNotLoggedIn(drawer, navController, navUsername, authButton);
+            } else {
+                setLoggedIn(navUsername, authButton, data.getDisplayName());
             }
         });
-
     }
 
     private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {

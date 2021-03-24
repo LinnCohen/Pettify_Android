@@ -31,7 +31,7 @@ public class RegisterFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         int progress = seekBar.getProgress();
         tvProgressLabel =  root.findViewById(R.id.textView);
-        tvProgressLabel.setText("Progress: " + progress);
+        tvProgressLabel.setText("Radius: " + progress);
         registerButton.setOnClickListener(buttonView -> {
             TextView email = root.findViewById(R.id.register_user_email);
             TextView password = root.findViewById(R.id.register_user_password);
@@ -66,8 +66,6 @@ public class RegisterFragment extends Fragment {
             // updated continuously as the user slides the thumb
             tvProgressLabel.setText("Radius: " + progress);
             radiusProgress=progress;
-            Log.d("TAG","workeddd");
-
         }
 
         @Override
