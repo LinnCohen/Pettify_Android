@@ -3,6 +3,7 @@ package com.pettify.model.user;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +34,14 @@ public class UserModelFireBase {
         auth = FirebaseAuth.getInstance();
     }
 
+    public void onUserChange(Listener<FirebaseUser> listener) {
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                listener.onComplete(firebaseAuth.getCurrentUser());
+            }
+        });
+    }
     public void getAllUsers(Listener<List<User>> listener) {
         List<User> users = new LinkedList<>();
         db.collection(USERS_COLLECTION)
