@@ -116,12 +116,13 @@ public class CreateReportFragment extends Fragment {
         LatLng location = LocationUtils.instance.getCurrentLocation();
         lat = String.valueOf(LocationUtils.instance.getLat());
         lng = String.valueOf(LocationUtils.instance.getLng());
+        report_address.setText(LocationUtils.instance.getAddressName(getContext(), location));
+        report_address.setEnabled(false);
         Log.d("location","from onViewCreated" + lat + lng);
         return view;
     }
 
     private void addReport() {
-       // LatLng location = reportViewModel.getLocation();
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
