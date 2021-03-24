@@ -38,7 +38,8 @@ public class HomeFragment extends Fragment {
 
     private HomeFragmentViewModel homeViewModel;
     GoogleMap map;
-    List<Report> data = new LinkedList<>();;
+    List<Report> data = new LinkedList<>();
+    ;
     LiveData<List<Report>> liveData;
     String lastClicked = "";
 
@@ -73,7 +74,40 @@ public class HomeFragment extends Fragment {
     };
 
     private void setMarkers() {
-        Log.d("location",data.toString());
+        map.clear();
+        Log.d("location", data.toString());
+
+        for (Report report : liveData.getValue()) {
+            Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
+            marker.setTitle(report.getDescription());
+            marker.setTag(report.getId());
+        }
+
+
+        map.setOnMarkerClickListener(clickedMarker -> {
+            String tag = clickedMarker.getTag().toString();
+            Log.d("TAG", "Clicked! title: " + tag);
+
+            if (lastClicked.equals(tag)) {
+                lastClicked = "";
+                Log.d("TAG", "Window true");
+
+                Report clonedReport = null;
+                for (int i = 0; i < data.size(); i++) {
+                    if (data.get(i).getId().equals(tag)) {
+                        clonedReport = data.get(i);
+                    }
+                }
+
+//              NEED TO REDRIRECT TO WANTED REPORT
+
+            } else {
+                lastClicked = tag;
+                Log.d("TAG", "Window false");
+            }
+            return false;
+        });
+
 
     }
 
