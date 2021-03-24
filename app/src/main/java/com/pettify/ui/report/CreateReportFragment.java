@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -116,12 +117,13 @@ public class CreateReportFragment extends Fragment {
         LatLng location = LocationUtils.instance.getCurrentLocation();
         lat = String.valueOf(LocationUtils.instance.getLat());
         lng = String.valueOf(LocationUtils.instance.getLng());
+        report_address.setText(LocationUtils.instance.getAddressName(getContext(), location));
+        report_address.setEnabled(false);
         Log.d("location","from onViewCreated" + lat + lng);
         return view;
     }
 
     private void addReport() {
-       // LatLng location = reportViewModel.getLocation();
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
@@ -203,7 +205,7 @@ public class CreateReportFragment extends Fragment {
             switch (requestCode) {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        Bitmap selectedImage = rotateImage((Bitmap) data.getExtras().get("data"));
                         reportImageView.setImageBitmap(selectedImage);
                     }
                     break;
@@ -226,5 +228,11 @@ public class CreateReportFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    public static Bitmap rotateImage(Bitmap source) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }
