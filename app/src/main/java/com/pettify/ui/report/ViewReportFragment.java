@@ -1,9 +1,11 @@
 package com.pettify.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.pettify.model.report.Report;
 
 public class ViewReportFragment extends Fragment {
     Report report;
+    Button edit_report;
     TextView report_title;
     TextView report_description;
     TextView report_posted_on;
@@ -37,6 +40,11 @@ public class ViewReportFragment extends Fragment {
         report_location = view.findViewById(R.id.report_address);
         report_posted_on = view.findViewById(R.id.report_posted_at);
         report_title = view.findViewById(R.id.report_title);
+//        edit_report = view.findViewById(R.id.listrow_edit_report);
+//
+//        edit_report.setOnClickListener(view1 -> {
+//            Log.d("TAG", "test button");
+//        });
 
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
         reportViewModel.getReport(reportId, new Listener<Report>() {
