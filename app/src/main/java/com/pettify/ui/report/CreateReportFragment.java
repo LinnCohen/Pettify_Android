@@ -12,6 +12,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -25,13 +26,16 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
+import com.pettify.model.listeners.*;
+import com.pettify.Utilities.LocationUtils;
 import com.pettify.model.Model;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
 
-import org.w3c.dom.Text;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
@@ -44,6 +48,8 @@ public class CreateReportFragment extends Fragment {
     TextView report_address;
     String report_animal_type;
     String report_type;
+    String lat;
+    String lng;
     Spinner animal_type_spinner;
     Spinner report_type_spinner;
     Button upload_image_btn;
@@ -63,7 +69,7 @@ public class CreateReportFragment extends Fragment {
         report_description = view.findViewById(R.id.create_desc_text);
         report_address = view.findViewById(R.id.create_report_address);
 
-        submit_btn.setOnClickListener(view1 -> addReport());
+        submit_btn.setOnClickListener(v -> addReport());
 
         //animal type spinner
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
@@ -103,30 +109,46 @@ public class CreateReportFragment extends Fragment {
         });;
 
         upload_image_btn.setOnClickListener(v -> uploadImage());
-
+        LatLng location = LocationUtils.instance.getCurrentLocation();
+        lat = String.valueOf(LocationUtils.instance.getLat());
+        lng = String.valueOf(LocationUtils.instance.getLng());
+        Log.d("location","from onViewCreated" + lat + lng);
         return view;
     }
 
     private void addReport() {
+       // LatLng location = ReportModel.instance.getLocation();
+        Date date = new Date();
         submit_btn.setEnabled(false);
+        lat = String.valueOf(LocationUtils.instance.getLat());
+        lng = String.valueOf(LocationUtils.instance.getLng());
+        Log.d("location","from AddReport" + lat + lng);
         Report report = new Report();
         report.setDescription(report_description.getText().toString());
         report.setTitle(report_title.getText().toString());
         report.setAddress(report_address.getText().toString());
         report.setAnimal_type(report_animal_type);
+        report.setLat(lat);
+        report.setLng(lng);
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        ReportModel.instance.uploadImage(bitmap, report.getTitle(), url -> {
+        ReportModel.instance.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
             if (url == null) {
                 displayFailedError();
             } else {
                 report.setImage_url(url);
-                ReportModel.instance.addReport(report, () -> reloadData());
+                ReportModel.instance.addReport(report, new EmptyListener() {
+                    @Override
+                    public void onComplete() {
+                        //do we need to reload data after creating report?
+//                        reloadData();
+                        Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list);
+                    }
+                });
             }
         });
-//        ReportModel.instance.addReport(report, () -> reloadData());
     }
 
     private void displayFailedError() {

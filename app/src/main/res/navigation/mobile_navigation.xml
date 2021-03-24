@@ -21,13 +21,30 @@
         android:id="@+id/reportslist_list"
         android:name="com.pettify.ui.report.ReportListFragment"
         android:label="Reports Feed"
-        tools:layout="@layout/fragment_report_list" />
+        tools:layout="@layout/fragment_report_list" >
+        <action
+            android:id="@+id/action_reportslist_list_to_view_report"
+            app:destination="@id/view_report" />
+    </fragment>
 
     <fragment
         android:id="@+id/create_report"
         android:name="com.pettify.ui.report.CreateReportFragment"
         android:label="Create Report"
-        tools:layout="@layout/fragment_create_report" />
+        tools:layout="@layout/fragment_create_report" >
+        <action
+            android:id="@+id/action_create_report_to_reportslist_list"
+            app:destination="@id/reportslist_list" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/view_report"
+        android:name="com.pettify.ui.report.ViewReportFragment"
+        android:label="View Report"
+        tools:layout="@layout/fragment_view_report" >
+        <argument
+            android:name="reportId" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_login"

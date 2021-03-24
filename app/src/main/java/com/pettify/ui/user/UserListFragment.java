@@ -97,7 +97,7 @@ public class UserListFragment extends Fragment {
                 view = getLayoutInflater().inflate(R.layout.list_row, null);
             }
 
-            TextView tv = view.findViewById(R.id.listrow_test_tv);
+            TextView tv = view.findViewById(R.id.listrow_report_item);
             User user = userListViewModel.getUserList().getValue().get(i);
             tv.setText(user.getId());
             return view;

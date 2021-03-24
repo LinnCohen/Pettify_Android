@@ -4,9 +4,8 @@ import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import com.firebase.client.core.Repo;
 import com.pettify.model.AppLocalDb;
-import com.pettify.model.Model;
+import com.pettify.model.listeners.EmptyListener;
 
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class ReportModelSql {
     }
 
     //TODO - fix deprecated code
-    public void addReport(final Report report, final Model.EmptyListener listener) {
+    public void addReport(final Report report, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
@@ -42,7 +41,7 @@ public class ReportModelSql {
         task.execute();
     }
 
-    public void deleteReport(Report report,  final Model.EmptyListener listener) {
+    public void deleteReport(Report report,  final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {

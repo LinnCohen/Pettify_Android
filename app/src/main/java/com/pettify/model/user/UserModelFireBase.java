@@ -10,8 +10,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -22,12 +26,14 @@ public class UserModelFireBase {
     private static final String USERS_COLLECTION = "users";
     public static final UserModelFireBase instance = new UserModelFireBase();
     private  FirebaseFirestore db;
+    private  FirebaseAuth auth;
 
     private UserModelFireBase() {
         db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
     }
 
-    public void getAllUsers(UserModel.Listener<List<User>> listener) {
+    public void getAllUsers(Listener<List<User>> listener) {
         List<User> users = new LinkedList<>();
         db.collection(USERS_COLLECTION)
                 .get()
@@ -43,8 +49,8 @@ public class UserModelFireBase {
                 });
     }
 
-    public void addUser(User user, UserModel.EmptyListener listener) {
-        Log.d("user",user.getName());
+    public void addUser(User user, EmptyListener listener) {
+
         db.collection(USERS_COLLECTION)
                 .document(user.getId())
                 .set(user)
@@ -63,11 +69,11 @@ public class UserModelFireBase {
                     );
     }
 
-    public void updateUser(User user, UserModel.EmptyListener listener) {
+    public void updateUser(User user, EmptyListener listener) {
         addUser(user, listener);
     }
 
-    public void getUser(String id, UserModel.Listener<User> listener) {
+    public void getUser(String id, Listener<User> listener) {
         db.collection(USERS_COLLECTION)
                 .document(id)
                 .get()
@@ -86,7 +92,7 @@ public class UserModelFireBase {
 
     }
 
-    public void deleteUser(String id, UserModel.EmptyListener listener) {
+    public void deleteUser(String id, EmptyListener listener) {
         db.collection(USERS_COLLECTION)
                 .document(id)
                 .delete()
@@ -94,15 +100,14 @@ public class UserModelFireBase {
                    listener.onComplete();
                 });
     }
-//
-//    public static User getCurrentUser() {
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        FirebaseUser firebaseUser = auth.getCurrentUser();
-//        return firebaseUser == null ? null : factory(firebaseUser);
-//    }
-//
-    public void register(final User user, String password, final UserModel.Listener<Boolean> listener) {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
+
+    public User getCurrentUser() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser firebaseUser = auth.getCurrentUser();
+        return firebaseUser == null ? null : new User(firebaseUser.getDisplayName(), firebaseUser.getEmail());
+    }
+
+    public void register(final User user, String password, final Listener<Boolean> listener) {
         auth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -110,7 +115,8 @@ public class UserModelFireBase {
                         if (task.isSuccessful()) {
                             db.collection(USERS_COLLECTION)
                                     .add(user);
-                            listener.onComplete(true);
+
+                            updateUserProfile(user, listener);
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
                             if (listener != null) {
@@ -121,8 +127,7 @@ public class UserModelFireBase {
                 });
     }
 
-    public static void login(String email, String password, final UserModel.Listener<Boolean> listener) {
-        final FirebaseAuth auth = FirebaseAuth.getInstance();
+    public void login(String email, String password, final Listener<Boolean> listener) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -137,24 +142,22 @@ public class UserModelFireBase {
                     }
                 });
     }
-//
-//    public static void logout() {
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        auth.signOut();
-//    }
-//
-//    private static void updateUserProfile(User user, final UserModel.Listener<Boolean> listener) {
-//        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-//
-//        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(user.getName()).build();
-//
-//        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-//            @Override
-//            public void onComplete(@NonNull Task<Void> task) {
-//                listener.onComplete(task.isSuccessful());
-//            }
-//        });
-//    }
+
+    public void logout() {
+        auth.signOut();
+    }
+
+    private  void updateUserProfile(User user, final Listener<Boolean> listener) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(user.getName()).build();
+
+        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                listener.onComplete(task.isSuccessful());
+            }
+        });
+    }
 //
 
 }

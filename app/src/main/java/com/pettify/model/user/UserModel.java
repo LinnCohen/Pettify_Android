@@ -6,11 +6,12 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.pettify.model.Model;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.util.List;
 
-public class UserModel implements Model {
+public class UserModel {
 
     public final static UserModel instance = new UserModel();
     UserModelFireBase userModelFireBase = UserModelFireBase.instance;
@@ -37,7 +38,6 @@ public class UserModel implements Model {
 
     public void addUser(final User user, final EmptyListener listener) {
         userModelFireBase.addUser(user, listener);
-      //  Log.d("user",user.getEmail());
     }
 
     public void updateUser(final User user, final EmptyListener listener) {
@@ -48,12 +48,19 @@ public class UserModel implements Model {
         userModelFireBase.deleteUser(id, listener);
     }
 
-    public void registerUser(User user, String password, final UserModel.Listener<Boolean> listener) {
+    public void registerUser(User user, String password, final Listener<Boolean> listener) {
         userModelFireBase.register(user, password, listener);
     }
 
-    public void login(String email, String password, final UserModel.Listener<Boolean> listener) {
+    public void login(String email, String password, final Listener<Boolean> listener) {
         userModelFireBase.login(email, password, listener);
     }
 
+    public void logout() {
+        userModelFireBase.logout();
+    }
+
+    public User getCurrentUser() {
+        return userModelFireBase.getCurrentUser();
+    }
 }

@@ -1,29 +1,37 @@
 package com.pettify.model.report;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.util.Listener;
-import com.pettify.model.Model;
-import com.pettify.model.Model.UploadImageListener;
 import com.pettify.model.PettifyApplication;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.util.List;
 
-public class ReportModel implements Model {
+public class ReportModel {
 
     public final static ReportModel instance = new ReportModel();
     public static final String REPORT_LAST_UPDATED = "reportLastUpdated";
     ReportModelFireBase reportModelFireBase = ReportModelFireBase.instance;
     ReportModelSql reportModelSql = ReportModelSql.instance;
 
-    private ReportModel(){}
+    private ReportModel() {
+    }
 
     LiveData<List<Report>> reportsList;
+
     public LiveData<List<Report>> getAllReports() {
         if (reportsList == null) {
             reportsList = reportModelSql.getAllReports();
@@ -46,6 +54,7 @@ public class ReportModel implements Model {
                 switch (documentChange.getType()) {
                     case ADDED:
                     case MODIFIED:
+                        report.setId(documentChange.getDocument().getId());
                         reportModelSql.addReport(report, null);
                         if (report.getLastUpdated() > newLastUpdated) {
                             newLastUpdated = report.getLastUpdated();
@@ -68,7 +77,7 @@ public class ReportModel implements Model {
         });
     }
 
-    public void addReport(final Report report, final ReportModel.EmptyListener listener) {
+    public void addReport(final Report report, final EmptyListener listener) {
         reportModelFireBase.addReport(report, listener);
     }
 
@@ -76,7 +85,11 @@ public class ReportModel implements Model {
         reportModelFireBase.updateReport(report, listener);
     }
 
-    public void uploadImage(Bitmap imageBmp, String name, final Model.UploadImageListener listener) {
+    public void getReport(String id, Listener listener) {
+        reportModelFireBase.getReport(id, listener);
+    }
+
+    public void uploadImage(Bitmap imageBmp, String name, final Listener<String> listener) {
         reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
 

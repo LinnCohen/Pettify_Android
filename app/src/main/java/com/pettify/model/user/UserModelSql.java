@@ -3,6 +3,8 @@ package com.pettify.model.user;
 import android.os.AsyncTask;
 
 import com.pettify.model.AppLocalDb;
+import com.pettify.model.listeners.EmptyListener;
+import com.pettify.model.listeners.Listener;
 
 import java.util.List;
 
@@ -11,13 +13,7 @@ public class UserModelSql {
 
     private UserModelSql() {
     }
-    public interface Listener<T> {
-        void onComplete(T data);
-    }
 
-    public interface EmptyListener {
-        void onComplete();
-    }
 
 //    public User getCurrentUser() {
 //        return UserFireBase.getCurrentUser();
