@@ -79,13 +79,7 @@ public class ReportListFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-
-        reloadData();
         return view;
-    }
-
-    void reloadData(){
-        reportViewModel.refreshAllReports(() -> { });
     }
 
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
