@@ -9,6 +9,7 @@ import com.pettify.model.user.UserModel;
 public class AuthViewModel extends ViewModel {
 
     private UserModel userModel;
+
     public AuthViewModel() {
         userModel = UserModel.instance;
     }
@@ -22,7 +23,7 @@ public class AuthViewModel extends ViewModel {
     }
 
     public User getCurrentUser(){
-        return userModel.getCurrentUser();
+         return userModel.getCurrentUser();
     }
 
 
