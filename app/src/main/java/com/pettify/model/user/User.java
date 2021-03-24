@@ -13,10 +13,26 @@ public class User implements Serializable {
     private String id;
     private String name;
 //    public String lastName = "";
-    private String email;
-//    public String phoneNumber = "";
+    private String email="";
+     public String phoneNumber = "";
 //    public UserType userType = UserType.NOTFICATIONS;
-//    public int radius = 0;
+    public double radius = 0.0;
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
 
     public User() {
     }

@@ -50,6 +50,7 @@ public class UserModelFireBase {
     }
 
     public void addUser(User user, EmptyListener listener) {
+
         db.collection(USERS_COLLECTION)
                 .document(user.getId())
                 .set(user)
@@ -112,6 +113,8 @@ public class UserModelFireBase {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            db.collection(USERS_COLLECTION)
+                                    .add(user);
                             updateUserProfile(user, listener);
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
@@ -147,13 +150,8 @@ public class UserModelFireBase {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(user.getName()).build();
 
-        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                listener.onComplete(task.isSuccessful());
-            }
-        });
+        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
     }
-//
+
 
 }
