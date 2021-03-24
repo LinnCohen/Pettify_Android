@@ -27,15 +27,16 @@ import java.util.List;
 public class ReportListFragment extends Fragment {
 
     private ReportListViewModel reportListViewModel;
-    ProgressBar pb;
-    Button addBtn;
     MyAdapter adapter;
     TextView reportDescription;
     ListView list;
+    ReportListViewModel reportViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        reportViewModel =
+                new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
@@ -66,7 +67,7 @@ public class ReportListFragment extends Fragment {
     }
 
     void reloadData(){
-        ReportModel.instance.refreshAllReports(() -> { });
+        reportViewModel.refreshAllReports(() -> { });
     }
 
     class MyAdapter extends BaseAdapter {
