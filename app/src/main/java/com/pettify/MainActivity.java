@@ -20,25 +20,33 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.firebase.client.Firebase;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.pettify.Utilities.LocationUtils;
+import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AuthViewModel authViewModel;
+
     LocationManager locationManager;
 
     @Override
@@ -60,7 +68,7 @@ public class MainActivity extends AppCompatActivity  {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_register, R.id.reportslist_list, R.id.userslist_list)
+                R.id.nav_home, R.id.reportslist_list, R.id.userslist_list)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -74,25 +82,32 @@ public class MainActivity extends AppCompatActivity  {
 
         authViewModel =
                 new ViewModelProvider(this).get(AuthViewModel.class);
-        User currentUser = authViewModel.getCurrentUser();
-        if (currentUser == null) {
+        authViewModel.onUserChange(data -> {
+            if (data == null) {
+                setNotLoggedIn(drawer, navController, navUsername, authButton);
+            } else {
+                setLoggedIn(navUsername, authButton, data.getDisplayName());
+            }
+        });
+    }
+
+    private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
+        navUsername.setText("Hello " + currentUserName);
+        authButton.setText("Logout");
+        authButton.setOnClickListener(buttonView -> {
+            authViewModel.logout();
             navUsername.setText("");
             authButton.setText("Login / Register");
-            authButton.setOnClickListener(butt -> {
-                navController.navigate(R.id.nav_login);
-                drawer.closeDrawer(GravityCompat.START);
-            });
+        });
+    }
 
-        } else {
-            navUsername.setText("Hello " + currentUser.getName());
-            authButton.setText("Logout");
-            authButton.setOnClickListener(buttonView -> {
-                authViewModel.logout();
-                navUsername.setText("");
-                authButton.setText("Login / Register");
-            });
-        }
-
+    private void setNotLoggedIn(DrawerLayout drawer, NavController navController, TextView navUsername, Button authButton) {
+        navUsername.setText("");
+        authButton.setText("Login / Register");
+        authButton.setOnClickListener(butt -> {
+            navController.navigate(R.id.nav_login);
+            drawer.closeDrawer(GravityCompat.START);
+        });
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.pettify.ui.auth;
 
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.pettify.model.listeners.Listener;
 import com.pettify.model.user.User;
 import com.pettify.model.user.UserModel;
@@ -9,6 +10,7 @@ import com.pettify.model.user.UserModel;
 public class AuthViewModel extends ViewModel {
 
     private UserModel userModel;
+
     public AuthViewModel() {
         userModel = UserModel.instance;
     }
@@ -25,8 +27,12 @@ public class AuthViewModel extends ViewModel {
         return userModel.getCurrentUser();
     }
 
-
     public void logout(){
         userModel.logout();
+    }
+
+
+    public void onUserChange(Listener<FirebaseUser> firebaseUserListener) {
+        userModel.onUserChange(firebaseUserListener);
     }
 }
