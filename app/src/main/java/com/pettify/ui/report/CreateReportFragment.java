@@ -56,9 +56,13 @@ public class CreateReportFragment extends Fragment {
     Button submit_btn;
     ImageView reportImageView;
 
+    ReportListViewModel reportViewModel;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        reportViewModel =
+                new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_report, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
@@ -117,7 +121,7 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
-       // LatLng location = ReportModel.instance.getLocation();
+       // LatLng location = reportViewModel.getLocation();
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
@@ -134,12 +138,12 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        ReportModel.instance.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
+        reportViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
             if (url == null) {
                 displayFailedError();
             } else {
                 report.setImage_url(url);
-                ReportModel.instance.addReport(report, new EmptyListener() {
+                reportViewModel.addReport(report, new EmptyListener() {
                     @Override
                     public void onComplete() {
                         //do we need to reload data after creating report?
@@ -167,7 +171,7 @@ public class CreateReportFragment extends Fragment {
     //TODO - direct to view report page
     void reloadData(){
         submit_btn.setEnabled(false);
-        ReportModel.instance.refreshAllReports(() -> {
+        reportViewModel.refreshAllReports(() -> {
             submit_btn.setEnabled(true);
         });
     }
