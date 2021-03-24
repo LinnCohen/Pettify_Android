@@ -5,9 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".ui.report.ReportListFragment">
 
-    <ListView
-        android:id="@+id/reportslist_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/report_list_refresh_by_swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/reportslist_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>
