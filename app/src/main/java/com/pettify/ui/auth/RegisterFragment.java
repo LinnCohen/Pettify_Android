@@ -1,7 +1,6 @@
 package com.pettify.ui.auth;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,10 +26,10 @@ public class RegisterFragment extends Fragment {
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
         View root = inflater.inflate(R.layout.fragment_register, container, false);
         View registerButton = root.findViewById(R.id.register_button);
-        SeekBar seekBar =  root.findViewById(R.id.seekBar);
+        SeekBar seekBar =  root.findViewById(R.id.radius_eekBar);
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         int progress = seekBar.getProgress();
-        tvProgressLabel =  root.findViewById(R.id.textView);
+        tvProgressLabel =  root.findViewById(R.id.accountTitle_textView);
         tvProgressLabel.setText("Radius: " + progress);
         registerButton.setOnClickListener(buttonView -> {
             TextView email = root.findViewById(R.id.register_user_email);
