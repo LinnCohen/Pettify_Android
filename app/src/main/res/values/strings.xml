@@ -37,6 +37,12 @@
         <item>Lost</item>
         <item>Injured</item>
     </string-array>
+    <string-array name="map_types">
+        <item>Normal Map</item>
+        <item>Hybrid Map</item>
+        <item>Satellite Map</item>
+        <item>Terrain Map</item>
+    </string-array>
     <string name="title_activity_maps">Map</string>
     <string name="navheader_button">navheader_button</string>
 </resources>

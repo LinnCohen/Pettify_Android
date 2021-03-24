@@ -9,6 +9,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,6 +31,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.protobuf.StringValue;
 import com.pettify.R;
 import com.pettify.Utilities.LocationUtils;
+import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportModel;
 
@@ -34,12 +39,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.Inflater;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private HomeFragmentViewModel homeViewModel;
     GoogleMap map;
     List<Report> data = new LinkedList<>();
-    ;
+    Spinner spinner;
     LiveData<List<Report>> liveData;
     String lastClicked = "";
 
@@ -51,6 +56,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
@@ -120,8 +126,20 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+//----------------------------Spinner actions to choose map types----------------------------------//
+        spinner = view.findViewById(R.id.spinner3);
+        spinner.setOnItemSelectedListener(this);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
+                R.array.map_types, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
+
+ //----------------------------Reports actions to render map markers--------------------------------//
         liveData = homeViewModel.getReports();
         liveData.observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
             @Override
@@ -136,7 +154,6 @@ public class HomeFragment extends Fragment {
             }
 
         });
-
         return view;
     }
 
@@ -154,33 +171,31 @@ public class HomeFragment extends Fragment {
         else
             Log.d("location", "Location return has null");
     }
-//
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-//        inflater.inflate(R.menu.map, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        Log.d("location", String.valueOf(item.getItemId()));
-//
-//        switch (item.getItemId()) {
-//            case R.id.action_normal:
-//                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-//                break;
-//            case R.id.action_hybrid:
-//                map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-//                break;
-//            case R.id.action_satellite:
-//                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-//                break;
-//            case R.id.action_terrain:
-//                map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
-//                break;
-//        }
-//
-//        return true;
-//    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String string = parent.getItemAtPosition(position).toString();
+        switch (string) {
+            case "Normal Map":
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case "Hybrid Map":
+                map.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case "Satellite Map":
+                map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case "Terrain Map":
+                map.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            default:
+                map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+        // Need to implment
+    }
 }
