@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.protobuf.Empty;
+import com.pettify.model.listeners.EmptyListener;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;

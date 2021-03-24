@@ -1,16 +1,16 @@
 package com.pettify.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +19,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.pettify.R;
 import com.pettify.model.listeners.EmptyListener;
-import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
 import com.squareup.picasso.Picasso;
 
@@ -70,17 +69,28 @@ public class ReportListFragment extends Fragment {
             reportData = reports;
             adapter.notifyDataSetChanged();
         });
+        reloadData();
         return view;
     }
 
+    void reloadData(){
+        reportViewModel.refreshAllReports(() -> { });
+    }
+
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
+        TextView title;
         TextView description;
         ImageView image;
+        Button edit_report;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-            description = itemView.findViewById(R.id.listrow_report_item);
+            description = itemView.findViewById(R.id.listrow_report_description);
+            title = itemView.findViewById(R.id.listrow_report_title);
             image = itemView.findViewById(R.id.listrow_report_image);
+            edit_report = itemView.findViewById(R.id.listrow_edit_report);
+
+            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Button"));
 
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
@@ -92,8 +102,9 @@ public class ReportListFragment extends Fragment {
             });
         }
 
-        public void bind(Report report) {
+        public void bindData(Report report) {
             description.setText(report.getDescription());
+            title.setText(report.getTitle());
 
             if (report.getImage_url() != null && !report.getImage_url().isEmpty())
                 Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(image);
@@ -124,7 +135,7 @@ public class ReportListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ReportRowViewHolder holder, int position) {
             Report report = reportData.get(position);
-            holder.bind(report);
+            holder.bindData(report);
         }
 
         @Override
