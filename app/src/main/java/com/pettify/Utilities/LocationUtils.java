@@ -58,7 +58,6 @@ public final class LocationUtils implements LocationListener {
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Log.d("New location", location.toString());
         setLat(location.getLatitude());
         setLng(location.getLongitude());
 
