@@ -3,7 +3,9 @@ package com.pettify.Utilities;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +17,10 @@ import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.model.PettifyApplication;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 public final class LocationUtils implements LocationListener {
     public final static LocationUtils instance = new LocationUtils();
@@ -122,6 +128,17 @@ public final class LocationUtils implements LocationListener {
         return new LatLng(0.0, 0.0);
     }
 
+    public String getAddressName(Context context, LatLng latLng) {
+        Geocoder geocoder=  new Geocoder(context, Locale.getDefault());
+
+        List<Address> addressList = null; // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        try {
+            addressList = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+        } catch (IOException e) {
+            return "no valid address found";
+        }
+        return addressList.get(0).getAddressLine(0);
+    }
 
     public double getLat() {
         return lat;
