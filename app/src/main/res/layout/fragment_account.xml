@@ -12,9 +12,10 @@
         android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginEnd="400dp"
         android:text="@string/hello_blank_fragment"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="64dp" />
+        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -77,28 +78,34 @@
         android:id="@+id/editTextTextEmailAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textEmailAddress"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="173dp" />
+        app:layout_constraintStart_toEndOf="@+id/email_textView"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName2" />
 
     <EditText
         android:id="@+id/editTextTextPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:inputType="textPassword"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="237dp" />
+        app:layout_constraintStart_toEndOf="@+id/password_textView"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextEmailAddress" />
 
     <EditText
         android:id="@+id/editTextTextPersonName2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="40dp"
         android:ems="10"
         android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="148dp"
-        tools:layout_editor_absoluteY="109dp" />
+        app:layout_constraintStart_toEndOf="@+id/name_textView"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <SeekBar
         android:id="@+id/seekBar"
