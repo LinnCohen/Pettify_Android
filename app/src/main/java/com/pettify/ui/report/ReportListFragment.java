@@ -92,7 +92,7 @@ public class ReportListFragment extends Fragment {
             edit_report = itemView.findViewById(R.id.listrow_edit_report);
             delete_report = itemView.findViewById(R.id.listrow_delete_report);
 
-            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));.
+            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));
             delete_report.setOnClickListener(view1 -> Log.d("TAG", "Test Delete Button"));
 
             itemView.setOnClickListener(view -> {
