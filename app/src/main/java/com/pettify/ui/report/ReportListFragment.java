@@ -30,7 +30,6 @@ public class ReportListFragment extends Fragment {
 
     private ReportListViewModel reportListViewModel;
     ReportListAdapter adapter;
-    TextView reportDescription;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
     ReportListViewModel reportViewModel;
@@ -60,24 +59,16 @@ public class ReportListFragment extends Fragment {
         });
 
         final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefresh.setOnRefreshListener(() -> reportViewModel.refreshAllReports(new EmptyListener() {
             @Override
-            public void onRefresh() {
-                reportViewModel.refreshAllReports(new EmptyListener() {
-                    @Override
-                    public void onComplete() {
-                        swipeRefresh.setRefreshing(false);
-                    }
-                });
+            public void onComplete() {
+                swipeRefresh.setRefreshing(false);
             }
-        });
+        }));
 
-        reportListViewModel.getReports().observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
-            @Override
-            public void onChanged(List<Report> reports) {
-                reportData = reports;
-                adapter.notifyDataSetChanged();
-            }
+        reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
+            reportData = reports;
+            adapter.notifyDataSetChanged();
         });
         return view;
     }
@@ -91,14 +82,11 @@ public class ReportListFragment extends Fragment {
             description = itemView.findViewById(R.id.listrow_report_item);
             image = itemView.findViewById(R.id.listrow_report_image);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onClick(position);
-                        }
+            itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onClick(position);
                     }
                 }
             });
