@@ -89,15 +89,11 @@ public class ReportListFragment extends Fragment {
     }
 
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
-        TextView reportDescription;
-        TextView title;
         TextView description;
         ImageView image;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-//            userName = itemView.findViewById(R.id.outfit_row_user_name);
-//            title = itemView.findViewById(R.id.outfit_row_title);
             description = itemView.findViewById(R.id.listrow_report_item);
             image = itemView.findViewById(R.id.listrow_report_image);
 
@@ -115,8 +111,6 @@ public class ReportListFragment extends Fragment {
         }
 
         public void bind(Report report) {
-//            userName.setText(report.ownerName);
-//            title.setText(report.title);
             description.setText(report.getDescription());
 
             if (report.getImage_url() != null && !report.getImage_url().isEmpty())
