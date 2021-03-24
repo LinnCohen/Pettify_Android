@@ -1,16 +1,16 @@
 package com.pettify.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +19,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.pettify.R;
 import com.pettify.model.listeners.EmptyListener;
-import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +29,6 @@ public class ReportListFragment extends Fragment {
 
     private ReportListViewModel reportListViewModel;
     ReportListAdapter adapter;
-    TextView reportDescription;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
     ReportListViewModel reportViewModel;
@@ -60,26 +58,17 @@ public class ReportListFragment extends Fragment {
         });
 
         final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefresh.setOnRefreshListener(() -> reportViewModel.refreshAllReports(new EmptyListener() {
             @Override
-            public void onRefresh() {
-                reportViewModel.refreshAllReports(new EmptyListener() {
-                    @Override
-                    public void onComplete() {
-                        swipeRefresh.setRefreshing(false);
-                    }
-                });
+            public void onComplete() {
+                swipeRefresh.setRefreshing(false);
             }
-        });
+        }));
 
-        reportListViewModel.getReports().observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
-            @Override
-            public void onChanged(List<Report> reports) {
-                reportData = reports;
-                adapter.notifyDataSetChanged();
-            }
+        reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
+            reportData = reports;
+            adapter.notifyDataSetChanged();
         });
-
         reloadData();
         return view;
     }
@@ -89,29 +78,36 @@ public class ReportListFragment extends Fragment {
     }
 
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
+        TextView title;
         TextView description;
         ImageView image;
+        Button edit_report;
+        Button delete_report;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
-            description = itemView.findViewById(R.id.listrow_report_item);
+            description = itemView.findViewById(R.id.listrow_report_description);
+            title = itemView.findViewById(R.id.listrow_report_title);
             image = itemView.findViewById(R.id.listrow_report_image);
+            edit_report = itemView.findViewById(R.id.listrow_edit_report);
+            delete_report = itemView.findViewById(R.id.listrow_delete_report);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onClick(position);
-                        }
+            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));.
+            delete_report.setOnClickListener(view1 -> Log.d("TAG", "Test Delete Button"));
+
+            itemView.setOnClickListener(view -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onClick(position);
                     }
                 }
             });
         }
 
-        public void bind(Report report) {
+        public void bindData(Report report) {
             description.setText(report.getDescription());
+            title.setText(report.getTitle());
 
             if (report.getImage_url() != null && !report.getImage_url().isEmpty())
                 Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(image);
@@ -142,7 +138,7 @@ public class ReportListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ReportRowViewHolder holder, int position) {
             Report report = reportData.get(position);
-            holder.bind(report);
+            holder.bindData(report);
         }
 
         @Override
