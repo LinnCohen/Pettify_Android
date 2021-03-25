@@ -66,6 +66,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
 
+
         //----------------------------Reports actions to render map markers--------------------------------//
         liveData.observe(getViewLifecycleOwner(), new Observer<List<Report>>() {
             @Override
