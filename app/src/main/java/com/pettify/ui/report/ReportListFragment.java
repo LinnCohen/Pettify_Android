@@ -28,17 +28,13 @@ import java.util.List;
 public class ReportListFragment extends Fragment {
 
     private static ReportListViewModel reportListViewModel;
-//    private ReportListViewModel reportListViewModel;
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
-    ReportListViewModel reportViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        reportViewModel =
-                new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
@@ -59,7 +55,7 @@ public class ReportListFragment extends Fragment {
         });
 
         final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-        swipeRefresh.setOnRefreshListener(() -> reportViewModel.refreshAllReports(new EmptyListener() {
+        swipeRefresh.setOnRefreshListener(() -> reportListViewModel.refreshAllReports(new EmptyListener() {
             @Override
             public void onComplete() {
                 swipeRefresh.setRefreshing(false);
