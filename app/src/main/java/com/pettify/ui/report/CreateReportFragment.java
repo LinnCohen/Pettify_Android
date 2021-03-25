@@ -168,18 +168,10 @@ public class CreateReportFragment extends Fragment {
         builder.show();
     }
 
-    //TODO - direct to view report page
-    void reloadData(){
-        submit_btn.setEnabled(false);
-        reportViewModel.refreshAllReports(() -> {
-            submit_btn.setEnabled(true);
-        });
-    }
-
     private void uploadImage() {
         final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose your profile picture");
+        builder.setTitle("Choose your report picture");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {

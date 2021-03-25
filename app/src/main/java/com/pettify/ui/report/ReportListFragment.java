@@ -27,17 +27,14 @@ import java.util.List;
 
 public class ReportListFragment extends Fragment {
 
-    private ReportListViewModel reportListViewModel;
+    private static ReportListViewModel reportListViewModel;
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
-    ReportListViewModel reportViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        reportViewModel =
-                new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
@@ -58,7 +55,7 @@ public class ReportListFragment extends Fragment {
         });
 
         final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-        swipeRefresh.setOnRefreshListener(() -> reportViewModel.refreshAllReports(new EmptyListener() {
+        swipeRefresh.setOnRefreshListener(() -> reportListViewModel.refreshAllReports(new EmptyListener() {
             @Override
             public void onComplete() {
                 swipeRefresh.setRefreshing(false);
@@ -73,8 +70,16 @@ public class ReportListFragment extends Fragment {
         return view;
     }
 
-    void reloadData(){
-        reportViewModel.refreshAllReports(() -> { });
+    static void reloadData() {
+        reportListViewModel.refreshAllReports(() -> { });
+    }
+
+    static void deleteReport(String id, EmptyListener listener) {
+        reportListViewModel.deleteReport(id, listener);
+    }
+
+    static void deleteReportLocally(Report report) {
+        reportListViewModel.deleteReportLocally(report);
     }
 
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
@@ -93,7 +98,6 @@ public class ReportListFragment extends Fragment {
             delete_report = itemView.findViewById(R.id.listrow_delete_report);
 
             edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));
-            delete_report.setOnClickListener(view1 -> Log.d("TAG", "Test Delete Button"));
 
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
@@ -138,6 +142,21 @@ public class ReportListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull ReportRowViewHolder holder, int position) {
             Report report = reportData.get(position);
+            Button delete_report = holder.itemView.findViewById(R.id.listrow_delete_report);
+            Log.d("TAG", "position is: " + position);
+            String id = reportListViewModel.getReports().getValue().get(position).getId();
+            delete_report.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteReport(id, new EmptyListener() {
+                        @Override
+                        public void onComplete() {
+                            Log.d("TAG", "Successfully deleted report");
+                        }
+                    });
+                    deleteReportLocally(report);
+                }
+            });
             holder.bindData(report);
         }
 

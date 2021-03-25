@@ -48,4 +48,12 @@ public class ReportListViewModel extends ViewModel {
         reportModel.uploadImage(imageBmp, name, listener);
     }
 
+    public void deleteReport(String id, EmptyListener listener) {
+        reportModel.deleteReport(id, listener);
+    }
+
+    public void deleteReportLocally(Report report) {
+        reportModel.deleteReportLocally(report);
+    }
+
 }
