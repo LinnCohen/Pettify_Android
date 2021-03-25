@@ -1,4 +1,4 @@
-package com.pettify.Utilities;
+package com.pettify.utilities;
 
 import android.Manifest;
 import android.content.Context;
