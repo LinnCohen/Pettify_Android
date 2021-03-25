@@ -153,7 +153,7 @@ public class ReportListFragment extends Fragment {
                             Log.d("TAG", "Successfully deleted report");
                         }
                     });
-                    reloadData();
+                    notifyDataSetChanged();
                 }
             });
             Report report = reportData.get(position);
