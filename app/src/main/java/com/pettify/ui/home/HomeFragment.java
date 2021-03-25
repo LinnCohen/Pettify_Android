@@ -118,7 +118,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (map == null || data == null) {
         return;
         }
-        map.clear();
+
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
@@ -133,15 +133,17 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 lastClicked = "";
                 Log.d("TAG", "Window true");
 
-                Report clonedReport = null;
+                Report clonedReport = new Report();
                 for (int i = 0; i < data.size(); i++) {
                     if (data.get(i).getId().equals(tag)) {
                         clonedReport = data.get(i);
+                        Log.d("TAG",clonedReport.toString());
                     }
                 }
 
 //              NEED TO REDRIRECT TO WANTED REPORT
-           ;
+                HomeFragmentDirections.ActionNavHomeToViewReport direc =  HomeFragmentDirections.actionNavHomeToViewReport(clonedReport.getId());
+                Navigation.findNavController(view).navigate(direc);
 
 
             } else {
