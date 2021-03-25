@@ -35,4 +35,9 @@ public class AuthViewModel extends ViewModel {
     public void onUserChange(Listener<FirebaseUser> firebaseUserListener) {
         userModel.onUserChange(firebaseUserListener);
     }
+
+
+    public void getUser(String id, final Listener<User> listener) {
+        userModel.getUser(id, listener);
+    }
 }
