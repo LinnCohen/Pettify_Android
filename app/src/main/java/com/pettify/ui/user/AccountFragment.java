@@ -46,7 +46,7 @@ public class AccountFragment extends Fragment {
         Log.d("TAG", "fidsfkj");
         int radiusProgress = (int)(currentUser.getRadius());
         Log.d("TAG", String.valueOf(radiusProgress));
-        Log.d("TAG", String.valueOf(currentUser.getRadius()));
+//        Log.d("TAG", currentUser.getId());
         radius.setProgress(radiusProgress);
 
 
