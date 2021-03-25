@@ -30,11 +30,9 @@ import android.widget.TextView;
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
 import com.pettify.model.listeners.*;
-import com.pettify.Utilities.LocationUtils;
-import com.pettify.model.Model;
+import com.pettify.utilities.LocationUtils;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModel;
 
 import java.util.Date;
 
