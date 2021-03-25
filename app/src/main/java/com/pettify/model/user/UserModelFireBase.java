@@ -116,7 +116,8 @@ public class UserModelFireBase {
         return firebaseUser == null ? null :
                 new User(
                         firebaseUser.getDisplayName(),
-                        firebaseUser.getEmail());
+                        firebaseUser.getEmail(),
+                        firebaseUser.getUid());
     }
 
     public void register(final User user, String password, final Listener<Boolean> listener) {
@@ -124,9 +125,12 @@ public class UserModelFireBase {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+
+                        String userUid=task.getResult().getUser().getUid();
+                        user.setId(userUid);
+
                         if (task.isSuccessful()) {
-                            db.collection(USERS_COLLECTION)
-                                    .add(user);
+                            db.collection(USERS_COLLECTION).document(userUid).set(user);
                             updateUserProfile(user, listener);
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
