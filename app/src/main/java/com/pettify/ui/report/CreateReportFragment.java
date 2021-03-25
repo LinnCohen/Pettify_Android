@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -28,6 +29,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.pettify.R;
 import com.pettify.model.listeners.*;
 import com.pettify.utilities.LocationUtils;
@@ -55,13 +57,12 @@ public class CreateReportFragment extends Fragment {
     Button upload_image_btn;
     Button submit_btn;
     ImageView reportImageView;
-
-    ReportListViewModel reportViewModel;
+    Report existingReport;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        reportViewModel =
+        reportListViewModel =
                 new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_report, container, false);
@@ -70,9 +71,10 @@ public class CreateReportFragment extends Fragment {
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
 
         if (reportId != null) {
-            reportViewModel.getReport(reportId, new Listener<Report>() {
+            reportListViewModel.getReport(reportId, new Listener<Report>() {
                 @Override
                 public void onComplete(Report report) {
+                    existingReport = report;
                     report_title.setText(report.getTitle());
                     report_description.setText(report.getDescription());
                     report_address.setText(report.getAddress());
@@ -156,19 +158,42 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        reportViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
-            if (url == null) {
-                displayFailedError();
-            } else {
-                report.setImage_url(url);
-                reportViewModel.addReport(report, new EmptyListener() {
-                    @Override
-                    public void onComplete() {
-                        //do we need to reload data after creating report?
-//                        reloadData();
-                        Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list);
-                    }
-                });
+        if (reportImageView != null) {
+            reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
+                if (url == null) {
+                    displayFailedError();
+                } else {
+                    report.setImage_url(url);
+                    CreateReportFragment.this.addOrEditReport(url);
+//                reportListViewModel.addReport(report, () -> Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list));
+                }
+            });
+        } else {
+            this.addOrEditReport(report.getImage_url());
+        }
+    }
+
+    private void addOrEditReport(String url) {
+        final String title = report_title.getText().toString();
+        final String description = report_description.getText().toString();
+
+//        User user = mViewModel.getCurrentUser();
+
+        final Outfit newOutfit = new Outfit(user.id, user.name, title, url, description);
+
+        if (!outfit.id.isEmpty()) {
+            newOutfit.setId(outfit.id);
+        }
+
+        mViewModel.addOrUpdateOutfit(newOutfit, new OutfitModel.CompleteListener() {
+            @Override
+            public void onComplete() {
+                NavController navController = Navigation.findNavController(view);
+
+                if (!outfit.id.isEmpty())
+                    navController.navigate(R.id.outfitsListFragment);
+                else
+                    navController.navigateUp();
             }
         });
     }
@@ -187,7 +212,7 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void uploadImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery", "Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Choose your report picture");
         builder.setItems(options, new DialogInterface.OnClickListener() {
