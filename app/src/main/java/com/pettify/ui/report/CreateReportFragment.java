@@ -33,6 +33,7 @@ import com.pettify.model.listeners.*;
 import com.pettify.utilities.LocationUtils;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
@@ -65,6 +66,23 @@ public class CreateReportFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_report, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
+
+        final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
+
+        if (reportId != null) {
+            reportViewModel.getReport(reportId, new Listener<Report>() {
+                @Override
+                public void onComplete(Report report) {
+                    report_title.setText(report.getTitle());
+                    report_description.setText(report.getDescription());
+                    report_address.setText(report.getAddress());
+                    if (report.getImage_url() != null){
+                        Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(reportImageView);
+                    }
+                }
+            });
+        }
+
         upload_image_btn = view.findViewById(R.id.create_add_images);
         reportImageView = view.findViewById(R.id.create_image_ph);
         submit_btn = view.findViewById(R.id.create_report_btn);
