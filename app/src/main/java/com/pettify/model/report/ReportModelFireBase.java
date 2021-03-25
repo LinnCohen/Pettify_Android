@@ -12,6 +12,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -21,6 +22,7 @@ import com.pettify.model.listeners.Listener;
 import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 
@@ -76,7 +78,13 @@ public class ReportModelFireBase {
     }
 
     public void updateReport(Report report, EmptyListener listener) {
-        addReport(report, listener);
+        Map<String, Object> reportMap = report.toMap();
+        db.collection(REPORTS_COLLECTION).document(report.getId()).set(reportMap, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (listener != null) listener.onComplete();
+            }
+        });
     }
 
     public void deleteReport(String reportId, EmptyListener listener) {

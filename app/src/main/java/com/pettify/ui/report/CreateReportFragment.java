@@ -164,36 +164,25 @@ public class CreateReportFragment extends Fragment {
                     displayFailedError();
                 } else {
                     report.setImage_url(url);
-                    CreateReportFragment.this.addOrEditReport(url);
+                    CreateReportFragment.this.addOrEditReport(report);
 //                reportListViewModel.addReport(report, () -> Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list));
                 }
             });
         } else {
-            this.addOrEditReport(report.getImage_url());
+            this.addOrEditReport(report);
         }
     }
 
-    private void addOrEditReport(String url) {
-        final String title = report_title.getText().toString();
-        final String description = report_description.getText().toString();
-
-//        User user = mViewModel.getCurrentUser();
-
-        final Outfit newOutfit = new Outfit(user.id, user.name, title, url, description);
-
-        if (!outfit.id.isEmpty()) {
-            newOutfit.setId(outfit.id);
-        }
-
-        mViewModel.addOrUpdateOutfit(newOutfit, new OutfitModel.CompleteListener() {
+    private void addOrEditReport(Report report) {
+        reportListViewModel.addOrEditReport(report, new EmptyListener() {
             @Override
             public void onComplete() {
-                NavController navController = Navigation.findNavController(view);
+                NavController navController = Navigation.findNavController(getView());
 
-                if (!outfit.id.isEmpty())
-                    navController.navigate(R.id.outfitsListFragment);
-                else
-                    navController.navigateUp();
+//                if (!report.id.isEmpty())
+                    navController.navigate(R.id.reportslist_list);
+//                else
+//                    navController.navigateUp();
             }
         });
     }

@@ -71,7 +71,12 @@ public class ReportModel {
     }
 
     public void addReport(final Report report, final EmptyListener listener) {
-        reportModelFireBase.addReport(report, listener);
+        if (!report.getId().isEmpty()) {
+            reportModelFireBase.addReport(report, listener);
+        }
+        else {
+            reportModelFireBase.updateReport(report, listener);
+        }
     }
 
     public void updateReport(final Report report, final EmptyListener listener) {

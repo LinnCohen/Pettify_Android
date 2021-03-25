@@ -36,7 +36,7 @@ public class ReportListViewModel extends ViewModel {
         reportModel.refreshAllReports(listener);
     }
 
-    public void addReport(Report report, EmptyListener listener) {
+    public void addOrEditReport(Report report, EmptyListener listener) {
         User user = userModel.getCurrentUser();
         if (user != null) {
             report.setReporterId(user.getId());
