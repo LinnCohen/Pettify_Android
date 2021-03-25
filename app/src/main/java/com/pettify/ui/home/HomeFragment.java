@@ -15,7 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
+import androidx.navigation.Navigation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -26,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.pettify.R;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
+import com.pettify.ui.report.ReportListFragmentDirections;
 import com.pettify.utilities.LocationUtils;
 
 import java.util.LinkedList;
@@ -40,24 +41,25 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     Spinner spinner;
     LiveData<List<Report>> liveData;
     String lastClicked = "";
+    View view;
 
 
 
     public HomeFragment(){
-        Log.d("TAG","CTOR");
+
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+         view = inflater.inflate(R.layout.fragment_home, container, false);
         liveData = homeViewModel.getReports();
         data = liveData.getValue();
 
 
 
-        //----------------------------Spinner actions to choose map types----------------------------------//
+        //----------------------------Spinner actions to choose the map types----------------------------------//
         spinner = view.findViewById(R.id.spinner3);
         spinner.setOnItemSelectedListener(this);
         // Create an ArrayAdapter using the string array and a default spinner layout
@@ -106,7 +108,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 8));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 9));
             setMarkers();
 
         }
@@ -116,7 +118,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (map == null || data == null) {
         return;
         }
-        map.clear();
+
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
@@ -131,14 +133,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 lastClicked = "";
                 Log.d("TAG", "Window true");
 
-                Report clonedReport = null;
+                Report clonedReport = new Report();
                 for (int i = 0; i < data.size(); i++) {
                     if (data.get(i).getId().equals(tag)) {
                         clonedReport = data.get(i);
+                        Log.d("TAG",clonedReport.toString());
                     }
                 }
 
 //              NEED TO REDRIRECT TO WANTED REPORT
+                HomeFragmentDirections.ActionNavHomeToViewReport direc =  HomeFragmentDirections.actionNavHomeToViewReport(clonedReport.getId());
+                Navigation.findNavController(view).navigate(direc);
+
 
             } else {
                 lastClicked = tag;
