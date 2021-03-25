@@ -86,6 +86,7 @@ public class ReportModelFireBase {
                 if (task.isSuccessful()) {
                     if (listener != null) {
                         listener.onComplete();
+                        Log.d("TAG", "Got to firebase");
                     }
                 }
                 else {

@@ -93,4 +93,8 @@ public class ReportModel {
         reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
 
+    public void deleteReport(String id, EmptyListener listener) {
+        reportModelFireBase.deleteReport(id, listener);
+    }
+
 }

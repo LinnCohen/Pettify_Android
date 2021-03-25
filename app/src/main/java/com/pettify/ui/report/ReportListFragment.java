@@ -27,7 +27,8 @@ import java.util.List;
 
 public class ReportListFragment extends Fragment {
 
-    private ReportListViewModel reportListViewModel;
+    private static ReportListViewModel reportListViewModel;
+//    private ReportListViewModel reportListViewModel;
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
@@ -73,8 +74,12 @@ public class ReportListFragment extends Fragment {
         return view;
     }
 
-    void reloadData(){
-        reportViewModel.refreshAllReports(() -> { });
+    static void reloadData() {
+        reportListViewModel.refreshAllReports(() -> { });
+    }
+
+    static void deleteReport(String id, EmptyListener listener) {
+        reportListViewModel.deleteReport(id, listener);
     }
 
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
@@ -93,7 +98,6 @@ public class ReportListFragment extends Fragment {
             delete_report = itemView.findViewById(R.id.listrow_delete_report);
 
             edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));
-            delete_report.setOnClickListener(view1 -> Log.d("TAG", "Test Delete Button"));
 
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
@@ -137,6 +141,21 @@ public class ReportListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ReportRowViewHolder holder, int position) {
+            Button delete_report = holder.itemView.findViewById(R.id.listrow_delete_report);
+            Log.d("TAG", "position is: " + position);
+            String id = reportListViewModel.getReports().getValue().get(position).getId();
+            delete_report.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deleteReport(id, new EmptyListener() {
+                        @Override
+                        public void onComplete() {
+                            Log.d("TAG", "Successfully deleted report");
+                        }
+                    });
+                    reloadData();
+                }
+            });
             Report report = reportData.get(position);
             holder.bindData(report);
         }

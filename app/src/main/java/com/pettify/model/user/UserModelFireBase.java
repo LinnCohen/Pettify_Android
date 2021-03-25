@@ -113,7 +113,10 @@ public class UserModelFireBase {
     public User getCurrentUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
-        return firebaseUser == null ? null : new User(firebaseUser.getDisplayName(), firebaseUser.getEmail());
+        return firebaseUser == null ? null :
+                new User(
+                        firebaseUser.getDisplayName(),
+                        firebaseUser.getEmail());
     }
 
     public void register(final User user, String password, final Listener<Boolean> listener) {
