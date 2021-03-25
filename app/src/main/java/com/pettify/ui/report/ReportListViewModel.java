@@ -52,4 +52,8 @@ public class ReportListViewModel extends ViewModel {
         reportModel.deleteReport(id, listener);
     }
 
+    public void deleteReportLocally(Report report) {
+        reportModel.deleteReportLocally(report);
+    }
+
 }

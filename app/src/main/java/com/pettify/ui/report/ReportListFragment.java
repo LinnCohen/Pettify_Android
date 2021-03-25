@@ -82,6 +82,10 @@ public class ReportListFragment extends Fragment {
         reportListViewModel.deleteReport(id, listener);
     }
 
+    static void deleteReportLocally(Report report) {
+        reportListViewModel.deleteReportLocally(report);
+    }
+
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView description;
@@ -141,6 +145,7 @@ public class ReportListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ReportRowViewHolder holder, int position) {
+            Report report = reportData.get(position);
             Button delete_report = holder.itemView.findViewById(R.id.listrow_delete_report);
             Log.d("TAG", "position is: " + position);
             String id = reportListViewModel.getReports().getValue().get(position).getId();
@@ -153,10 +158,9 @@ public class ReportListFragment extends Fragment {
                             Log.d("TAG", "Successfully deleted report");
                         }
                     });
-                    notifyDataSetChanged();
+                    deleteReportLocally(report);
                 }
             });
-            Report report = reportData.get(position);
             holder.bindData(report);
         }
 

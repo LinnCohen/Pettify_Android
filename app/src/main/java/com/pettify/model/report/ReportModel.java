@@ -1,18 +1,11 @@
 package com.pettify.model.report;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
 
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentChange;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
@@ -95,6 +88,10 @@ public class ReportModel {
 
     public void deleteReport(String id, EmptyListener listener) {
         reportModelFireBase.deleteReport(id, listener);
+    }
+
+    public void deleteReportLocally(final Report report) {
+        reportModelSql.deleteReportLocally(report);
     }
 
 }
