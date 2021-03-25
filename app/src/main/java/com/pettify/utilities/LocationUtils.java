@@ -24,7 +24,7 @@ import java.util.Locale;
 
 public final class LocationUtils implements LocationListener {
     public final static LocationUtils instance = new LocationUtils();
-    LocationManager locationManager;
+    private  LocationManager locationManager;
     private double lat = 0.0;
     private double lng = 0.0;
 
@@ -44,12 +44,26 @@ public final class LocationUtils implements LocationListener {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         Location location = locationManager.getLastKnownLocation(provider);
         if (location != null) {
-            Log.d("location", "Locatoin !=null");
             setLat(location.getLatitude());
             setLng(location.getLongitude());
         }
 
+    }
 
+    public double getLat() {
+        return this.lat;
+    }
+
+    public double getLng() {
+        return this.lng;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public void setLng(double lng) {
+        this.lng = lng;
     }
 
     @Override
@@ -74,33 +88,6 @@ public final class LocationUtils implements LocationListener {
         Log.d("Latitude", "status");
     }
 
-    public String getCurrentLocationAsString() {
-        locationManager = (LocationManager) PettifyApplication.context.getSystemService(Context.LOCATION_SERVICE);
-        String provider = locationManager.getBestProvider(new Criteria(), true);
-        if (ActivityCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            /*
-             TODO: Consider calling
-                ActivityCompat#requestPermissions
-             here to request the missing permissions, and then overriding
-               public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                                                      int[] grantResults)
-             to handle the case where the user grants the permission. See the documentation
-             for ActivityCompat#requestPermissions for more details.
-            */
-            Log.d("location", "Client does not have location/network permmisons please active permissions");
-            return null;
-        }
-
-        Location location = locationManager.getLastKnownLocation(provider);
-        if (location != null) {
-            setLat(location.getLatitude());
-            setLng(location.getLongitude());
-            LatLng myCoordinates = new LatLng(getLat(), getLng());
-            return myCoordinates.toString();
-        }
-        return new String("Undefined");
-    }
-
 
     public LatLng getCurrentLocation() {
         locationManager = (LocationManager) PettifyApplication.context.getSystemService(Context.LOCATION_SERVICE);
@@ -122,14 +109,14 @@ public final class LocationUtils implements LocationListener {
         if (location != null) {
             setLat(location.getLatitude());
             setLng(location.getLongitude());
-            LatLng myCoordinates = new LatLng(getLat(), getLng());
-            return myCoordinates;
+            return new LatLng(getLat(), getLng());
+
         }
-        return new LatLng(0.0, 0.0);
+        return new LatLng(32.0851703, 35.139172); // retrun default location if cant get current location
     }
 
     public String getAddressName(Context context, LatLng latLng) {
-        Geocoder geocoder=  new Geocoder(context, Locale.getDefault());
+        Geocoder geocoder = new Geocoder(context, Locale.getDefault());
 
         List<Address> addressList = null; // Here 1 represent max location result to returned, by documents it recommended 1 to 5
         try {
@@ -140,19 +127,5 @@ public final class LocationUtils implements LocationListener {
         return addressList.get(0).getAddressLine(0);
     }
 
-    public double getLat() {
-        return lat;
-    }
 
-    public double getLng() {
-        return lng;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public void setLng(double lng) {
-        this.lng = lng;
-    }
 }

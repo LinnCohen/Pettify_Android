@@ -1,5 +1,6 @@
 package com.pettify.ui.home;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.pettify.R;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
+import com.pettify.utilities.LocationUtils;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -104,7 +106,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(31.0461, 34.8516), 8));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 8));
             setMarkers();
 
         }
@@ -115,14 +117,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         return;
         }
         map.clear();
-        Log.d("location", data.toString());
-
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
             marker.setTag(report.getId());
         }
-
 
         map.setOnMarkerClickListener(clickedMarker -> {
             String tag = clickedMarker.getTag().toString();
