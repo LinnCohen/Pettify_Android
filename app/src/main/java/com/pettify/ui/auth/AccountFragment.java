@@ -1,4 +1,4 @@
-package com.pettify.ui.user;
+package com.pettify.ui.auth;
 
 import android.os.Bundle;
 
@@ -13,10 +13,13 @@ import android.widget.EditText;
 import android.widget.SeekBar;
 
 import com.pettify.R;
+import com.pettify.model.listeners.Listener;
+import com.pettify.model.report.Report;
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
 import com.pettify.ui.report.ReportListViewModel;
 import com.pettify.ui.report.ViewReportFragmentArgs;
+import com.squareup.picasso.Picasso;
 
 public class AccountFragment extends Fragment {
 
@@ -25,6 +28,7 @@ public class AccountFragment extends Fragment {
     EditText phone;
     SeekBar radius;
     AuthViewModel authViewModel;
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -38,17 +42,30 @@ public class AccountFragment extends Fragment {
         phone = view.findViewById(R.id.phone_editText);
         radius = view.findViewById(R.id.radius_eekBar);
 
+        name.setEnabled(false);
+        email.setEnabled(false);
+        phone.setEnabled(false);
+        radius.setEnabled(false);
+
         final User currentUser = authViewModel.getCurrentUser();
 
         name.setText(currentUser.getName());
         email.setText(currentUser.getEmail());
-        phone.setText(currentUser.getPhoneNumber());
         Log.d("TAG", "fidsfkj");
         int radiusProgress = (int)(currentUser.getRadius());
         Log.d("TAG", String.valueOf(radiusProgress));
 //        Log.d("TAG", currentUser.getId());
-        radius.setProgress(radiusProgress);
 
+        final String userId = currentUser.getId();
+
+        authViewModel.getUser(userId, new Listener<User>() {
+            @Override
+            public void onComplete(User data) {
+                user = data;
+                phone.setText(user.getPhoneNumber());
+                radius.setProgress((int) user.getRadius());
+            }
+        });
 
         return view;
     }
