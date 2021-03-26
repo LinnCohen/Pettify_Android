@@ -28,7 +28,7 @@ import java.util.List;
 
 public class ReportListFragment extends Fragment {
 
-    private static ReportListViewModel reportListViewModel;
+    private ReportListViewModel reportListViewModel;
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
@@ -71,24 +71,18 @@ public class ReportListFragment extends Fragment {
         return view;
     }
 
-    static void reloadData() {
+    void reloadData() {
         reportListViewModel.refreshAllReports(() -> { });
     }
 
-    static void deleteReport(String id, EmptyListener listener) {
+    void deleteReport(String id, EmptyListener listener) {
         reportListViewModel.deleteReport(id, listener);
-    }
-
-    static void deleteReportLocally(Report report) {
-        reportListViewModel.deleteReportLocally(report);
     }
 
     static class ReportRowViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView description;
         ImageView image;
-        Button edit_report;
-        Button delete_report;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);

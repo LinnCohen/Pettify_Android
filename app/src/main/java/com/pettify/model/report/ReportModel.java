@@ -57,7 +57,6 @@ public class ReportModel {
                         break;
                     case REMOVED:
                         report.setId(documentChange.getDocument().getId());
-                        Log.d("TAG", "got to delete report locally");
                         reportModelSql.deleteReport(report, null);
                         break;
                 }
@@ -93,9 +92,4 @@ public class ReportModel {
     public void deleteReport(String id, EmptyListener listener) {
         reportModelFireBase.deleteReport(id, listener);
     }
-
-    public void deleteReportLocally(final Report report) {
-        reportModelSql.deleteReportLocally(report);
-    }
-
 }

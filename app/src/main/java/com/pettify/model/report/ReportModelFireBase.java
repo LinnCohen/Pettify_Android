@@ -42,9 +42,7 @@ public class ReportModelFireBase {
 
     public void getAllReports(long lastUpdated, Listener<QuerySnapshot> listener) {
         Timestamp ts = new Timestamp(lastUpdated,0);
-        List<Report> reports = new LinkedList<>();
         db.collection(REPORTS_COLLECTION).whereGreaterThanOrEqualTo("lastUpdated",ts)
-//                .get()
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
@@ -90,20 +88,6 @@ public class ReportModelFireBase {
     public void updateReport(Report report, String reportId, EmptyListener listener) {
         Map<String, Object> reportMap = report.toMap();
         db.collection(REPORTS_COLLECTION).document(reportId).set(reportMap, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (listener != null) listener.onComplete();
-            }
-        });
-    }
-
-    public void updateReportLastUpdated(String reportId, EmptyListener listener) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("lastUpdated", FieldValue.serverTimestamp());
-        db.collection(REPORTS_COLLECTION)
-                .document(reportId)
-                .update(result)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (listener != null) listener.onComplete();

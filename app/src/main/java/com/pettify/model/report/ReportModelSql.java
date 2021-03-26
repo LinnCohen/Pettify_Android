@@ -63,21 +63,4 @@ public class ReportModelSql {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
-
-    @SuppressLint("StaticFieldLeak")
-    public void deleteReportLocally(final Report report) {
-        new AsyncTask<String, String, String>() {
-            @Override
-            protected String doInBackground(String... strings) {
-                AppLocalDb.db.reportDao().delete(report);
-                return "";
-            }
-
-            @Override
-            protected void onPostExecute(String s) {
-                super.onPostExecute(s);
-                Log.d("TAG", "deleted report");
-            }
-        }.execute("");
-    }
 }
