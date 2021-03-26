@@ -73,7 +73,11 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
-        navUsername.setText("Hello " + currentUserName);
+        if (currentUserName == null) {
+            navUsername.setText("Welcome to Pettify!");
+        } else {
+            navUsername.setText("Hello " + currentUserName);
+        }
         authButton.setText("Logout");
         authButton.setOnClickListener(buttonView -> {
             authViewModel.logout();
