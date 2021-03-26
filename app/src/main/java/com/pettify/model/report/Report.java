@@ -109,8 +109,8 @@ public class Report implements Serializable {
         result.put("description", this.description);
         result.put("title", this.title);
         result.put("address", this.address);
-        result.put("animal type", this.animal_type);
-        result.put("report type", this.report_type);
+        result.put("animal_type", this.animal_type);
+        result.put("report_type", this.report_type);
         result.put("image url", this.image_url);
         result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("lat", this.lat);
