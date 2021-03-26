@@ -24,18 +24,18 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_register, container, false);
-        View registerButton = root.findViewById(R.id.register_button);
-        SeekBar seekBar =  root.findViewById(R.id.radius_eekBar);
+        View registerView = inflater.inflate(R.layout.fragment_register, container, false);
+        View registerButton = registerView.findViewById(R.id.register_button);
+        SeekBar seekBar =  registerView.findViewById(R.id.radius_eekBar);
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         int progress = seekBar.getProgress();
-        tvProgressLabel =  root.findViewById(R.id.accountTitle_textView);
+        tvProgressLabel =  registerView.findViewById(R.id.accountTitle_textView);
         tvProgressLabel.setText("Radius: " + progress);
         registerButton.setOnClickListener(buttonView -> {
-            TextView email = root.findViewById(R.id.register_user_email);
-            TextView password = root.findViewById(R.id.register_user_password);
-            TextView name = root.findViewById(R.id.register_user_name);
-            TextView phone = root.findViewById(R.id.register_user_phoneNumber);
+            TextView email = registerView.findViewById(R.id.register_user_email);
+            TextView password = registerView.findViewById(R.id.register_user_password);
+            TextView name = registerView.findViewById(R.id.register_user_name);
+            TextView phone = registerView.findViewById(R.id.register_user_phoneNumber);
             User user = new User(name.getText().toString(), email.getText().toString());
             user.setPhoneNumber(phone.getText().toString());
             int currentProgress = seekBar.getProgress();
@@ -43,16 +43,14 @@ public class RegisterFragment extends Fragment {
             authViewModel.registerUser(user, password.getText().toString(),
                     isCreated -> {
                         if (isCreated) {
-                            NavController navController = Navigation.findNavController(root);
-                            navController.navigateUp();
-                            navController.navigateUp();
+                            Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
                         }
                         else {
                             //show error
                         }
                     });
         });
-        return root;
+        return registerView;
     }
 
 
