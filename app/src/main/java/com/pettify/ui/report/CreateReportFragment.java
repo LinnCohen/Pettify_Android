@@ -42,7 +42,6 @@ import java.util.Date;
 import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
 
-
 public class CreateReportFragment extends Fragment {
     ReportListViewModel reportListViewModel;
     TextView report_title;
@@ -71,6 +70,7 @@ public class CreateReportFragment extends Fragment {
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
 
         if (reportId != null) {
+            Log.d("TAG", reportId);
             reportListViewModel.getReport(reportId, new Listener<Report>() {
                 @Override
                 public void onComplete(Report report) {
@@ -165,7 +165,6 @@ public class CreateReportFragment extends Fragment {
                 } else {
                     report.setImage_url(url);
                     CreateReportFragment.this.addOrEditReport(report);
-//                reportListViewModel.addReport(report, () -> Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list));
                 }
             });
         } else {
@@ -174,17 +173,23 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addOrEditReport(Report report) {
-        reportListViewModel.addOrEditReport(report, new EmptyListener() {
-            @Override
-            public void onComplete() {
-                NavController navController = Navigation.findNavController(getView());
-
-//                if (!report.id.isEmpty())
+        if (existingReport != null) {
+            reportListViewModel.addReport(report, new EmptyListener() {
+                @Override
+                public void onComplete() {
+                    NavController navController = Navigation.findNavController(getView());
                     navController.navigate(R.id.reportslist_list);
-//                else
-//                    navController.navigateUp();
-            }
-        });
+                }
+            });
+        } else {
+            reportListViewModel.updateReport(report, new EmptyListener() {
+                @Override
+                public void onComplete() {
+                    NavController navController = Navigation.findNavController(getView());
+                    navController.navigate(R.id.reportslist_list);
+                }
+            });
+        }
     }
 
     private void displayFailedError() {
