@@ -43,7 +43,8 @@
             android:id="@+id/action_create_report_to_reportslist_list"
             app:destination="@id/reportslist_list" />
         <argument
-            android:name="reportId" />
+            android:name="reportId"
+            android:defaultValue="null"/>
     </fragment>
 
     <fragment

@@ -70,7 +70,7 @@ public class CreateReportFragment extends Fragment {
 
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
 
-        if (reportId != null) {
+        if (reportId != "null") {
             reportListViewModel.getReport(reportId, new Listener<Report>() {
                 @Override
                 public void onComplete(Report report) {
