@@ -44,6 +44,14 @@ public class ReportListViewModel extends ViewModel {
         reportModel.addReport(report, listener);
     }
 
+    public void updateReport(Report report, String reportId, EmptyListener listener) {
+        User user = userModel.getCurrentUser();
+        if (user != null) {
+            report.setReporterId(user.getId());
+        }
+        reportModel.updateReport(report, reportId, listener);
+    }
+
     public void uploadImage(Bitmap imageBmp, String name, final Listener<String> listener) {
         reportModel.uploadImage(imageBmp, name, listener);
     }
