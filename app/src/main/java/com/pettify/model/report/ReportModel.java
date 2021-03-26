@@ -91,12 +91,7 @@ public class ReportModel {
     }
 
     public void deleteReport(String id, EmptyListener listener) {
-//        reportModelFireBase.updateReportLastUpdated(id, new EmptyListener() {
-//            @Override
-//            public void onComplete() {
-                reportModelFireBase.deleteReport(id, listener);
-//            }
-//        });
+        reportModelFireBase.deleteReport(id, listener);
     }
 
     public void deleteReportLocally(final Report report) {

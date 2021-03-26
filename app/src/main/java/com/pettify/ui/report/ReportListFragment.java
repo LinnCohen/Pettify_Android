@@ -152,7 +152,6 @@ public class ReportListFragment extends Fragment {
                             reloadData();
                         }
                     });
-//                    deleteReportLocally(report);
                 }
             });
 
