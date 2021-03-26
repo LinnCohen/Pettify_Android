@@ -5,12 +5,16 @@ import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -20,6 +24,7 @@ import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -37,14 +42,15 @@ public class ReportModelFireBase {
 
     public void getAllReports(long lastUpdated, Listener<QuerySnapshot> listener) {
         Timestamp ts = new Timestamp(lastUpdated,0);
-        List<Report> reports = new LinkedList<>();
         db.collection(REPORTS_COLLECTION).whereGreaterThanOrEqualTo("lastUpdated",ts)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        listener.onComplete(task.getResult());
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                        if (error != null) {
+                            Log.d("TAG", "", error);
+                            listener.onComplete(null);
+                        }
+                        listener.onComplete(value);
                     }
                 });
     }
@@ -52,7 +58,9 @@ public class ReportModelFireBase {
     public void addReport(Report report, EmptyListener listener) {
         db.collection(REPORTS_COLLECTION)
                 .add(report.toMap())
-                .addOnSuccessListener(documentReference -> listener.onComplete())
+                .addOnSuccessListener(documentReference -> {
+                    listener.onComplete();
+                })
                 .addOnFailureListener(e -> listener.onComplete()
                 );
     }
