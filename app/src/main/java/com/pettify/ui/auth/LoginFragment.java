@@ -43,8 +43,7 @@ public class LoginFragment extends Fragment {
 
         View noAccount = loginView.findViewById(R.id.noAccount_button);
         noAccount.setOnClickListener(buttonView -> {
-            NavController navController = Navigation.findNavController(loginView);
-            navController.navigate(R.id.nav_register);
+            Navigation.findNavController(loginView).navigate(R.id.action_nav_login_to_nav_register);
         });
 
         return loginView;
