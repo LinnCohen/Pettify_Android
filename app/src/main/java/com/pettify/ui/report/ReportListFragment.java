@@ -51,7 +51,7 @@ public class ReportListFragment extends Fragment {
 
         adapter.setOnItemClickListener(position ->  {
             String id = reportListViewModel.getReports().getValue().get(position).getId();
-            ReportListFragmentDirections.ActionReportslistListToViewReport direc = ReportListFragmentDirections.actionReportslistListToViewReport(id);
+            ReportListFragmentDirections.ActionReportslistListToViewReport direc = ReportListFragmentDirections.actionReportslistListToViewReport().setReportId(id);
             Navigation.findNavController(view).navigate(direc);
         });
 
@@ -95,10 +95,6 @@ public class ReportListFragment extends Fragment {
             description = itemView.findViewById(R.id.listrow_report_description);
             title = itemView.findViewById(R.id.listrow_report_title);
             image = itemView.findViewById(R.id.listrow_report_image);
-            edit_report = itemView.findViewById(R.id.listrow_edit_report);
-            delete_report = itemView.findViewById(R.id.listrow_delete_report);
-
-            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));
 
             itemView.setOnClickListener(view -> {
                 if (listener != null) {

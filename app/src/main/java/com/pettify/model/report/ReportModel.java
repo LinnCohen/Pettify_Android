@@ -3,6 +3,7 @@ package com.pettify.model.report;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -71,12 +72,7 @@ public class ReportModel {
     }
 
     public void addReport(final Report report, final EmptyListener listener) {
-        if (!report.getId().isEmpty()) {
-            reportModelFireBase.addReport(report, listener);
-        }
-        else {
-            reportModelFireBase.updateReport(report, listener);
-        }
+        reportModelFireBase.addReport(report, listener);
     }
 
     public void updateReport(final Report report, final EmptyListener listener) {
