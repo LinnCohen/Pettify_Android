@@ -26,29 +26,27 @@ public class LoginFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         authViewModel =
                 new ViewModelProvider(this).get(AuthViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_login, container, false);
-        View loginButton = root.findViewById(R.id.login_but);
+        View loginView = inflater.inflate(R.layout.fragment_login, container, false);
+        View loginButton = loginView.findViewById(R.id.login_but);
         loginButton.setOnClickListener(buttonView -> {
-            TextView email = root.findViewById(R.id.login_email);
-            TextView password = root.findViewById(R.id.login_password);
+            TextView email = loginView.findViewById(R.id.login_email);
+            TextView password = loginView.findViewById(R.id.login_password);
             authViewModel.loginUser(email.getText().toString(), password.getText().toString(),
                     isSuccess -> {
                         if (isSuccess) {
-                            NavController navController = Navigation.findNavController(root);
-                            navController.navigateUp();
-                            navController.navigateUp();
+                            Navigation.findNavController(loginView).navigate(R.id.action_nav_login_to_nav_home);
                         } else {
-                            root.findViewById(R.id.login_error_msg).setVisibility(View.VISIBLE);
+                            loginView.findViewById(R.id.login_error_msg).setVisibility(View.VISIBLE);
                         }
                     });
         });
 
-        View noAccount = root.findViewById(R.id.noAccount_button);
+        View noAccount = loginView.findViewById(R.id.noAccount_button);
         noAccount.setOnClickListener(buttonView -> {
-            NavController navController = Navigation.findNavController(root);
+            NavController navController = Navigation.findNavController(loginView);
             navController.navigate(R.id.nav_register);
         });
 
-        return root;
+        return loginView;
     }
 }
