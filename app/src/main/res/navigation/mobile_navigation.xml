@@ -64,6 +64,6 @@
     <fragment
         android:id="@+id/account"
         android:name="com.pettify.ui.auth.AccountFragment"
-        android:label="fragment_account"
+        android:label="My Account"
         tools:layout="@layout/fragment_account" />
 </navigation>
