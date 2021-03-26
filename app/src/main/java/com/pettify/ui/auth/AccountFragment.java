@@ -42,7 +42,7 @@ public class AccountFragment extends Fragment {
         email = view.findViewById(R.id.editTextTextEmailAddress);
         phone = view.findViewById(R.id.phone_editText);
         radius = view.findViewById(R.id.radius_eekBar);
-        radiusVal = view.findViewById(R.id.editTextNumber);
+        radiusVal = view.findViewById(R.id.radius_editText);
 
         name.setEnabled(false);
         email.setEnabled(false);
@@ -54,8 +54,6 @@ public class AccountFragment extends Fragment {
 
         name.setText(currentUser.getName());
         email.setText(currentUser.getEmail());
-        int radiusProgress = (int)(currentUser.getRadius());
-
         final String userId = currentUser.getId();
 
         authViewModel.getUser(userId, new Listener<User>() {
@@ -63,8 +61,9 @@ public class AccountFragment extends Fragment {
             public void onComplete(User data) {
                 user = data;
                 phone.setText(user.getPhoneNumber());
+                int radiusProgress = (int)(user.getRadius());
                 radius.setProgress(radiusProgress);
-//                radiusVal.setText(radiusProgress);
+                radiusVal.setText((String.valueOf(radiusProgress)));
             }
         });
 
