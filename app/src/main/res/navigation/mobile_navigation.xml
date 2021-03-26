@@ -73,7 +73,11 @@
         android:id="@+id/nav_register"
         android:name="com.pettify.ui.auth.RegisterFragment"
         android:label="@string/menu_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_nav_register_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/account"
         android:name="com.pettify.ui.auth.AccountFragment"
