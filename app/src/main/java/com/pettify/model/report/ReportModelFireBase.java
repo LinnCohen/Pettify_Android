@@ -72,7 +72,6 @@ public class ReportModelFireBase {
                         }
                     }
                 }
-                Log.d("TAG", "from firebase: " + report.toString());
                 listener.onComplete(report);
             }
         });

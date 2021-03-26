@@ -115,7 +115,7 @@ public class Report implements Serializable {
         result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("lat", this.lat);
         result.put("lng", this.lng);
-        result.put("reporterId", this.reporterId);
+        result.put("reportedId", this.reporterId);
         return result;
     }
 
