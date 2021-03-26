@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -50,7 +51,7 @@ public class ReportListFragment extends Fragment {
 
         adapter.setOnItemClickListener(position ->  {
             String id = reportListViewModel.getReports().getValue().get(position).getId();
-            ReportListFragmentDirections.ActionReportslistListToViewReport direc = ReportListFragmentDirections.actionReportslistListToViewReport(id);
+            ReportListFragmentDirections.ActionReportslistListToViewReport direc = ReportListFragmentDirections.actionReportslistListToViewReport().setReportId(id);
             Navigation.findNavController(view).navigate(direc);
         });
 
@@ -94,10 +95,6 @@ public class ReportListFragment extends Fragment {
             description = itemView.findViewById(R.id.listrow_report_description);
             title = itemView.findViewById(R.id.listrow_report_title);
             image = itemView.findViewById(R.id.listrow_report_image);
-            edit_report = itemView.findViewById(R.id.listrow_edit_report);
-            delete_report = itemView.findViewById(R.id.listrow_delete_report);
-
-            edit_report.setOnClickListener(view1 -> Log.d("TAG", "Test Edit Button"));
 
             itemView.setOnClickListener(view -> {
                 if (listener != null) {
@@ -143,7 +140,7 @@ public class ReportListFragment extends Fragment {
         public void onBindViewHolder(@NonNull ReportRowViewHolder holder, int position) {
             Report report = reportData.get(position);
             Button delete_report = holder.itemView.findViewById(R.id.listrow_delete_report);
-            Log.d("TAG", "position is: " + position);
+            Button edit_report = holder.itemView.findViewById(R.id.listrow_edit_report);
             String id = reportListViewModel.getReports().getValue().get(position).getId();
             delete_report.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -155,6 +152,14 @@ public class ReportListFragment extends Fragment {
                         }
                     });
                     deleteReportLocally(report);
+                }
+            });
+
+            edit_report.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ReportListFragmentDirections.ActionReportslistListToCreateReport direction = ReportListFragmentDirections.actionReportslistListToCreateReport(id);
+                    Navigation.findNavController(holder.itemView).navigate(direction);
                 }
             });
             holder.bindData(report);

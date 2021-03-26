@@ -142,7 +142,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 }
 
 //              NEED TO REDRIRECT TO WANTED REPORT
-                HomeFragmentDirections.ActionNavHomeToViewReport direc =  HomeFragmentDirections.actionNavHomeToViewReport(clonedReport.getId());
+                HomeFragmentDirections.ActionNavHomeToViewReport direc =  HomeFragmentDirections.actionNavHomeToViewReport().setReportId(clonedReport.getId());
                 Navigation.findNavController(view).navigate(direc);
 
 
