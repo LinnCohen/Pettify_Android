@@ -57,6 +57,7 @@ public class CreateReportFragment extends Fragment {
     Button submit_btn;
     ImageView reportImageView;
     Report existingReport;
+    String reportId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,7 +68,15 @@ public class CreateReportFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_create_report, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
-        final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
+        reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
+
+        animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
+        ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
+                R.array.animal_types_array, android.R.layout.simple_spinner_item);
+
+        report_type_spinner = view.findViewById(R.id.report_type_spinner);
+        ArrayAdapter<CharSequence> report_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
+                R.array.report_types_array, android.R.layout.simple_spinner_item);
 
         if (reportId != null) {
             Log.d("TAG", reportId);
@@ -78,6 +87,11 @@ public class CreateReportFragment extends Fragment {
                     report_title.setText(report.getTitle());
                     report_description.setText(report.getDescription());
                     report_address.setText(report.getAddress());
+                    Log.d("TAG", "report: " + report.toString());
+                    int animalSpinnerPosition = animal_type_adapter.getPosition(report.getAnimal_type());
+                    animal_type_spinner.setSelection(animalSpinnerPosition);
+                    int reportTypeSpinnerPosition = report_type_adapter.getPosition(report.getReport_type());
+                    report_type_spinner.setSelection(reportTypeSpinnerPosition);
                     if (report.getImage_url() != null){
                         Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(reportImageView);
                     }
@@ -85,19 +99,20 @@ public class CreateReportFragment extends Fragment {
             });
         }
 
-        upload_image_btn = view.findViewById(R.id.create_add_images);
-        reportImageView = view.findViewById(R.id.create_image_ph);
-        submit_btn = view.findViewById(R.id.create_report_btn);
-        report_title = view.findViewById(R.id.create_title_text);
-        report_description = view.findViewById(R.id.create_desc_text);
-        report_address = view.findViewById(R.id.create_report_address);
+        report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        report_type_spinner.setAdapter(report_type_adapter);
+        report_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: report_type = parent.getItemAtPosition(0).toString(); break;
+                    case 1: report_type = parent.getItemAtPosition(1).toString(); break;
 
-        submit_btn.setOnClickListener(v -> addReport());
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
 
-        //animal type spinner
-        animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
-        ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
-                R.array.animal_types_array, android.R.layout.simple_spinner_item);
         animal_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         animal_type_spinner.setAdapter(animal_type_adapter);
         animal_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -113,23 +128,14 @@ public class CreateReportFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        //report type spinner
-        report_type_spinner = view.findViewById(R.id.report_type_spinner);
-        ArrayAdapter<CharSequence> report_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
-                R.array.report_types_array, android.R.layout.simple_spinner_item);
-        report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        report_type_spinner.setAdapter(report_type_adapter);
-        report_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0: report_type = parent.getItemAtPosition(0).toString(); break;
-                    case 1: report_type = parent.getItemAtPosition(1).toString(); break;
+        upload_image_btn = view.findViewById(R.id.create_add_images);
+        reportImageView = view.findViewById(R.id.create_image_ph);
+        submit_btn = view.findViewById(R.id.create_report_btn);
+        report_title = view.findViewById(R.id.create_title_text);
+        report_description = view.findViewById(R.id.create_desc_text);
+        report_address = view.findViewById(R.id.create_report_address);
 
-                }
-            }
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });;
+        submit_btn.setOnClickListener(v -> addReport());
 
         upload_image_btn.setOnClickListener(v -> uploadImage());
         LatLng location = LocationUtils.instance.getCurrentLocation();
@@ -174,7 +180,7 @@ public class CreateReportFragment extends Fragment {
 
     private void addOrEditReport(Report report) {
         if (existingReport != null) {
-            reportListViewModel.addReport(report, new EmptyListener() {
+            reportListViewModel.updateReport(report, reportId, new EmptyListener() {
                 @Override
                 public void onComplete() {
                     NavController navController = Navigation.findNavController(getView());
@@ -182,7 +188,7 @@ public class CreateReportFragment extends Fragment {
                 }
             });
         } else {
-            reportListViewModel.updateReport(report, new EmptyListener() {
+            reportListViewModel.addReport(report, new EmptyListener() {
                 @Override
                 public void onComplete() {
                     NavController navController = Navigation.findNavController(getView());

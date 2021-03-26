@@ -75,8 +75,8 @@ public class ReportModel {
         reportModelFireBase.addReport(report, listener);
     }
 
-    public void updateReport(final Report report, final EmptyListener listener) {
-        reportModelFireBase.updateReport(report, listener);
+    public void updateReport(final Report report, final String reportId, final EmptyListener listener) {
+        reportModelFireBase.updateReport(report, reportId, listener);
     }
 
     public void getReport(String id, Listener listener) {

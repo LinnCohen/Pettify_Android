@@ -77,9 +77,9 @@ public class ReportModelFireBase {
         });
     }
 
-    public void updateReport(Report report, EmptyListener listener) {
+    public void updateReport(Report report, String reportId, EmptyListener listener) {
         Map<String, Object> reportMap = report.toMap();
-        db.collection(REPORTS_COLLECTION).document(report.getId()).set(reportMap, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
+        db.collection(REPORTS_COLLECTION).document(reportId).set(reportMap, SetOptions.merge()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (listener != null) listener.onComplete();
