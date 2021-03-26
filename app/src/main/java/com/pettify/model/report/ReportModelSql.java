@@ -43,6 +43,7 @@ public class ReportModelSql {
         task.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void deleteReport(Report report,  final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override

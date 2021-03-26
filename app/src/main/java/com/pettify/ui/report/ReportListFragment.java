@@ -149,9 +149,10 @@ public class ReportListFragment extends Fragment {
                         @Override
                         public void onComplete() {
                             Log.d("TAG", "Successfully deleted report");
+                            reloadData();
                         }
                     });
-                    deleteReportLocally(report);
+//                    deleteReportLocally(report);
                 }
             });
 
