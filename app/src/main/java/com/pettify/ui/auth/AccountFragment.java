@@ -26,6 +26,7 @@ public class AccountFragment extends Fragment {
     EditText name;
     EditText email;
     EditText phone;
+    EditText radiusVal;
     SeekBar radius;
     AuthViewModel authViewModel;
     User user;
@@ -41,21 +42,18 @@ public class AccountFragment extends Fragment {
         email = view.findViewById(R.id.editTextTextEmailAddress);
         phone = view.findViewById(R.id.phone_editText);
         radius = view.findViewById(R.id.radius_eekBar);
+        radiusVal = view.findViewById(R.id.radius_editText);
 
         name.setEnabled(false);
         email.setEnabled(false);
         phone.setEnabled(false);
         radius.setEnabled(false);
+        radiusVal.setEnabled(false);
 
         final User currentUser = authViewModel.getCurrentUser();
 
         name.setText(currentUser.getName());
         email.setText(currentUser.getEmail());
-        Log.d("TAG", "fidsfkj");
-        int radiusProgress = (int)(currentUser.getRadius());
-        Log.d("TAG", String.valueOf(radiusProgress));
-//        Log.d("TAG", currentUser.getId());
-
         final String userId = currentUser.getId();
 
         authViewModel.getUser(userId, new Listener<User>() {
@@ -63,7 +61,9 @@ public class AccountFragment extends Fragment {
             public void onComplete(User data) {
                 user = data;
                 phone.setText(user.getPhoneNumber());
-                radius.setProgress((int) user.getRadius());
+                int radiusProgress = (int)(user.getRadius());
+                radius.setProgress(radiusProgress);
+                radiusVal.setText((String.valueOf(radiusProgress)));
             }
         });
 

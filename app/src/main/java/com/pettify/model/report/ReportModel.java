@@ -45,6 +45,7 @@ public class ReportModel {
             for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
                 Report report = new Report();
                 report.fromMap(documentChange.getDocument().getData());
+                Log.d("TAG", documentChange.getType().toString());
                 switch (documentChange.getType()) {
                     case ADDED:
                     case MODIFIED:
@@ -55,6 +56,7 @@ public class ReportModel {
                         }
                         break;
                     case REMOVED:
+                        report.setId(documentChange.getDocument().getId());
                         reportModelSql.deleteReport(report, null);
                         break;
                 }
@@ -90,9 +92,4 @@ public class ReportModel {
     public void deleteReport(String id, EmptyListener listener) {
         reportModelFireBase.deleteReport(id, listener);
     }
-
-    public void deleteReportLocally(final Report report) {
-        reportModelSql.deleteReportLocally(report);
-    }
-
 }

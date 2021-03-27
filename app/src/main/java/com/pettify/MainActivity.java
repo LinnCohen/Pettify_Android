@@ -1,7 +1,9 @@
 package com.pettify;
 
+import android.content.ClipData;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -26,7 +28,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AuthViewModel authViewModel;
-
     LocationManager locationManager;
 
     @Override
@@ -75,8 +76,10 @@ public class MainActivity extends AppCompatActivity  {
     private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
         if (currentUserName == null) {
             navUsername.setText("Welcome to Pettify!");
+            setTabsVisibility(true);
         } else {
             navUsername.setText("Hello " + currentUserName);
+            setTabsVisibility(true);
         }
         authButton.setText("Logout");
         authButton.setOnClickListener(buttonView -> {
@@ -89,10 +92,13 @@ public class MainActivity extends AppCompatActivity  {
     private void setNotLoggedIn(DrawerLayout drawer, NavController navController, TextView navUsername, Button authButton) {
         navUsername.setText("");
         authButton.setText("Login / Register");
+
         authButton.setOnClickListener(butt -> {
             navController.navigate(R.id.nav_login);
             drawer.closeDrawer(GravityCompat.START);
         });
+
+        setTabsVisibility(false);
     }
 
     @Override
@@ -107,5 +113,14 @@ public class MainActivity extends AppCompatActivity  {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void setTabsVisibility(boolean isVisible) {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+
+        nav_Menu.findItem(R.id.account_tab).setVisible(isVisible);
+        nav_Menu.findItem(R.id.create_report).setVisible(isVisible);
+
     }
 }
