@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.type.DateTime;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
@@ -46,7 +47,7 @@ public class ViewReportFragment extends Fragment {
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
                 report_location.setText("Location: " + report.getAddress());
-                report_last_updated_on.setText("Last updated at: " + report.getLastUpdated());
+                report_last_updated_on.setText("Last updated at: " + new DateTime(report.getLastUpdated()).toString());
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                 }
