@@ -19,22 +19,22 @@
     <TextView
         android:id="@+id/report_description"
         android:layout_width="0dp"
-        android:layout_height="69dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/report_title" />
 
     <TextView
-        android:id="@+id/report_posted_at"
-        android:layout_width="wrap_content"
+        android:id="@+id/report_last_updated_at"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="15dp"
-        android:text="Posten on: 22.3.21, 15:41"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/report_description" />
 
@@ -42,19 +42,18 @@
         android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintTop_toBottomOf="@+id/report_address" />
 
     <TextView
         android:id="@+id/report_address"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="5dp"
-        android:text="Location: Eilat 20, Holon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/report_posted_at" />
+        app:layout_constraintTop_toBottomOf="@+id/report_last_updated_at" />
 
     <ImageView
         android:id="@+id/report_image"
