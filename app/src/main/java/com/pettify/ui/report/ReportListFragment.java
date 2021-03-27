@@ -7,12 +7,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +32,7 @@ public class ReportListFragment extends Fragment {
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
+    ProgressBar pb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,6 +40,8 @@ public class ReportListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
+
+        pb = view.findViewById(R.id.reportslist_progress_bar);
 
         reports_list = view.findViewById(R.id.reportslist_list);
         reports_list.setHasFixedSize(true);
@@ -66,13 +69,16 @@ public class ReportListFragment extends Fragment {
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
             adapter.notifyDataSetChanged();
+            reports_list.setVisibility(View.VISIBLE);
+            pb.setVisibility(View.GONE);
+            Log.d("TAG", "done");
         });
         reloadData();
         return view;
     }
 
     void reloadData() {
-        reportListViewModel.refreshAllReports(() -> { });
+        reportListViewModel.refreshAllReports(() -> {});
     }
 
     void deleteReport(String id, EmptyListener listener) {
