@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AuthViewModel authViewModel;
-    DrawerLayout account;
     LocationManager locationManager;
 
     @Override
@@ -77,10 +76,10 @@ public class MainActivity extends AppCompatActivity  {
     private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
         if (currentUserName == null) {
             navUsername.setText("Welcome to Pettify!");
-            setMyAccountVisibility(true);
+            setTabsVisibility(true);
         } else {
             navUsername.setText("Hello " + currentUserName);
-            setMyAccountVisibility(true);
+            setTabsVisibility(true);
         }
         authButton.setText("Logout");
         authButton.setOnClickListener(buttonView -> {
@@ -99,7 +98,7 @@ public class MainActivity extends AppCompatActivity  {
             drawer.closeDrawer(GravityCompat.START);
         });
 
-        setMyAccountVisibility(false);
+        setTabsVisibility(false);
     }
 
     @Override
@@ -116,9 +115,12 @@ public class MainActivity extends AppCompatActivity  {
                 || super.onSupportNavigateUp();
     }
 
-    private void setMyAccountVisibility(boolean isVisible) {
+    private void setTabsVisibility(boolean isVisible) {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
+
         nav_Menu.findItem(R.id.account_tab).setVisible(isVisible);
+        nav_Menu.findItem(R.id.create_report).setVisible(isVisible);
+
     }
 }
