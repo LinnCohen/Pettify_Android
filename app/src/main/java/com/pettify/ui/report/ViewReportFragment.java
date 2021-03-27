@@ -5,12 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.protobuf.Empty;
-import com.pettify.model.listeners.EmptyListener;
+import com.google.type.DateTime;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
@@ -20,11 +18,15 @@ import com.pettify.R;
 import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 public class ViewReportFragment extends Fragment {
     Report report;
     TextView report_title;
     TextView report_description;
-    TextView report_posted_on;
+    TextView report_last_updated_on;
     TextView report_location;
     ImageView report_image;
     ReportListViewModel reportViewModel;
@@ -39,7 +41,7 @@ public class ViewReportFragment extends Fragment {
         report_description = view.findViewById(R.id.report_description);
         report_image = view.findViewById(R.id.report_image);
         report_location = view.findViewById(R.id.report_address);
-        report_posted_on = view.findViewById(R.id.report_posted_at);
+        report_last_updated_on = view.findViewById(R.id.report_last_updated_at);
         report_title = view.findViewById(R.id.report_title);
 
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
@@ -49,7 +51,11 @@ public class ViewReportFragment extends Fragment {
                 report = data;
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
-                report_location.setText(report.getAddress());
+                report_location.setText("Location: " + report.getAddress());
+                Date date = new Date(report.getLastUpdated() * 1000L);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+                format.setTimeZone(TimeZone.getTimeZone("Etc/UTC+3"));
+                report_last_updated_on.setText("Last updated at: " + format.format(date));
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                 }
