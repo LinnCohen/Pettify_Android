@@ -17,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,14 +59,14 @@ public class CreateReportFragment extends Fragment {
     ImageView reportImageView;
     Report existingReport;
     String reportId;
-
+    View view ;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         reportListViewModel =
                 new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_report, container, false);
+        view = inflater.inflate(R.layout.fragment_create_report, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
         reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
@@ -164,7 +165,12 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        if (reportImageView != null) {
+        if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) ||
+                reportImageView.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.images).getConstantState()) {
+            TextView error = view.findViewById(R.id.create_report_error_msg);
+            error.setVisibility(View.VISIBLE);
+            submit_btn.setEnabled(true);
+        } else {
             reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
                 if (url == null) {
                     displayFailedError();
@@ -173,29 +179,27 @@ public class CreateReportFragment extends Fragment {
                     CreateReportFragment.this.addOrEditReport(report);
                 }
             });
-        } else {
-            this.addOrEditReport(report);
         }
     }
 
     private void addOrEditReport(Report report) {
-        if (existingReport != null) {
-            reportListViewModel.updateReport(report, reportId, new EmptyListener() {
-                @Override
-                public void onComplete() {
-                    NavController navController = Navigation.findNavController(getView());
-                    navController.navigate(R.id.reportslist_list);
-                }
-            });
-        } else {
-            reportListViewModel.addReport(report, new EmptyListener() {
-                @Override
-                public void onComplete() {
-                    NavController navController = Navigation.findNavController(getView());
-                    navController.navigate(R.id.reportslist_list);
-                }
-            });
-        }
+            if (existingReport != null) {
+                reportListViewModel.updateReport(report, reportId, new EmptyListener() {
+                    @Override
+                    public void onComplete() {
+                        NavController navController = Navigation.findNavController(getView());
+                        navController.navigate(R.id.reportslist_list);
+                    }
+                });
+            } else {
+                reportListViewModel.addReport(report, new EmptyListener() {
+                    @Override
+                    public void onComplete() {
+                        NavController navController = Navigation.findNavController(getView());
+                        navController.navigate(R.id.reportslist_list);
+                    }
+                });
+            }
     }
 
     private void displayFailedError() {
