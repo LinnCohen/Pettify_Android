@@ -48,7 +48,9 @@ public class ReportModelSql {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
+                Log.d("TAG", objects.toString());
                 AppLocalDb.db.reportDao().delete(report);
+                Log.d("TAG", "delete report!" + report.getId());
                 return null;
             }
 

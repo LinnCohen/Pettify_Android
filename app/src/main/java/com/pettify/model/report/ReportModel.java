@@ -57,6 +57,7 @@ public class ReportModel {
                         break;
                     case REMOVED:
                         report.setId(documentChange.getDocument().getId());
+                        Log.d("TAG", report.getId());
                         reportModelSql.deleteReport(report, null);
                         break;
                 }
