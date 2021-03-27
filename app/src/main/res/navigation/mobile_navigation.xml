@@ -9,7 +9,11 @@
         android:id="@+id/nav_home"
         android:name="com.pettify.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_nav_home_to_view_report"
+            app:destination="@id/view_report" />
+    </fragment>
 
     <fragment
         android:id="@+id/userslist_list"
@@ -25,6 +29,9 @@
         <action
             android:id="@+id/action_reportslist_list_to_view_report"
             app:destination="@id/view_report" />
+        <action
+            android:id="@+id/action_reportslist_list_to_create_report"
+            app:destination="@id/create_report" />
     </fragment>
 
     <fragment
@@ -35,6 +42,8 @@
         <action
             android:id="@+id/action_create_report_to_reportslist_list"
             app:destination="@id/reportslist_list" />
+        <argument
+            android:name="reportId" />
     </fragment>
 
     <fragment
@@ -43,19 +52,37 @@
         android:label="View Report"
         tools:layout="@layout/fragment_view_report" >
         <argument
-            android:name="reportId" />
+            android:name="reportId"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
         android:id="@+id/nav_login"
         android:name="com.pettify.ui.auth.LoginFragment"
         android:label="@string/menu_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_nav_login_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_login_to_nav_register"
+            app:destination="@id/nav_register" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_register"
         android:name="com.pettify.ui.auth.RegisterFragment"
         android:label="@string/menu_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_nav_register_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/account_tab"
+        android:name="com.pettify.ui.auth.AccountFragment"
+        android:label="My Account"
+        tools:layout="@layout/fragment_account" />
         tools:layout="@layout/fragment_register" />
 
     <fragment

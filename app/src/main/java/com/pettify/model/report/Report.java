@@ -25,7 +25,7 @@ public class Report implements Serializable {
     private long lastUpdated;
     private String lat = "";
     private String lng = "";
-
+    private String reporterId = "";
 
     public String getImage_url() { return image_url; }
 
@@ -96,17 +96,26 @@ public class Report implements Serializable {
         this.lng = lng;
     }
 
+    public String getReporterId() {
+        return reporterId;
+    }
+
+    public void setReporterId(String reporterId) {
+        this.reporterId = reporterId;
+    }
+
     public Map<String, Object> toMap() {
         Map<String, Object> result = new HashMap<>();
         result.put("description", this.description);
         result.put("title", this.title);
         result.put("address", this.address);
-        result.put("animal type", this.animal_type);
-        result.put("report type", this.report_type);
+        result.put("animal_type", this.animal_type);
+        result.put("report_type", this.report_type);
         result.put("image url", this.image_url);
         result.put("lastUpdated", FieldValue.serverTimestamp());
         result.put("lat", this.lat);
         result.put("lng", this.lng);
+        result.put("reporterId", this.reporterId);
         return result;
     }
 
@@ -121,6 +130,7 @@ public class Report implements Serializable {
         this.lastUpdated = lastUpdatedTS.getSeconds();
         this.lat = (String)data.get("lat");
         this.lng = (String)data.get("lng");
+        this.reporterId = (String)data.get("reportedId");
     }
 
 
@@ -137,6 +147,7 @@ public class Report implements Serializable {
                 ", lastUpdated=" + lastUpdated +
                 ", lat='" + lat + '\'' +
                 ", lng='" + lng + '\'' +
+                ", reportedId='" + reporterId + '\'' +
                 '}';
     }
 }

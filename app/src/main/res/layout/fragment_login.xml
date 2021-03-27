@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.auth.LoginFragment">
+    tools:context=".MainActivity">
 
 
     <EditText
@@ -78,7 +78,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Failed to login, are you registered?"
+        android:text="Failed to login"
         android:textColor="#FF0000"
         android:textSize="18sp"
         android:visibility="invisible"

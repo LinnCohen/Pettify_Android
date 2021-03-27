@@ -6,6 +6,7 @@ import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
 
@@ -62,5 +63,9 @@ public class UserModel {
 
     public User getCurrentUser() {
         return userModelFireBase.getCurrentUser();
+    }
+
+    public void onUserChange(Listener<FirebaseUser> firebaseUserListener) {
+        userModelFireBase.onUserChange(firebaseUserListener);
     }
 }

@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -27,19 +29,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.material.snackbar.Snackbar;
 import com.pettify.R;
 import com.pettify.model.listeners.*;
-import com.pettify.Utilities.LocationUtils;
-import com.pettify.model.Model;
+import com.pettify.utilities.LocationUtils;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModel;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 import static android.app.Activity.RESULT_CANCELED;
-
 
 public class CreateReportFragment extends Fragment {
     ReportListViewModel reportListViewModel;
@@ -55,26 +56,63 @@ public class CreateReportFragment extends Fragment {
     Button upload_image_btn;
     Button submit_btn;
     ImageView reportImageView;
+    Report existingReport;
+    String reportId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        reportListViewModel =
+                new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_create_report, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
-        upload_image_btn = view.findViewById(R.id.create_add_images);
-        reportImageView = view.findViewById(R.id.create_image_ph);
-        submit_btn = view.findViewById(R.id.create_report_btn);
-        report_title = view.findViewById(R.id.create_title_text);
-        report_description = view.findViewById(R.id.create_desc_text);
-        report_address = view.findViewById(R.id.create_report_address);
 
-        submit_btn.setOnClickListener(v -> addReport());
+        reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
 
-        //animal type spinner
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
         ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
                 R.array.animal_types_array, android.R.layout.simple_spinner_item);
+
+        report_type_spinner = view.findViewById(R.id.report_type_spinner);
+        ArrayAdapter<CharSequence> report_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
+                R.array.report_types_array, android.R.layout.simple_spinner_item);
+
+        if (reportId != null) {
+            Log.d("TAG", reportId);
+            reportListViewModel.getReport(reportId, new Listener<Report>() {
+                @Override
+                public void onComplete(Report report) {
+                    existingReport = report;
+                    report_title.setText(report.getTitle());
+                    report_description.setText(report.getDescription());
+                    report_address.setText(report.getAddress());
+                    Log.d("TAG", "report: " + report.toString());
+                    int animalSpinnerPosition = animal_type_adapter.getPosition(report.getAnimal_type());
+                    animal_type_spinner.setSelection(animalSpinnerPosition);
+                    int reportTypeSpinnerPosition = report_type_adapter.getPosition(report.getReport_type());
+                    report_type_spinner.setSelection(reportTypeSpinnerPosition);
+                    if (report.getImage_url() != null){
+                        Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(reportImageView);
+                    }
+                }
+            });
+        }
+
+        report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        report_type_spinner.setAdapter(report_type_adapter);
+        report_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0: report_type = parent.getItemAtPosition(0).toString(); break;
+                    case 1: report_type = parent.getItemAtPosition(1).toString(); break;
+
+                }
+            }
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
         animal_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         animal_type_spinner.setAdapter(animal_type_adapter);
         animal_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -90,34 +128,26 @@ public class CreateReportFragment extends Fragment {
             public void onNothingSelected(AdapterView<?> parent) { }
         });
 
-        //report type spinner
-        report_type_spinner = view.findViewById(R.id.report_type_spinner);
-        ArrayAdapter<CharSequence> report_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
-                R.array.report_types_array, android.R.layout.simple_spinner_item);
-        report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        report_type_spinner.setAdapter(report_type_adapter);
-        report_type_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0: report_type = parent.getItemAtPosition(0).toString(); break;
-                    case 1: report_type = parent.getItemAtPosition(1).toString(); break;
+        upload_image_btn = view.findViewById(R.id.create_add_images);
+        reportImageView = view.findViewById(R.id.create_image_ph);
+        submit_btn = view.findViewById(R.id.create_report_btn);
+        report_title = view.findViewById(R.id.create_title_text);
+        report_description = view.findViewById(R.id.create_desc_text);
+        report_address = view.findViewById(R.id.create_report_address);
 
-                }
-            }
-            public void onNothingSelected(AdapterView<?> parent) { }
-        });;
+        submit_btn.setOnClickListener(v -> addReport());
 
         upload_image_btn.setOnClickListener(v -> uploadImage());
         LatLng location = LocationUtils.instance.getCurrentLocation();
         lat = String.valueOf(LocationUtils.instance.getLat());
         lng = String.valueOf(LocationUtils.instance.getLng());
+        report_address.setText(LocationUtils.instance.getAddressName(getContext(), location));
+        report_address.setEnabled(false);
         Log.d("location","from onViewCreated" + lat + lng);
         return view;
     }
 
     private void addReport() {
-       // LatLng location = ReportModel.instance.getLocation();
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
@@ -134,21 +164,38 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        ReportModel.instance.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
-            if (url == null) {
-                displayFailedError();
-            } else {
-                report.setImage_url(url);
-                ReportModel.instance.addReport(report, new EmptyListener() {
-                    @Override
-                    public void onComplete() {
-                        //do we need to reload data after creating report?
-//                        reloadData();
-                        Navigation.findNavController(submit_btn).navigate(R.id.action_create_report_to_reportslist_list);
-                    }
-                });
-            }
-        });
+        if (reportImageView != null) {
+            reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
+                if (url == null) {
+                    displayFailedError();
+                } else {
+                    report.setImage_url(url);
+                    CreateReportFragment.this.addOrEditReport(report);
+                }
+            });
+        } else {
+            this.addOrEditReport(report);
+        }
+    }
+
+    private void addOrEditReport(Report report) {
+        if (existingReport != null) {
+            reportListViewModel.updateReport(report, reportId, new EmptyListener() {
+                @Override
+                public void onComplete() {
+                    NavController navController = Navigation.findNavController(getView());
+                    navController.navigate(R.id.reportslist_list);
+                }
+            });
+        } else {
+            reportListViewModel.addReport(report, new EmptyListener() {
+                @Override
+                public void onComplete() {
+                    NavController navController = Navigation.findNavController(getView());
+                    navController.navigate(R.id.reportslist_list);
+                }
+            });
+        }
     }
 
     private void displayFailedError() {
@@ -164,18 +211,10 @@ public class CreateReportFragment extends Fragment {
         builder.show();
     }
 
-    //TODO - direct to view report page
-    void reloadData(){
-        submit_btn.setEnabled(false);
-        ReportModel.instance.refreshAllReports(() -> {
-            submit_btn.setEnabled(true);
-        });
-    }
-
     private void uploadImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery","Cancel" };
+        final CharSequence[] options = { "Take Photo", "Choose from Gallery", "Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose your profile picture");
+        builder.setTitle("Choose your report picture");
         builder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
@@ -199,7 +238,7 @@ public class CreateReportFragment extends Fragment {
             switch (requestCode) {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
+                        Bitmap selectedImage = rotateImage((Bitmap) data.getExtras().get("data"));
                         reportImageView.setImageBitmap(selectedImage);
                     }
                     break;
@@ -222,5 +261,11 @@ public class CreateReportFragment extends Fragment {
                     break;
             }
         }
+    }
+
+    public static Bitmap rotateImage(Bitmap source) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
 }

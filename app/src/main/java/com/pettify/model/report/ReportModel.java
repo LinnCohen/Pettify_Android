@@ -1,18 +1,12 @@
 package com.pettify.model.report;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationManager;
+import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.LiveData;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentChange;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
@@ -51,6 +45,7 @@ public class ReportModel {
             for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
                 Report report = new Report();
                 report.fromMap(documentChange.getDocument().getData());
+                Log.d("TAG", documentChange.getType().toString());
                 switch (documentChange.getType()) {
                     case ADDED:
                     case MODIFIED:
@@ -61,6 +56,7 @@ public class ReportModel {
                         }
                         break;
                     case REMOVED:
+                        report.setId(documentChange.getDocument().getId());
                         reportModelSql.deleteReport(report, null);
                         break;
                 }
@@ -81,8 +77,8 @@ public class ReportModel {
         reportModelFireBase.addReport(report, listener);
     }
 
-    public void updateReport(final Report report, final EmptyListener listener) {
-        reportModelFireBase.updateReport(report, listener);
+    public void updateReport(final Report report, final String reportId, final EmptyListener listener) {
+        reportModelFireBase.updateReport(report, reportId, listener);
     }
 
     public void getReport(String id, Listener listener) {
@@ -93,4 +89,7 @@ public class ReportModel {
         reportModelFireBase.uploadImage(imageBmp, name, listener);
     }
 
+    public void deleteReport(String id, EmptyListener listener) {
+        reportModelFireBase.deleteReport(id, listener);
+    }
 }

@@ -3,6 +3,7 @@ package com.pettify.model.user;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -33,6 +34,14 @@ public class UserModelFireBase {
         auth = FirebaseAuth.getInstance();
     }
 
+    public void onUserChange(Listener<FirebaseUser> listener) {
+        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                listener.onComplete(firebaseAuth.getCurrentUser());
+            }
+        });
+    }
     public void getAllUsers(Listener<List<User>> listener) {
         List<User> users = new LinkedList<>();
         db.collection(USERS_COLLECTION)
@@ -104,7 +113,11 @@ public class UserModelFireBase {
     public User getCurrentUser() {
         FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseUser firebaseUser = auth.getCurrentUser();
-        return firebaseUser == null ? null : new User(firebaseUser.getDisplayName(), firebaseUser.getEmail());
+        return firebaseUser == null ? null :
+                new User(
+                        firebaseUser.getDisplayName(),
+                        firebaseUser.getEmail(),
+                        firebaseUser.getUid());
     }
 
     public void register(final User user, String password, final Listener<Boolean> listener) {
@@ -112,10 +125,12 @@ public class UserModelFireBase {
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            db.collection(USERS_COLLECTION)
-                                    .add(user);
 
+                        String userUid=task.getResult().getUser().getUid();
+                        user.setId(userUid);
+
+                        if (task.isSuccessful()) {
+                            db.collection(USERS_COLLECTION).document(userUid).set(user);
                             updateUserProfile(user, listener);
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
@@ -151,13 +166,8 @@ public class UserModelFireBase {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName(user.getName()).build();
 
-        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                listener.onComplete(task.isSuccessful());
-            }
-        });
+        firebaseUser.updateProfile(profileUpdates).addOnCompleteListener(task -> listener.onComplete(task.isSuccessful()));
     }
-//
+
 
 }

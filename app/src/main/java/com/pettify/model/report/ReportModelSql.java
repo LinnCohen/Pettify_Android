@@ -1,6 +1,8 @@
 package com.pettify.model.report;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
@@ -41,6 +43,7 @@ public class ReportModelSql {
         task.execute();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void deleteReport(Report report,  final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override

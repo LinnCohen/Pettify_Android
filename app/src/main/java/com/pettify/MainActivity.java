@@ -1,11 +1,6 @@
 package com.pettify;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
+import android.content.ClipData;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,11 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -29,16 +22,13 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.pettify.Utilities.LocationUtils;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModel;
-import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
 
 public class MainActivity extends AppCompatActivity  {
 
     private AppBarConfiguration mAppBarConfiguration;
     private AuthViewModel authViewModel;
+    DrawerLayout account;
     LocationManager locationManager;
 
     @Override
@@ -60,7 +50,7 @@ public class MainActivity extends AppCompatActivity  {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_login, R.id.nav_register, R.id.reportslist_list, R.id.userslist_list)
+                R.id.nav_home, R.id.reportslist_list, R.id.userslist_list)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -74,25 +64,42 @@ public class MainActivity extends AppCompatActivity  {
 
         authViewModel =
                 new ViewModelProvider(this).get(AuthViewModel.class);
-        User currentUser = authViewModel.getCurrentUser();
-        if (currentUser == null) {
+        authViewModel.onUserChange(data -> {
+            if (data == null) {
+                setNotLoggedIn(drawer, navController, navUsername, authButton);
+            } else {
+                setLoggedIn(navUsername, authButton, data.getDisplayName());
+            }
+        });
+    ;
+    }
+
+    private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
+        if (currentUserName == null) {
+            navUsername.setText("Welcome to Pettify!");
+            setMyAccountVisibility(true);
+        } else {
+            navUsername.setText("Hello " + currentUserName);
+            setMyAccountVisibility(true);
+        }
+        authButton.setText("Logout");
+        authButton.setOnClickListener(buttonView -> {
+            authViewModel.logout();
             navUsername.setText("");
             authButton.setText("Login / Register");
-            authButton.setOnClickListener(butt -> {
-                navController.navigate(R.id.nav_login);
-                drawer.closeDrawer(GravityCompat.START);
-            });
+        });
+    }
 
-        } else {
-            navUsername.setText("Hello " + currentUser.getName());
-            authButton.setText("Logout");
-            authButton.setOnClickListener(buttonView -> {
-                authViewModel.logout();
-                navUsername.setText("");
-                authButton.setText("Login / Register");
-            });
-        }
+    private void setNotLoggedIn(DrawerLayout drawer, NavController navController, TextView navUsername, Button authButton) {
+        navUsername.setText("");
+        authButton.setText("Login / Register");
 
+        authButton.setOnClickListener(butt -> {
+            navController.navigate(R.id.nav_login);
+            drawer.closeDrawer(GravityCompat.START);
+        });
+
+        setMyAccountVisibility(false);
     }
 
     @Override
@@ -107,5 +114,11 @@ public class MainActivity extends AppCompatActivity  {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    private void setMyAccountVisibility(boolean isVisible) {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        nav_Menu.findItem(R.id.account_tab).setVisible(isVisible);
     }
 }
