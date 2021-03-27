@@ -36,7 +36,7 @@
             android:id="@+id/register_user_phoneNumber_label2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="136dp"
+            android:layout_marginStart="88dp"
             android:layout_marginTop="32dp"
             android:text="Pick Your Radius"
             android:textSize="18sp"
@@ -123,14 +123,14 @@
 
         <TextView
             android:id="@+id/accountTitle_textView"
-            android:layout_width="68dp"
-            android:layout_height="39dp"
-            android:layout_margin="20dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/register_user_phoneNumber_label2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="32dp"
+            android:text="20"
+            android:textSize="18sp"
+            app:layout_constraintStart_toEndOf="@+id/register_user_phoneNumber_label2"
+            app:layout_constraintTop_toBottomOf="@+id/register_user_phoneNumber"
             tools:ignore="MissingConstraints" />
 
         <SeekBar
@@ -138,11 +138,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="28dp"
             android:max="40"
             android:progress="20"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/accountTitle_textView"
+            app:layout_constraintTop_toBottomOf="@+id/register_user_phoneNumber_label2"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -150,13 +150,29 @@
             android:layout_width="361dp"
             android:layout_height="65dp"
             android:layout_marginStart="24dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="24dp"
             android:text="Register"
             app:backgroundTint="@color/purple_200"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/radius_eekBar" />
+            app:layout_constraintTop_toBottomOf="@+id/register_error_msg" />
+
+        <TextView
+            android:id="@+id/register_error_msg"
+            android:layout_width="331dp"
+            android:layout_height="69dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:text="all fields should be provided!"
+            android:textColor="#FF0000"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/radius_eekBar"
+            tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,11 +1,10 @@
 package com.pettify.model.user;
 
 
-import android.content.pm.LabeledIntent;
-import android.util.Log;
-
 import androidx.lifecycle.MutableLiveData;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
@@ -49,7 +48,7 @@ public class UserModel {
         userModelFireBase.deleteUser(id, listener);
     }
 
-    public void registerUser(User user, String password, final Listener<Boolean> listener) {
+    public void registerUser(User user, String password, final Listener<Task<AuthResult>> listener) {
         userModelFireBase.register(user, password, listener);
     }
 
