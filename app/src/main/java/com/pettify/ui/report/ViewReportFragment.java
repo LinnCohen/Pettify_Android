@@ -1,6 +1,7 @@
 package com.pettify.ui.report;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.pettify.R;
 import com.pettify.model.listeners.Listener;
 import com.pettify.model.report.Report;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ViewReportFragment extends Fragment {
     Report report;
@@ -47,7 +51,9 @@ public class ViewReportFragment extends Fragment {
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
                 report_location.setText("Location: " + report.getAddress());
-                report_last_updated_on.setText("Last updated at: " + new DateTime(report.getLastUpdated()).toString());
+                Date date = new Date(report.getLastUpdated());
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                report_last_updated_on.setText("Last updated at: " + format.format(date));
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                 }
