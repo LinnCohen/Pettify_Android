@@ -20,6 +20,7 @@ import com.pettify.model.report.Report;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class ViewReportFragment extends Fragment {
     Report report;
@@ -51,8 +52,9 @@ public class ViewReportFragment extends Fragment {
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
                 report_location.setText("Location: " + report.getAddress());
-                Date date = new Date(report.getLastUpdated());
-                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = new Date(report.getLastUpdated() * 1000L);
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+                format.setTimeZone(TimeZone.getTimeZone("Etc/UTC+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
