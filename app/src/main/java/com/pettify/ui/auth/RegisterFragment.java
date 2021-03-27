@@ -14,7 +14,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.pettify.R;
+import com.pettify.model.listeners.Listener;
 import com.pettify.model.user.User;
 
 public class RegisterFragment extends Fragment {
@@ -31,7 +34,7 @@ public class RegisterFragment extends Fragment {
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
         int progress = seekBar.getProgress();
         tvProgressLabel =  registerView.findViewById(R.id.accountTitle_textView);
-        tvProgressLabel.setText("Radius: " + progress);
+        tvProgressLabel.setText(String.valueOf(progress));
         registerButton.setOnClickListener(buttonView -> {
             TextView email = registerView.findViewById(R.id.register_user_email);
             TextView password = registerView.findViewById(R.id.register_user_password);
@@ -41,18 +44,23 @@ public class RegisterFragment extends Fragment {
             user.setPhoneNumber(phone.getText().toString());
             int currentProgress = seekBar.getProgress();
             user.setRadius(currentProgress);
-             if (fileWasNotProvided(email, password, name, phone)) {
-                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.VISIBLE);
-             } else {
-                 authViewModel.registerUser(user, password.getText().toString(),
-                         isCreated -> {
-                             if (isCreated) {
-                                 Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
-                             } else {
-                                 //show error
-                             }
-                         });
-             }
+            if (fileWasNotProvided(email, password, name, phone)) {
+                registerView.findViewById(R.id.register_error_msg).setVisibility(View.VISIBLE);
+            } else {
+                registerView.findViewById(R.id.register_error_msg).setVisibility(View.INVISIBLE);
+                authViewModel.registerUser(user, password.getText().toString(), new Listener<Task<AuthResult>>() {
+                    @Override
+                    public void onComplete(Task<AuthResult> data) {
+                        if (data.isSuccessful()) {
+                            Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
+                        } else {
+                            TextView error = registerView.findViewById(R.id.register_error_msg);
+                            error.setText(data.getException().getMessage());
+                            error.setVisibility(View.VISIBLE);
+                        }
+                    }
+                });
+            }
         });
         return registerView;
     }
@@ -70,7 +78,7 @@ public class RegisterFragment extends Fragment {
         @Override
         public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // updated continuously as the user slides the thumb
-            tvProgressLabel.setText("Radius: " + progress);
+            tvProgressLabel.setText(String.valueOf(progress));
             radiusProgress=progress;
         }
 

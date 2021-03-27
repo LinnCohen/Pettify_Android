@@ -2,6 +2,8 @@ package com.pettify.ui.auth;
 
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseUser;
 import com.pettify.model.listeners.Listener;
 import com.pettify.model.user.User;
@@ -15,7 +17,7 @@ public class AuthViewModel extends ViewModel {
         userModel = UserModel.instance;
     }
 
-    public void registerUser(User user, String password, Listener<Boolean> listener) {
+    public void registerUser(User user, String password, Listener<Task<AuthResult>> listener) {
         userModel.registerUser(user, password, listener);
     }
 
@@ -35,7 +37,6 @@ public class AuthViewModel extends ViewModel {
     public void onUserChange(Listener<FirebaseUser> firebaseUserListener) {
         userModel.onUserChange(firebaseUserListener);
     }
-
 
     public void getUser(String id, final Listener<User> listener) {
         userModel.getUser(id, listener);
