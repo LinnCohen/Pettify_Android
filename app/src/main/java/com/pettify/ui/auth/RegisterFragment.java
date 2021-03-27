@@ -1,6 +1,7 @@
 package com.pettify.ui.auth;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,17 +41,25 @@ public class RegisterFragment extends Fragment {
             user.setPhoneNumber(phone.getText().toString());
             int currentProgress = seekBar.getProgress();
             user.setRadius(currentProgress);
-            authViewModel.registerUser(user, password.getText().toString(),
-                    isCreated -> {
-                        if (isCreated) {
-                            Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
-                        }
-                        else {
-                            //show error
-                        }
-                    });
+             if (fileWasNotProvided(email, password, name, phone)) {
+                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.VISIBLE);
+             } else {
+                 authViewModel.registerUser(user, password.getText().toString(),
+                         isCreated -> {
+                             if (isCreated) {
+                                 Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
+                             } else {
+                                 //show error
+                             }
+                         });
+             }
         });
         return registerView;
+    }
+
+    private boolean fileWasNotProvided(TextView email, TextView password, TextView name, TextView phone) {
+        return TextUtils.isEmpty(email.getText()) || TextUtils.isEmpty(password.getText())
+                       || TextUtils.isEmpty(name.getText()) || TextUtils.isEmpty(phone.getText());
     }
 
 
