@@ -88,8 +88,8 @@ public class ChatFragment extends Fragment {
             // Name, email address etc
             String name = user.getDisplayName();
             String email = user.getEmail();
-            Log.d("TAG", email);
-            Log.d("TAG", name);
+//            Log.d("TAG", email);
+//            Log.d("TAG", name);
             UserName=name;
             String uid = user.getUid();
             Log.d("TAG", uid);

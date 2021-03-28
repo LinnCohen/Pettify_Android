@@ -38,7 +38,7 @@
         <item>Injured</item>
     </string-array>
     <string-array name="map_types">
-        <item  style="@style/GreenText">Normal Map</item>
+        <item style="@style/GreenText">Normal Map</item>
         <item>Hybrid Map</item>
         <item>Satellite Map</item>
         <item>Terrain Map</item>

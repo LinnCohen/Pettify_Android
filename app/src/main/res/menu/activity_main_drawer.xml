@@ -29,5 +29,6 @@
             android:id="@+id/account_tab"
             android:icon="@drawable/my_account_icon"
             android:title="My Account" />
+
     </group>
 </menu>
