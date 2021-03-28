@@ -175,6 +175,7 @@ public class CreateReportFragment extends Fragment {
         if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) ||
                 reportImageView.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.images).getConstantState()) {
             TextView error = view.findViewById(R.id.create_report_error_msg);
+            progressBar.setVisibility(View.INVISIBLE);
             error.setVisibility(View.VISIBLE);
             submit_btn.setEnabled(true);
         } else {
