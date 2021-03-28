@@ -74,21 +74,22 @@ public class ViewReportFragment extends Fragment {
                         }
 
                         @Override
-                        public void onError(Exception e) { }
+                        public void onError(Exception e) {
+                        }
                     });
 
-                if (data.getImage_url() != null){
-                    Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
-                }
-
-                authViewModel.getUser(report.getReporterId(), new Listener<User>() {
-                    @Override
-                    public void onComplete(User user) {
-                        reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
+                    if (data.getImage_url() != null) {
+                        Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                     }
-                });
-            }
-        });
+
+                    authViewModel.getUser(report.getReporterId(), new Listener<User>() {
+                        @Override
+                        public void onComplete(User user) {
+                            reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
+                        }
+                    });
+                }
+            }});
 
         return view;
     }
