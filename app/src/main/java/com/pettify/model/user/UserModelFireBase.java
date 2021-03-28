@@ -126,6 +126,10 @@ public class UserModelFireBase {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            String userUid=task.getResult().getUser().getUid();
+                            user.setId(userUid);
+                            //TODO - async
+                            db.collection(USERS_COLLECTION).document(userUid).set(user);
                             updateUserProfile(user, new Listener<Boolean>() {
                                 @Override
                                 public void onComplete(Boolean data) {
