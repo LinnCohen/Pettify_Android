@@ -8,6 +8,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.SnapshotMetadata;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
@@ -49,10 +50,13 @@ public class ReportModel {
                 switch (documentChange.getType()) {
                     case ADDED:
                     case MODIFIED:
-                        report.setId(documentChange.getDocument().getId());
-                        reportModelSql.addReport(report, null);
-                        if (report.getLastUpdated() > newLastUpdated) {
-                            newLastUpdated = report.getLastUpdated();
+                        SnapshotMetadata metadata = documentChange.getDocument().getMetadata();
+                        if (!metadata.hasPendingWrites()) {
+                            report.setId(documentChange.getDocument().getId());
+                            reportModelSql.addReport(report, null);
+                            if (report.getLastUpdated() > newLastUpdated) {
+                                newLastUpdated = report.getLastUpdated();
+                            }
                         }
                         break;
                     case REMOVED:
