@@ -192,23 +192,16 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addOrEditReport(Report report) {
-            if (existingReport != null) {
-                reportListViewModel.updateReport(report, reportId, new EmptyListener() {
-                    @Override
-                    public void onComplete() {
-                        NavController navController = Navigation.findNavController(getView());
-                        navController.navigate(R.id.reportslist_list);
-                    }
-                });
-            } else {
-                reportListViewModel.addReport(report, new EmptyListener() {
-                    @Override
-                    public void onComplete() {
-                        NavController navController = Navigation.findNavController(getView());
-                        navController.navigate(R.id.reportslist_list);
-                    }
-                });
-            }
+        EmptyListener listener = () -> {
+            NavController navController = Navigation.findNavController(getView());
+            navController.navigate(R.id.action_create_report_to_reportslist_list);
+        };
+
+        if (existingReport != null) {
+            reportListViewModel.updateReport(report, reportId, listener);
+        } else {
+            reportListViewModel.addReport(report, listener);
+        }
     }
 
     private void displayFailedError() {
