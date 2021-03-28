@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
@@ -27,6 +29,7 @@ public class ViewReportFragment extends Fragment {
     TextView report_last_updated_on;
     TextView report_location;
     ImageView report_image;
+    ProgressBar pb;
     ReportListViewModel reportViewModel;
 
     @Override
@@ -41,6 +44,7 @@ public class ViewReportFragment extends Fragment {
         report_location = view.findViewById(R.id.report_address);
         report_last_updated_on = view.findViewById(R.id.report_last_updated_at);
         report_title = view.findViewById(R.id.report_title);
+        pb = view.findViewById(R.id.report_image_progress_bar);
 
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
         reportViewModel.getReport(reportId, new Listener<Report>() {
@@ -54,8 +58,16 @@ public class ViewReportFragment extends Fragment {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
                 format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
-                if (data.getImage_url() != null){
-                    Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
+                if (data.getImage_url() != null) {
+                    Picasso.get().load(report.getImage_url()).into(report_image, new Callback() {
+                        @Override
+                        public void onSuccess() {
+                            pb.setVisibility(View.GONE);
+                        }
+
+                        @Override
+                        public void onError(Exception e) { }
+                    });
                 }
             }
         });
