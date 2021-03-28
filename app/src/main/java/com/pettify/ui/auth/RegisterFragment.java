@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.Task;
@@ -44,7 +43,7 @@ public class RegisterFragment extends Fragment {
             user.setPhoneNumber(phone.getText().toString());
             int currentProgress = seekBar.getProgress();
             user.setRadius(currentProgress);
-            if (fileWasNotProvided(email, password, name, phone)) {
+            if (fieldWasNotProvided(email, password, name, phone)) {
                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.VISIBLE);
             } else {
                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.INVISIBLE);
@@ -65,7 +64,7 @@ public class RegisterFragment extends Fragment {
         return registerView;
     }
 
-    private boolean fileWasNotProvided(TextView email, TextView password, TextView name, TextView phone) {
+    private boolean fieldWasNotProvided(TextView email, TextView password, TextView name, TextView phone) {
         return TextUtils.isEmpty(email.getText()) || TextUtils.isEmpty(password.getText())
                        || TextUtils.isEmpty(name.getText()) || TextUtils.isEmpty(phone.getText());
     }
