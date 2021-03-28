@@ -79,7 +79,6 @@ public class CreateReportFragment extends Fragment {
         submit_progress_bar = view.findViewById(R.id.create_report_pb);
         submit_progress_bar.setVisibility(View.INVISIBLE);
         image_progress_bar = view.findViewById(R.id.create_report_image_pb);
-//        image_progress_bar.setVisibility(View.INVISIBLE);
 
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
         ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
@@ -116,6 +115,8 @@ public class CreateReportFragment extends Fragment {
                     }
                 }
             });
+        } else {
+            image_progress_bar.setVisibility(View.GONE);
         }
 
         report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -154,7 +155,10 @@ public class CreateReportFragment extends Fragment {
         report_description = view.findViewById(R.id.create_desc_text);
         report_address = view.findViewById(R.id.create_report_address);
 
-        submit_btn.setOnClickListener(v -> addReport());
+        submit_btn.setOnClickListener(v -> {
+            addReport();
+//            Navigation.findNavController(getView()).popBackStack();
+        });
 
         upload_image_btn.setOnClickListener(v -> uploadImage());
         LatLng location = LocationUtils.instance.getCurrentLocation();

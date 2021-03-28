@@ -141,7 +141,7 @@
             android:layout_height="90dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="12dp"
-            tools:src="@tools:sample/avatars"
+            tools:src="@drawable/images"
             app:layout_constraintStart_toEndOf="@+id/create_add_images"
             app:layout_constraintTop_toBottomOf="@+id/report_type_spinner" />
 
