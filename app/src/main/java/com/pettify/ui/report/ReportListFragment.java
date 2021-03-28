@@ -13,6 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.navigation.NavController;
+import android.widget.ProgressBar;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,7 +25,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.pettify.R;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.report.Report;
+
+import com.pettify.model.user.User;
+import com.pettify.ui.auth.AuthViewModel;
+
 import com.squareup.picasso.Callback;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
@@ -33,6 +42,8 @@ public class ReportListFragment extends Fragment {
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
+    AuthViewModel authViewModel;
+    String currentUserId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +51,9 @@ public class ReportListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
-
+        authViewModel =
+                new ViewModelProvider(this).get(AuthViewModel.class);
+        currentUserId = authViewModel.getCurrentUser().getId();
         reports_list = view.findViewById(R.id.reportslist_list);
         reports_list.setHasFixedSize(true);
 
@@ -130,6 +143,7 @@ public class ReportListFragment extends Fragment {
     class ReportListAdapter extends RecyclerView.Adapter<ReportRowViewHolder> {
         private OnItemClickListener listener;
 
+
         void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
@@ -148,6 +162,7 @@ public class ReportListFragment extends Fragment {
             Button delete_report = holder.itemView.findViewById(R.id.listrow_delete_report);
             Button edit_report = holder.itemView.findViewById(R.id.listrow_edit_report);
             String id = reportListViewModel.getReports().getValue().get(position).getId();
+
             delete_report.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,11 +184,20 @@ public class ReportListFragment extends Fragment {
                 }
             });
             holder.bindData(report);
+            if(!isUserReporter(report.getReporterId())){
+                delete_report.setVisibility(View.INVISIBLE);
+                edit_report.setVisibility(View.INVISIBLE);
+            }
         }
 
         @Override
         public int getItemCount() {
             return reportData.size();
+        }
+
+        public boolean isUserReporter(String reporterId){
+            boolean test = reporterId.equals(currentUserId);
+            return test;
         }
     }
 }
