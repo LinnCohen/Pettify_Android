@@ -41,7 +41,7 @@ public class ReportListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
-        pb = view.findViewById(R.id.reportslist_progress_bar);
+        pb = view.findViewById(R.id.create_report_pb);
 
         reports_list = view.findViewById(R.id.reportslist_list);
         reports_list.setHasFixedSize(true);

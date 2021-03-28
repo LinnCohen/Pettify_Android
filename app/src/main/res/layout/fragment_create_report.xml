@@ -175,5 +175,16 @@
             app:layout_constraintTop_toBottomOf="@+id/create_image_ph"
             tools:visibility="invisible" />
 
+        <ProgressBar
+            android:id="@+id/create_report_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="8dp"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            app:layout_constraintEnd_toStartOf="@+id/create_report_btn"
+            app:layout_constraintTop_toBottomOf="@+id/create_report_error_msg" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
