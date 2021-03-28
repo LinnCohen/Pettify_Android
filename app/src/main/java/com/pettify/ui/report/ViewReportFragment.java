@@ -59,6 +59,12 @@ public class ViewReportFragment extends Fragment {
             @Override
             public void onComplete(Report data) {
                 report = data;
+                authViewModel.getUser(report.getReporterId(), new Listener<User>() {
+                    @Override
+                    public void onComplete(User user) {
+                        reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
+                    }
+                });
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
                 report_location.setText("Location: " + report.getAddress());
@@ -73,6 +79,7 @@ public class ViewReportFragment extends Fragment {
                             pb.setVisibility(View.GONE);
                         }
 
+<<<<<<< HEAD
                         @Override
                         public void onError(Exception e) {
                         }
@@ -90,6 +97,17 @@ public class ViewReportFragment extends Fragment {
                     });
                 }
             }});
+=======
+
+
+                if (data.getImage_url() != null){
+                    Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
+                }
+
+
+            }
+        });
+>>>>>>> d6c4d3067d898db81dcc75f1a87892e01f0367f6
 
         return view;
     }
