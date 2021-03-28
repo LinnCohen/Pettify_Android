@@ -43,7 +43,7 @@ public class ReportListFragment extends Fragment {
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
     AuthViewModel authViewModel;
-    String currentUserId;
+    String currentUserId = "";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,7 +53,10 @@ public class ReportListFragment extends Fragment {
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
         authViewModel =
                 new ViewModelProvider(this).get(AuthViewModel.class);
-        currentUserId = authViewModel.getCurrentUser().getId();
+        User user = authViewModel.getCurrentUser();
+        if(user != null) {
+            currentUserId = user.getId();
+        }
         reports_list = view.findViewById(R.id.reportslist_list);
         reports_list.setHasFixedSize(true);
 
