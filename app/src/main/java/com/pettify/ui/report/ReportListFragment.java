@@ -7,13 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+
 import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.navigation.NavController;
+import android.widget.ProgressBar;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,8 +25,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.pettify.R;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.report.Report;
+
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
+
+import com.squareup.picasso.Callback;
+
 import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
@@ -79,7 +86,7 @@ public class ReportListFragment extends Fragment {
     }
 
     void reloadData() {
-        reportListViewModel.refreshAllReports(() -> { });
+        reportListViewModel.refreshAllReports(() -> {});
     }
 
     void deleteReport(String id, EmptyListener listener) {
@@ -90,6 +97,7 @@ public class ReportListFragment extends Fragment {
         TextView title;
         TextView description;
         ImageView image;
+        ProgressBar pb;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -110,9 +118,19 @@ public class ReportListFragment extends Fragment {
         public void bindData(Report report) {
             description.setText(report.getDescription());
             title.setText(report.getTitle());
+            pb = itemView.findViewById(R.id.list_row_progress_bar);
+            pb.setVisibility(View.VISIBLE);
 
             if (report.getImage_url() != null && !report.getImage_url().isEmpty())
-                Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(image);
+                Picasso.get().load(report.getImage_url()).into(image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        pb.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) { }
+                });
             else
                 image.setImageResource(R.drawable.images);
         }
