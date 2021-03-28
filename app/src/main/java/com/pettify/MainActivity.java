@@ -67,13 +67,13 @@ public class MainActivity extends AppCompatActivity  {
             if (data == null) {
                 setNotLoggedIn(drawer, navController, navUsername, authButton);
             } else {
-                setLoggedIn(navUsername, authButton, data.getDisplayName());
+                setLoggedIn(navUsername, authButton, data.getDisplayName(), navController);
             }
         });
     ;
     }
 
-    private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
+    private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName, NavController navController) {
         if (currentUserName == null) {
             navUsername.setText("Welcome to Pettify!");
             setTabsVisibility(true);
@@ -86,6 +86,7 @@ public class MainActivity extends AppCompatActivity  {
             authViewModel.logout();
             navUsername.setText("");
             authButton.setText("Login / Register");
+            navController.navigate(R.id.nav_home);
         });
     }
 
