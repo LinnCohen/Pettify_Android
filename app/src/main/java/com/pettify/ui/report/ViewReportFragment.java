@@ -9,6 +9,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.squareup.picasso.Callback;
+import com.pettify.model.user.User;
+import com.pettify.ui.auth.AuthViewModel;
 import com.squareup.picasso.Picasso;
 
 import androidx.fragment.app.Fragment;
@@ -28,15 +30,20 @@ public class ViewReportFragment extends Fragment {
     TextView report_description;
     TextView report_last_updated_on;
     TextView report_location;
+    TextView reporter_phone;
+
     ImageView report_image;
     ProgressBar pb;
     ReportListViewModel reportViewModel;
+    AuthViewModel authViewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         reportViewModel =
                 new ViewModelProvider(this).get(ReportListViewModel.class);
+        authViewModel =
+                new ViewModelProvider(this).get(AuthViewModel.class);
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_view_report, container, false);
         report_description = view.findViewById(R.id.report_description);
@@ -45,6 +52,7 @@ public class ViewReportFragment extends Fragment {
         report_last_updated_on = view.findViewById(R.id.report_last_updated_at);
         report_title = view.findViewById(R.id.report_title);
         pb = view.findViewById(R.id.report_image_progress_bar);
+        reporter_phone = view.findViewById(R.id.reporterPhone_TextView);
 
         final String reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
         reportViewModel.getReport(reportId, new Listener<Report>() {
@@ -68,9 +76,20 @@ public class ViewReportFragment extends Fragment {
                         @Override
                         public void onError(Exception e) { }
                     });
+
+                if (data.getImage_url() != null){
+                    Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                 }
+
+                authViewModel.getUser(report.getReporterId(), new Listener<User>() {
+                    @Override
+                    public void onComplete(User user) {
+                        reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
+                    }
+                });
             }
         });
+
         return view;
     }
 }
