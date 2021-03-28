@@ -21,13 +21,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ProgressBar
-            android:id="@+id/create_report_pb"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:scaleX="0.20"
-            android:scaleY="0.20" />
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </FrameLayout>

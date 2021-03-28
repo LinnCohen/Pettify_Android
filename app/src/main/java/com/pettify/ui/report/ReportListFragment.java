@@ -21,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.pettify.R;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.report.Report;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
@@ -32,7 +33,6 @@ public class ReportListFragment extends Fragment {
     ReportListAdapter adapter;
     RecyclerView reports_list;
     List<Report> reportData = new LinkedList<>();
-    ProgressBar pb;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,8 +40,6 @@ public class ReportListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_report_list, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
-
-        pb = view.findViewById(R.id.create_report_pb);
 
         reports_list = view.findViewById(R.id.reportslist_list);
         reports_list.setHasFixedSize(true);
@@ -69,9 +67,6 @@ public class ReportListFragment extends Fragment {
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
             adapter.notifyDataSetChanged();
-            reports_list.setVisibility(View.VISIBLE);
-            pb.setVisibility(View.GONE);
-            Log.d("TAG", "done");
         });
         reloadData();
         return view;
@@ -89,6 +84,7 @@ public class ReportListFragment extends Fragment {
         TextView title;
         TextView description;
         ImageView image;
+        ProgressBar pb;
 
         public ReportRowViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
@@ -109,9 +105,19 @@ public class ReportListFragment extends Fragment {
         public void bindData(Report report) {
             description.setText(report.getDescription());
             title.setText(report.getTitle());
+            pb = itemView.findViewById(R.id.list_row_progress_bar);
+            pb.setVisibility(View.VISIBLE);
 
             if (report.getImage_url() != null && !report.getImage_url().isEmpty())
-                Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(image);
+                Picasso.get().load(report.getImage_url()).into(image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        pb.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError(Exception e) { }
+                });
             else
                 image.setImageResource(R.drawable.images);
         }
