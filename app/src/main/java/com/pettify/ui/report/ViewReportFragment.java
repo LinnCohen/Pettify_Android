@@ -56,6 +56,12 @@ public class ViewReportFragment extends Fragment {
             @Override
             public void onComplete(Report data) {
                 report = data;
+                authViewModel.getUser(report.getReporterId(), new Listener<User>() {
+                    @Override
+                    public void onComplete(User user) {
+                        reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
+                    }
+                });
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
                 report_location.setText("Location: " + report.getAddress());
@@ -64,16 +70,13 @@ public class ViewReportFragment extends Fragment {
                 format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
 
+
+
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                 }
 
-                authViewModel.getUser(report.getReporterId(), new Listener<User>() {
-                    @Override
-                    public void onComplete(User user) {
-                        reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
-                    }
-                });
+
             }
         });
 
