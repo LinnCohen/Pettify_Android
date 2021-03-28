@@ -120,22 +120,28 @@ public class UserModelFireBase {
                         firebaseUser.getUid());
     }
 
-    public void register(final User user, String password, final Listener<Boolean> listener) {
+    public void register(final User user, String password, final Listener<Task<AuthResult>> listener) {
         auth.createUserWithEmailAndPassword(user.getEmail(), password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
-                        String userUid=task.getResult().getUser().getUid();
-                        user.setId(userUid);
-
                         if (task.isSuccessful()) {
+                            String userUid=task.getResult().getUser().getUid();
+                            user.setId(userUid);
+                            //TODO - async
                             db.collection(USERS_COLLECTION).document(userUid).set(user);
-                            updateUserProfile(user, listener);
+                            updateUserProfile(user, new Listener<Boolean>() {
+                                @Override
+                                public void onComplete(Boolean data) {
+                                    if (data) {
+                                        listener.onComplete(task);
+                                    }
+                                }
+                            });
                         } else {
                             Log.w("TAG", "Failed to register user", task.getException());
                             if (listener != null) {
-                                listener.onComplete(false);
+                                listener.onComplete(task);
                             }
                         }
                     }

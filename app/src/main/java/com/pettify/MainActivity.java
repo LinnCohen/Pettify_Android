@@ -36,20 +36,13 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.reportslist_list, R.id.userslist_list)
+                R.id.nav_home, R.id.reportslist_list)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -67,13 +60,13 @@ public class MainActivity extends AppCompatActivity  {
             if (data == null) {
                 setNotLoggedIn(drawer, navController, navUsername, authButton);
             } else {
-                setLoggedIn(navUsername, authButton, data.getDisplayName());
+                setLoggedIn(navUsername, authButton, data.getDisplayName(), navController);
             }
         });
     ;
     }
 
-    private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName) {
+    private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName, NavController navController) {
         if (currentUserName == null) {
             navUsername.setText("Welcome to Pettify!");
             setTabsVisibility(true);
@@ -86,6 +79,7 @@ public class MainActivity extends AppCompatActivity  {
             authViewModel.logout();
             navUsername.setText("");
             authButton.setText("Login / Register");
+            navController.navigate(R.id.nav_home);
         });
     }
 

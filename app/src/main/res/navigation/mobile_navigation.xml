@@ -16,12 +16,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/userslist_list"
-        android:name="com.pettify.ui.user.UserListFragment"
-        android:label="Users List"
-        tools:layout="@layout/fragment_user_list" />
-
-    <fragment
         android:id="@+id/reportslist_list"
         android:name="com.pettify.ui.report.ReportListFragment"
         android:label="Reports Feed"

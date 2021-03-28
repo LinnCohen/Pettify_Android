@@ -17,6 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -58,6 +60,8 @@ public class CreateReportFragment extends Fragment {
     ImageView reportImageView;
     Report existingReport;
     String reportId;
+    View view;
+    ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,10 +69,13 @@ public class CreateReportFragment extends Fragment {
         reportListViewModel =
                 new ViewModelProvider(this).get(ReportListViewModel.class);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_create_report, container, false);
+        view = inflater.inflate(R.layout.fragment_create_report, container, false);
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
         reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
+
+        progressBar = view.findViewById(R.id.create_report_pb);
+        progressBar.setVisibility(View.INVISIBLE);
 
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
         ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
@@ -148,6 +155,7 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
+        progressBar.setVisibility(View.VISIBLE);
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
@@ -164,37 +172,35 @@ public class CreateReportFragment extends Fragment {
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
         Bitmap bitmap = drawable.getBitmap();
 
-        if (reportImageView != null) {
+        if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) ||
+                reportImageView.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.images).getConstantState()) {
+            TextView error = view.findViewById(R.id.create_report_error_msg);
+            progressBar.setVisibility(View.INVISIBLE);
+            error.setVisibility(View.VISIBLE);
+            submit_btn.setEnabled(true);
+        } else {
             reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
                 if (url == null) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     displayFailedError();
                 } else {
                     report.setImage_url(url);
                     CreateReportFragment.this.addOrEditReport(report);
                 }
             });
-        } else {
-            this.addOrEditReport(report);
         }
     }
 
     private void addOrEditReport(Report report) {
+        EmptyListener listener = () -> {
+            NavController navController = Navigation.findNavController(getView());
+            navController.navigate(R.id.action_create_report_to_reportslist_list);
+        };
+
         if (existingReport != null) {
-            reportListViewModel.updateReport(report, reportId, new EmptyListener() {
-                @Override
-                public void onComplete() {
-                    NavController navController = Navigation.findNavController(getView());
-                    navController.navigate(R.id.reportslist_list);
-                }
-            });
+            reportListViewModel.updateReport(report, reportId, listener);
         } else {
-            reportListViewModel.addReport(report, new EmptyListener() {
-                @Override
-                public void onComplete() {
-                    NavController navController = Navigation.findNavController(getView());
-                    navController.navigate(R.id.reportslist_list);
-                }
-            });
+            reportListViewModel.addReport(report, listener);
         }
     }
 
