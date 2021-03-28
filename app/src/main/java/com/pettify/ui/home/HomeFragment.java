@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 9));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 13));
             setMarkers();
 
         }
@@ -124,12 +124,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             marker.setTitle(report.getDescription());
             marker.setTag(report.getId());
         }
+        Marker marker2 = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+        marker2.setTag("selflocation");
+        marker2.setTitle("IM HERE");
+
+
 
         map.setOnMarkerClickListener(clickedMarker -> {
+
             String tag = clickedMarker.getTag().toString();
             Log.d("TAG", "Clicked! title: " + tag);
 
-            if (lastClicked.equals(tag)) {
+            if (lastClicked.equals(tag) && clickedMarker.getTag() != "selflocation") {
                 lastClicked = "";
                 Log.d("TAG", "Window true");
 

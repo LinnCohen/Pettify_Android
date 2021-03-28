@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -59,7 +60,9 @@ public class CreateReportFragment extends Fragment {
     ImageView reportImageView;
     Report existingReport;
     String reportId;
-    View view ;
+    View view;
+    ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -70,6 +73,9 @@ public class CreateReportFragment extends Fragment {
         reportListViewModel = new ViewModelProvider(this).get(ReportListViewModel.class);
 
         reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
+
+        progressBar = view.findViewById(R.id.create_report_pb);
+        progressBar.setVisibility(View.INVISIBLE);
 
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
         ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
@@ -149,6 +155,7 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
+        progressBar.setVisibility(View.VISIBLE);
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
@@ -168,11 +175,13 @@ public class CreateReportFragment extends Fragment {
         if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) ||
                 reportImageView.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.images).getConstantState()) {
             TextView error = view.findViewById(R.id.create_report_error_msg);
+            progressBar.setVisibility(View.INVISIBLE);
             error.setVisibility(View.VISIBLE);
             submit_btn.setEnabled(true);
         } else {
             reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
                 if (url == null) {
+                    progressBar.setVisibility(View.INVISIBLE);
                     displayFailedError();
                 } else {
                     report.setImage_url(url);

@@ -52,7 +52,7 @@ public class ViewReportFragment extends Fragment {
                 report_location.setText("Location: " + report.getAddress());
                 Date date = new Date(report.getLastUpdated() * 1000L);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
-                format.setTimeZone(TimeZone.getTimeZone("Etc/UTC+3"));
+                format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);

@@ -42,6 +42,17 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", radius=" + radius +
+                '}';
+    }
+
     public User(String name, String email, String uid) {
         this.name = name;
         this.email = email;
