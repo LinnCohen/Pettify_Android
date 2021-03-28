@@ -56,13 +56,13 @@ public class ReportListFragment extends Fragment {
             Navigation.findNavController(view).navigate(direc);
         });
 
-        final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-        swipeRefresh.setOnRefreshListener(() -> reportListViewModel.refreshAllReports(new EmptyListener() {
-            @Override
-            public void onComplete() {
-                swipeRefresh.setRefreshing(false);
-            }
-        }));
+//        final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
+//        swipeRefresh.setOnRefreshListener(() -> reportListViewModel.refreshAllReports(new EmptyListener() {
+//            @Override
+//            public void onComplete() {
+//                swipeRefresh.setRefreshing(false);
+//            }
+//        }));
 
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
