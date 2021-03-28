@@ -118,7 +118,7 @@ public class Report implements Serializable {
         result.put("reporterId", this.reporterId);
         return result;
     }
-
+ 
     public void fromMap(Map<String, Object> data) {
         this.description = (String)data.get("description");
         this.title = (String)data.get("title");
