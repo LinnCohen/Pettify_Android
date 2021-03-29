@@ -116,10 +116,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 12));
-            Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
-            myLocation.setTag("my_location");
-            myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-            myLocation.setTitle("IM HERE");
             setMarkers();
 
         }
@@ -129,7 +125,10 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (map == null || data == null) {
         return;
         }
-
+        Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+        myLocation.setTag("my_location");
+        myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+        myLocation.setTitle("IM HERE");
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
