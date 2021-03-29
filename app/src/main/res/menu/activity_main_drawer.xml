@@ -20,10 +20,15 @@
             android:id="@+id/nav_chat"
             android:icon="@drawable/chat"
             android:title="Chat" />
+
         <item
             android:id="@+id/account_tab"
             android:icon="@drawable/my_account_icon"
             android:title="My Account" />
+        <item
+            android:id="@+id/nav_new_chat"
+            android:icon="@drawable/chat"
+            android:title="New Chat" />
 
     </group>
 </menu>

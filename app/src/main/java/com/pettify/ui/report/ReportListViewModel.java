@@ -59,4 +59,5 @@ public class ReportListViewModel extends ViewModel {
     public void deleteReport(String id, EmptyListener listener) {
         reportModel.deleteReport(id, listener);
     }
+
 }
