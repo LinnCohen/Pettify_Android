@@ -72,6 +72,7 @@ public class ViewReportFragment extends Fragment {
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
                 format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
+
                 if (data.getImage_url() != null) {
                     Picasso.get().load(report.getImage_url()).into(report_image, new Callback() {
                         @Override
@@ -79,36 +80,11 @@ public class ViewReportFragment extends Fragment {
                             pb.setVisibility(View.GONE);
                         }
 
-<<<<<<< HEAD
                         @Override
-                        public void onError(Exception e) {
-                        }
+                        public void onError(Exception e) { }
                     });
-
-                    if (data.getImage_url() != null) {
-                        Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
-                    }
-
-                    authViewModel.getUser(report.getReporterId(), new Listener<User>() {
-                        @Override
-                        public void onComplete(User user) {
-                            reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
-                        }
-                    });
-                }
-            }});
-=======
-
-
-                if (data.getImage_url() != null){
-                    Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
-                }
-
-
-            }
+                }}
         });
->>>>>>> d6c4d3067d898db81dcc75f1a87892e01f0367f6
-
         return view;
     }
 }
