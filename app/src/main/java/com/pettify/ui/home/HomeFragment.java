@@ -83,8 +83,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 Log.d("location", String.valueOf(data.size()));
             }
         });
+        reloadData();
         setupMap();
         return view;
+    }
+    void reloadData() {
+        homeViewModel.refreshAllReports(() -> {});
     }
 
     private void setupMap() {
