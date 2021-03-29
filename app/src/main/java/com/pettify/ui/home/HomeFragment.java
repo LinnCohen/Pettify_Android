@@ -129,9 +129,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (map == null || data == null) {
         return;
         }
-        Log.d("Reports before sort",liveData.getValue().toString());
-        Collections.sort(liveData.getValue(), new SortReports(LocationUtils.instance.getCurrentLocation()));
-        Log.d("Reports after sort",liveData.getValue().toString());
+
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
