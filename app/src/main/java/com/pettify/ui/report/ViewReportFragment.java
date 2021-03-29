@@ -73,7 +73,6 @@ public class ViewReportFragment extends Fragment {
                 format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
 
-<<<<<<< HEAD
                 if (data.getImage_url() != null) {
                     Picasso.get().load(report.getImage_url()).into(report_image, new Callback() {
                         @Override
@@ -85,14 +84,6 @@ public class ViewReportFragment extends Fragment {
                         public void onError(Exception e) { }
                     });
                 }}
-=======
-                if (data.getImage_url() != null){
-                    Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
-                }
-
-
-            }
->>>>>>> 7e5051370a0bca1f566aef7a3fb1ca7b19059bb4
         });
         return view;
     }
