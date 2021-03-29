@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -28,7 +29,9 @@ import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
 import com.pettify.ui.report.ReportListFragmentDirections;
 import com.pettify.utilities.LocationUtils;
+import com.pettify.utilities.SortReports;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,8 +83,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 Log.d("location", String.valueOf(data.size()));
             }
         });
+        reloadData();
         setupMap();
         return view;
+    }
+    void reloadData() {
+        homeViewModel.refreshAllReports(() -> {});
     }
 
     private void setupMap() {
@@ -108,7 +115,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 13));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 12));
             setMarkers();
 
         }
@@ -118,15 +125,15 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (map == null || data == null) {
         return;
         }
-
+        Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+        myLocation.setTag("my_location");
+        myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+        myLocation.setTitle("IM HERE");
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
             marker.setTag(report.getId());
         }
-        Marker marker2 = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
-        marker2.setTag("selflocation");
-        marker2.setTitle("IM HERE");
 
 
 
@@ -135,7 +142,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             String tag = clickedMarker.getTag().toString();
             Log.d("TAG", "Clicked! title: " + tag);
 
-            if (lastClicked.equals(tag) && clickedMarker.getTag() != "selflocation") {
+            if (lastClicked.equals(tag) && clickedMarker.getTag() != "my_location") {
                 lastClicked = "";
                 Log.d("TAG", "Window true");
 
