@@ -208,15 +208,16 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addOrEditReport(Report report) {
-        EmptyListener listener = () -> {
-            NavController navController = Navigation.findNavController(getView());
-            navController.navigate(R.id.action_create_report_to_reportslist_list);
-        };
-
         if (existingReport != null) {
-            reportListViewModel.updateReport(report, reportId, listener);
+            reportListViewModel.updateReport(report, reportId, () -> {
+                NavController navController = Navigation.findNavController(getView());
+                navController.navigateUp();
+            });
         } else {
-            reportListViewModel.addReport(report, listener);
+            reportListViewModel.addReport(report, () -> {
+                NavController navController = Navigation.findNavController(getView());
+                navController.navigate(R.id.action_create_report_to_reportslist_list);
+            });
         }
     }
 
