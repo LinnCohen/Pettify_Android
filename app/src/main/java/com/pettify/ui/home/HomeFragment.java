@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -108,7 +109,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 13));
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 12));
+            Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+            myLocation.setTag("my_location");
+            myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+            myLocation.setTitle("IM HERE");
             setMarkers();
 
         }
@@ -124,9 +129,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             marker.setTitle(report.getDescription());
             marker.setTag(report.getId());
         }
-        Marker marker2 = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
-        marker2.setTag("selflocation");
-        marker2.setTitle("IM HERE");
 
 
 
@@ -135,7 +137,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             String tag = clickedMarker.getTag().toString();
             Log.d("TAG", "Clicked! title: " + tag);
 
-            if (lastClicked.equals(tag) && clickedMarker.getTag() != "selflocation") {
+            if (lastClicked.equals(tag) && clickedMarker.getTag() != "my_location") {
                 lastClicked = "";
                 Log.d("TAG", "Window true");
 
