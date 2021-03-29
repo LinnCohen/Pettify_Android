@@ -3,6 +3,7 @@ package com.pettify.model.report;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -38,7 +39,6 @@ public class ReportModel {
         //1. get local last update date
         SharedPreferences sharedPreferences = PettifyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong(REPORT_LAST_UPDATED, 0);
-
         //2. get all updated records from fire base from the last update date
         reportModelFireBase.getAllReports(lastUpdated, querySnapshot -> {
             //3. insert the new updates and addition to the local db and delete from local db removed reports.
@@ -66,10 +66,13 @@ public class ReportModel {
                 }
             }
 
-            //4. update the local last update date
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong(REPORT_LAST_UPDATED, newLastUpdated);
-            editor.commit();
+            if (newLastUpdated != 0) {
+                //4. update the local last update date
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putLong(REPORT_LAST_UPDATED, newLastUpdated);
+                editor.commit();
+            }
+
             //5. return the updated data to the listeners - all the data
             if (listener != null) {
                 listener.onComplete();

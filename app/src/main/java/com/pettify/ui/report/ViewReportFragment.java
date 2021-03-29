@@ -70,8 +70,6 @@ public class ViewReportFragment extends Fragment {
                 format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
                 report_last_updated_on.setText("Last updated at: " + format.format(date));
 
-
-
                 if (data.getImage_url() != null){
                     Picasso.get().load(data.getImage_url()).placeholder(R.drawable.images).into(report_image);
                 }
