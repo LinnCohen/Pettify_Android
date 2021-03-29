@@ -192,7 +192,6 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addOrEditReport(Report report) {
-
         if (existingReport != null) {
             reportListViewModel.updateReport(report, reportId, () -> {
                 NavController navController = Navigation.findNavController(getView());
