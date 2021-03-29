@@ -186,15 +186,15 @@ public class CreateReportFragment extends Fragment {
         report.setLng(lng);
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
 
-        if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) ||
+        if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) || drawable == null ||
                 reportImageView.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.images).getConstantState()) {
             TextView error = view.findViewById(R.id.create_report_error_msg);
             submit_progress_bar.setVisibility(View.INVISIBLE);
             error.setVisibility(View.VISIBLE);
             submit_btn.setEnabled(true);
         } else {
+            Bitmap bitmap = drawable.getBitmap();
             reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
                 if (url == null) {
                     submit_progress_bar.setVisibility(View.INVISIBLE);
