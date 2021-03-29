@@ -29,10 +29,13 @@ import com.pettify.model.report.Report;
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
 
+import com.pettify.utilities.LocationUtils;
+import com.pettify.utilities.SortReports;
 import com.squareup.picasso.Callback;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,6 +85,7 @@ public class ReportListFragment extends Fragment {
 
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
+            Collections.sort(reportData, new SortReports(LocationUtils.instance.getCurrentLocation()));
             adapter.notifyDataSetChanged();
         });
         reloadData();
