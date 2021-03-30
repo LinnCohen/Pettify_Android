@@ -79,14 +79,6 @@ public class ReportListFragment extends Fragment {
             Navigation.findNavController(view).navigate(direc);
         });
 
-//        final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-//        swipeRefresh.setOnRefreshListener(() -> reportListViewModel.refreshAllReports(new EmptyListener() {
-//            @Override
-//            public void onComplete() {
-//                swipeRefresh.setRefreshing(false);
-//            }
-//        }));
-
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
             if(reportData != null && ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )
@@ -195,11 +187,15 @@ public class ReportListFragment extends Fragment {
                     Navigation.findNavController(holder.itemView).navigate(direction);
                 }
             });
-            holder.bindData(report);
             if(!isUserReporter(report.getReporterId())){
                 delete_report.setVisibility(View.INVISIBLE);
                 edit_report.setVisibility(View.INVISIBLE);
+            } else {
+                delete_report.setVisibility(View.VISIBLE);
+                edit_report.setVisibility(View.VISIBLE);
             }
+            holder.bindData(report);
+
         }
 
         @Override

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.Task;
@@ -56,7 +57,9 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onComplete(Task<AuthResult> data) {
                         if (data.isSuccessful()) {
-                            Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
+                            NavController navigation = Navigation.findNavController(registerView);
+                            navigation.navigateUp();
+                            navigation.navigateUp();
                         } else {
                             pb.setVisibility(View.INVISIBLE);
                             TextView error = registerView.findViewById(R.id.register_error_msg);
