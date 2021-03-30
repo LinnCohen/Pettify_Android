@@ -1,6 +1,9 @@
 package com.pettify.ui.home;
 
-import android.location.Location;
+import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,14 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -27,16 +35,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.pettify.R;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
-import com.pettify.ui.report.ReportListFragmentDirections;
-import com.pettify.utilities.LocationUtils;
-import com.pettify.utilities.SortReports;
 
-import java.util.Collections;
+import com.pettify.utilities.LocationUtils;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class HomeFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
+    private int LOCATION_PERMISSION_CODE = 1;
     private HomeFragmentViewModel homeViewModel;
     SupportMapFragment mapFragment;
     private GoogleMap map;
@@ -45,10 +52,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     LiveData<List<Report>> liveData;
     String lastClicked = "";
     View view;
+    Button buttonRequest;
+    Boolean hasLocationPermission;
 
 
-
-    public HomeFragment(){
+    public HomeFragment() {
 
     }
 
@@ -56,10 +64,33 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(this).get(HomeFragmentViewModel.class);
-         view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         liveData = homeViewModel.getReports();
         data = liveData.getValue();
+        buttonRequest = view.findViewById(R.id.location_permission_button);
 
+
+        // --------------------------------- Location premission section ----------------------//
+        if (ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            this.hasLocationPermission = true;
+            buttonRequest.setVisibility(View.INVISIBLE);
+        }
+        else {
+            this.hasLocationPermission = false;
+
+        }
+        buttonRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(PettifyApplication.context, "You already granted this permission", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    requestStoragePermission();
+
+                }
+            }
+        });
 
 
         //----------------------------Spinner actions to choose the map types----------------------------------//
@@ -87,8 +118,44 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         setupMap();
         return view;
     }
+
+
+    private void requestStoragePermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+            new AlertDialog.Builder(this.getActivity()).setTitle("Permission needed").setMessage("This permission is needed for location services").setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                }
+            }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            }).create().show();
+
+
+        } else {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT);
+
+        } else {
+            Toast.makeText(getActivity(), "Permession DENIED", Toast.LENGTH_SHORT);
+
+        }
+    }
+
     void reloadData() {
-        homeViewModel.refreshAllReports(() -> {});
+        homeViewModel.refreshAllReports(() -> {
+        });
     }
 
     private void setupMap() {
@@ -115,7 +182,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-          //  map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 12));
+            if (hasLocationPermission) {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 12));
+            }
             setMarkers();
 
         }
@@ -123,18 +192,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private void setMarkers() {
         if (map == null || data == null) {
-        return;
+            return;
         }
-        Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
-        myLocation.setTag("my_location");
-        myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-        myLocation.setTitle("IM HERE");
+        map.clear();
+        if (hasLocationPermission) {
+            Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+            myLocation.setTag("my_location");
+            myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+            myLocation.setTitle("IM HERE");
+        }
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
             marker.setTitle(report.getDescription());
             marker.setTag(report.getId());
         }
-
 
 
         map.setOnMarkerClickListener(clickedMarker -> {
@@ -150,12 +221,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 for (int i = 0; i < data.size(); i++) {
                     if (data.get(i).getId().equals(tag)) {
                         clonedReport = data.get(i);
-                        Log.d("TAG",clonedReport.toString());
+                        Log.d("TAG", clonedReport.toString());
                     }
                 }
 
 //              NEED TO REDRIRECT TO WANTED REPORT
-                HomeFragmentDirections.ActionNavHomeToViewReport direc =  HomeFragmentDirections.actionNavHomeToViewReport().setReportId(clonedReport.getId());
+                HomeFragmentDirections.ActionNavHomeToViewReport direc = HomeFragmentDirections.actionNavHomeToViewReport().setReportId(clonedReport.getId());
                 Navigation.findNavController(view).navigate(direc);
 
 
