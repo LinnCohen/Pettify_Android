@@ -1,5 +1,7 @@
 package com.pettify.ui.report;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -23,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.pettify.R;
+import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.report.Report;
 
@@ -85,7 +89,8 @@ public class ReportListFragment extends Fragment {
 
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
-            Collections.sort(reportData, new SortReports(LocationUtils.instance.getCurrentLocation()));
+            if(reportData != null && ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )
+                Collections.sort(reportData, new SortReports(LocationUtils.instance.getCurrentLocation()));
             adapter.notifyDataSetChanged();
         });
         reloadData();
