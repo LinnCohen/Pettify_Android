@@ -140,15 +140,13 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == LOCATION_PERMISSION_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT).show();
                 this.buttonRequest.setVisibility(View.INVISIBLE);
                 this.hasLocationPermission = true;
                 setMarkers();
+            } else {
+                Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             }
-
-        } else {
-            Toast.makeText(getActivity(), "Permession DENIED", Toast.LENGTH_SHORT);
-
         }
     }
 
@@ -192,7 +190,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         }
         if (hasLocationPermission) {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 8));
-        //    Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+            //    Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
 //            myLocation.setTag("my_location");
 //            myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
 //            myLocation.setTitle("IM HERE");
