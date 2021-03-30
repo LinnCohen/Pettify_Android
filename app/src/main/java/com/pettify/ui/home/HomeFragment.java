@@ -74,8 +74,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.hasLocationPermission = true;
             buttonRequest.setVisibility(View.INVISIBLE);
-        }
-        else {
+        } else {
             this.hasLocationPermission = false;
 
         }
@@ -86,12 +85,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     Toast.makeText(PettifyApplication.context, "You already granted this permission", Toast.LENGTH_SHORT).show();
 
                 } else {
-                    requestStoragePermission();
-
+                    requestLocationPermission();
                 }
+
             }
         });
-
 
         //----------------------------Spinner actions to choose the map types----------------------------------//
         spinner = view.findViewById(R.id.spinner3);
@@ -120,12 +118,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
 
-    private void requestStoragePermission() {
+    private void requestLocationPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this.getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
             new AlertDialog.Builder(this.getActivity()).setTitle("Permission needed").setMessage("This permission is needed for location services").setPositiveButton("ok", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+                    requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
                 }
             }).setNegativeButton("cancel", new DialogInterface.OnClickListener() {
                 @Override
@@ -133,19 +131,20 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                     dialog.dismiss();
                 }
             }).create().show();
-
-
         } else {
-            ActivityCompat.requestPermissions(this.getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_CODE);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == LOCATION_PERMISSION_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(getActivity(), "Permission Granted", Toast.LENGTH_SHORT);
+                this.buttonRequest.setVisibility(View.INVISIBLE);
+                this.hasLocationPermission = true;
+                setMarkers();
+            }
 
         } else {
             Toast.makeText(getActivity(), "Permession DENIED", Toast.LENGTH_SHORT);
@@ -182,9 +181,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         public void onMapReady(GoogleMap googleMap) {
             map = googleMap;
             map.setMapType(googleMap.MAP_TYPE_NORMAL);
-            if (hasLocationPermission) {
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 12));
-            }
             setMarkers();
 
         }
@@ -194,12 +190,12 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         if (map == null || data == null) {
             return;
         }
-        map.clear();
         if (hasLocationPermission) {
-            Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
-            myLocation.setTag("my_location");
-            myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
-            myLocation.setTitle("IM HERE");
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(LocationUtils.instance.getCurrentLocation(), 8));
+        //    Marker myLocation = map.addMarker(new MarkerOptions().position(LocationUtils.instance.getCurrentLocation()));
+//            myLocation.setTag("my_location");
+//            myLocation.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET));
+//            myLocation.setTitle("IM HERE");
         }
         for (Report report : liveData.getValue()) {
             Marker marker = map.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(report.getLat()), Double.parseDouble(report.getLng()))));
