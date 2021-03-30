@@ -216,7 +216,8 @@ public class CreateReportFragment extends Fragment {
         } else {
             reportListViewModel.addReport(report, () -> {
                 NavController navController = Navigation.findNavController(getView());
-                navController.navigate(R.id.action_create_report_to_reportslist_list);
+                navController.navigateUp();
+                navController.navigate(R.id.reportslist_list);
             });
         }
     }
