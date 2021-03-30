@@ -12,7 +12,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -24,12 +23,7 @@ import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
 
 import java.io.ByteArrayOutputStream;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 public class ReportModelFireBase {
     private static final String REPORTS_COLLECTION = "reports";
