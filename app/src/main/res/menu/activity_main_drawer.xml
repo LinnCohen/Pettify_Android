@@ -16,10 +16,7 @@
             android:id="@+id/create_report"
             android:icon="@drawable/create_new_595b40b75ba036ed117d938a"
             android:title="Create Report" />
-        <item
-            android:id="@+id/nav_chat"
-            android:icon="@drawable/chat"
-            android:title="Chat" />
+
 
         <item
             android:id="@+id/account_tab"
