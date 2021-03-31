@@ -45,18 +45,18 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
 
     private int LOCATION_PERMISSION_CODE = 1;
     private HomeFragmentViewModel homeViewModel;
-    SupportMapFragment mapFragment;
+    private SupportMapFragment mapFragment;
     private GoogleMap map;
-    List<Report> data = new LinkedList<>();
-    Spinner spinner;
-    LiveData<List<Report>> liveData;
-    String lastClicked = "";
-    View view;
-    Button buttonRequest;
-    Boolean hasLocationPermission;
+    private List<Report> data = new LinkedList<>();
+    private Spinner spinner;
+    private LiveData<List<Report>> liveData;
+    private String lastClicked = "";
+    private View view;
+    private Button buttonRequest;
+    private Boolean hasLocationPermission;
 
 
-    public HomeFragment() {
+    public HomeFragment() { // must default ctor for map
 
     }
 
@@ -101,6 +101,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Apply the adapter to the spinner
         spinner.setAdapter(adapter);
+
 
 
         //----------------------------Reports actions to render map markers--------------------------------//

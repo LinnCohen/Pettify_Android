@@ -36,6 +36,7 @@ public class ReportModel {
         return reportsList;
     }
 
+    @SuppressLint("StaticFieldLeak")
     public void refreshAllReports(EmptyListener listener) {
         //1. get local last update date
         SharedPreferences sharedPreferences = PettifyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);

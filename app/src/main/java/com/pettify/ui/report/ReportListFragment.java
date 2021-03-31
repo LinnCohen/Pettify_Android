@@ -17,13 +17,9 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.navigation.NavController;
-import android.widget.ProgressBar;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.pettify.R;
 import com.pettify.model.PettifyApplication;
@@ -155,7 +151,7 @@ public class ReportListFragment extends Fragment {
         @NonNull
         @Override
         public ReportRowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_row, parent, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.report_list_row, parent, false);
             ReportRowViewHolder viewHolder = new ReportRowViewHolder(view, listener);
             return viewHolder;
         }
