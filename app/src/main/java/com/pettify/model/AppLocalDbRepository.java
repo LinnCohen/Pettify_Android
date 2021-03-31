@@ -7,8 +7,6 @@ import com.pettify.model.chat.Chat;
 import com.pettify.model.chat.ChatDao;
 import com.pettify.model.report.Report;
 import com.pettify.model.report.ReportDao;
-import com.pettify.model.user.User;
-import com.pettify.model.user.UserDao;
 
 @Database(entities = {Report.class, Chat.class}, version = 8)
 public abstract class AppLocalDbRepository extends RoomDatabase {
