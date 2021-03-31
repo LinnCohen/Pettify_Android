@@ -15,7 +15,6 @@ public class UserModel {
 
     public final static UserModel instance = new UserModel();
     UserModelFireBase userModelFireBase = UserModelFireBase.instance;
-    UserModelSql userModelSql = UserModelSql.instance;
 
     private UserModel(){}
 
