@@ -1,6 +1,8 @@
 package com.pettify;
 
+import android.Manifest;
 import android.content.ClipData;
+import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,6 +25,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.pettify.model.PettifyApplication;
 import com.pettify.ui.auth.AuthViewModel;
 
 public class MainActivity extends AppCompatActivity  {
@@ -63,7 +67,7 @@ public class MainActivity extends AppCompatActivity  {
                 setLoggedIn(navUsername, authButton, data.getDisplayName(), navController);
             }
         });
-    ;
+        setCreateReport();
     }
 
     private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName, NavController navController) {
@@ -115,6 +119,15 @@ public class MainActivity extends AppCompatActivity  {
 
         nav_Menu.findItem(R.id.account_tab).setVisible(isVisible);
         nav_Menu.findItem(R.id.create_report).setVisible(isVisible);
+    }
 
+    private void setCreateReport (){
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+        if(ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+            nav_Menu.findItem(R.id.create_report).setVisible(true);
+        } else {
+            nav_Menu.findItem(R.id.create_report).setVisible(false);
+        }
     }
 }

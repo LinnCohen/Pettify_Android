@@ -11,7 +11,7 @@
         <item
             android:id="@+id/reportslist_list"
             android:icon="@drawable/reports"
-            android:title="Reports" />
+            android:title="Reports Feed" />
         <item
             android:id="@+id/create_report"
             android:icon="@drawable/create_new_595b40b75ba036ed117d938a"
@@ -25,7 +25,7 @@
         <item
             android:id="@+id/nav_new_chat"
             android:icon="@drawable/chat"
-            android:title="New Chat" />
+            android:title="Chat" />
 
     </group>
 </menu>
