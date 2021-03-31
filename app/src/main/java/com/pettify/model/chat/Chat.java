@@ -8,7 +8,6 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,9 +96,6 @@ import java.util.Map;
                     "id='" + id + '\'' +
                     ", message='" + message + '\'' +
                     ", user_name='" + user_name + '\'' + '}';
-
         }
-
-
     }
 

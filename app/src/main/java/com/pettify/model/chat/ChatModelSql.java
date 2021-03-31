@@ -1,16 +1,11 @@
 package com.pettify.model.chat;
 
-
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.pettify.model.AppLocalDb;
 import com.pettify.model.listeners.EmptyListener;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModelSql;
 
 import java.util.List;
 
