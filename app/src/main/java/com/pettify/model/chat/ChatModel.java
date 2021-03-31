@@ -1,10 +1,13 @@
 package com.pettify.model.chat;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.loader.content.AsyncTaskLoader;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.pettify.model.PettifyApplication;
@@ -37,42 +40,47 @@ public class ChatModel {
     }
 
 
+    @SuppressLint("StaticFieldLeak")
     public void refreshAllChats(EmptyListener listener) {
         //1. get local last update date
-        Log.d("TAG","we on refreshh");
         SharedPreferences sharedPreferences = PettifyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong(CHAT_LAST_UPDATED, 0);
 
         //2. get all updated records from fire base from the last update date
         chatModelFireBase.getAllChats(lastUpdated, querySnapshot -> {
-            //3. insert the new updates and addition to the local db and delete from local db removed reports.
-            long newLastUpdated = 0L;
-            for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
-                Chat chat = new Chat();
-                chat.fromMap(documentChange.getDocument().getData());
-                Log.d("TAG", documentChange.getType().toString());
-                switch (documentChange.getType()) {
-                    case ADDED:
-                    case MODIFIED:
-                        Log.d("TAG","We here :)");
-                        chat.setId(documentChange.getDocument().getId());
-                        chatModelSql.addChat(chat, null);
-                        if (chat.getLastUpdated() > newLastUpdated) {
-                            newLastUpdated = chat.getLastUpdated();
+            new AsyncTask<String, String, String>() {
+                @SuppressLint("StaticFieldLeak")
+                @Override
+                protected String doInBackground(String... strings) {
+                    //3. insert the new updates and addition to the local db and delete from local db removed reports.
+                    long newLastUpdated = 0L;
+                    for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
+                        Chat chat = new Chat();
+                        chat.fromMap(documentChange.getDocument().getData());
+                        switch (documentChange.getType()) {
+                            case ADDED:
+                            case MODIFIED:
+                                chat.setId(documentChange.getDocument().getId());
+                                chatModelSql.addChat(chat, null);
+                                if (chat.getLastUpdated() > newLastUpdated) {
+                                    newLastUpdated = chat.getLastUpdated();
+                                }
+                                break;
+
                         }
-                        break;
+                    }
 
+                    //4. update the local last update date
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putLong(CHAT_LAST_UPDATED, newLastUpdated);
+                    editor.commit();
+                    //5. return the updated data to the listeners - all the data
+                    if (listener != null) {
+                        listener.onComplete();
+                    }
+                    return "";
                 }
-            }
-
-            //4. update the local last update date
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putLong(CHAT_LAST_UPDATED, newLastUpdated);
-            editor.commit();
-            //5. return the updated data to the listeners - all the data
-            if (listener != null) {
-                listener.onComplete();
-            }
+            };
         });
     }
 
