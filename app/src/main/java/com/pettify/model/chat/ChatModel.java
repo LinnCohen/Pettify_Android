@@ -4,20 +4,11 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
-import androidx.loader.content.AsyncTaskLoader;
-
 import com.google.firebase.firestore.DocumentChange;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModel;
-import com.pettify.model.report.ReportModelFireBase;
-import com.pettify.model.report.ReportModelSql;
-
 import java.util.List;
 
 public class ChatModel {
@@ -38,7 +29,6 @@ public class ChatModel {
         }
         return chatsList;
     }
-
 
     @SuppressLint("StaticFieldLeak")
     public void refreshAllChats(EmptyListener listener) {
