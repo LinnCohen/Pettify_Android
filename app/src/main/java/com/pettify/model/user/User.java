@@ -12,10 +12,8 @@ public class User implements Serializable {
     @NonNull
     private String id;
     private String name;
-//    public String lastName = "";
     private String email="";
      public String phoneNumber = "";
-//    public UserType userType = UserType.NOTFICATIONS;
     public double radius = 0.0;
 
     public String getPhoneNumber() {

@@ -35,51 +35,7 @@ public class UserModelFireBase {
     }
 
     public void onUserChange(Listener<FirebaseUser> listener) {
-        auth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                listener.onComplete(firebaseAuth.getCurrentUser());
-            }
-        });
-    }
-    public void getAllUsers(Listener<List<User>> listener) {
-        List<User> users = new LinkedList<>();
-        db.collection(USERS_COLLECTION)
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        for (DocumentSnapshot document : task.getResult()) {
-                            users.add(document.toObject(User.class));
-                        }
-                        listener.onComplete(users);
-                    } else {
-                        Log.d(TAG, "Error getting documents: ", task.getException());
-                    }
-                });
-    }
-
-    public void addUser(User user, EmptyListener listener) {
-
-        db.collection(USERS_COLLECTION)
-                .document(user.getId())
-                .set(user)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("TAG", "user with id:" + user.getId() + " was created");
-                        listener.onComplete();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("TAG", "user with id:" + user.getId() + " failed to be created");
-                        listener.onComplete();
-                    }}
-                    );
-    }
-
-    public void updateUser(User user, EmptyListener listener) {
-        addUser(user, listener);
+        auth.addAuthStateListener(firebaseAuth -> listener.onComplete(firebaseAuth.getCurrentUser()));
     }
 
     public void getUser(String id, Listener<User> listener) {
@@ -99,15 +55,6 @@ public class UserModelFireBase {
                     }
                 });
 
-    }
-
-    public void deleteUser(String id, EmptyListener listener) {
-        db.collection(USERS_COLLECTION)
-                .document(id)
-                .delete()
-                .addOnCompleteListener(task -> {
-                   listener.onComplete();
-                });
     }
 
     public User getCurrentUser() {

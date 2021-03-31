@@ -22,7 +22,6 @@ public class ReportModelSql {
        return AppLocalDb.db.reportDao().getAll();
     }
 
-    //TODO - fix deprecated code
     public void addReport(final Report report, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override

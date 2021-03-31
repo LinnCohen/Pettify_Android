@@ -20,14 +20,13 @@ import java.util.List;
 public class ChatModel {
     public final static ChatModel instance = new ChatModel();
     public static final String CHAT_LAST_UPDATED = "chatLastUpdated";
-    ChatModelFireBase chatModelFireBase = ChatModelFireBase.instance;
-    ChatModelSql chatModelSql = ChatModelSql.instance;
-
+    private ChatModelFireBase chatModelFireBase = ChatModelFireBase.instance;
+    private ChatModelSql chatModelSql = ChatModelSql.instance;
 
     public ChatModel() {
     }
 
-    LiveData<List<Chat>> chatsList;
+    private LiveData<List<Chat>> chatsList;
 
     public LiveData<List<Chat>> getAllChats() {
         if (chatsList == null) {
@@ -80,6 +79,7 @@ public class ChatModel {
     public void addChat(final Chat chat, final EmptyListener listener) {
         chatModelFireBase.addChat(chat, listener);
     }
+
     public void getChat(String id, Listener listener) {
         chatModelFireBase.getChat(id, listener);
     }

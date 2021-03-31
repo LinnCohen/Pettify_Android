@@ -37,15 +37,12 @@ public class ReportModelFireBase {
     public void getAllReports(long lastUpdated, Listener<QuerySnapshot> listener) {
         Timestamp ts = new Timestamp(lastUpdated,0);
         db.collection(REPORTS_COLLECTION).whereGreaterThanOrEqualTo("lastUpdated",ts)
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if (error != null) {
-                            Log.d("TAG", "", error);
-                            listener.onComplete(null);
-                        }
-                        listener.onComplete(value);
+                .addSnapshotListener((value, error) -> {
+                    if (error != null) {
+                        Log.d("TAG", "", error);
+                        listener.onComplete(null);
                     }
+                    listener.onComplete(value);
                 });
     }
 
@@ -61,22 +58,19 @@ public class ReportModelFireBase {
 
     public void getReport(String id, Listener listener) {
         db.collection(REPORTS_COLLECTION)
-                .document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                Report report = null;
-                if (task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    if (doc != null) {
-                        if (doc.exists()) {
-                            report = new Report();
-                            report.fromMap(doc.getData());
+                .document(id).get().addOnCompleteListener(task -> {
+                    Report report = null;
+                    if (task.isSuccessful()){
+                        DocumentSnapshot doc = task.getResult();
+                        if (doc != null) {
+                            if (doc.exists()) {
+                                report = new Report();
+                                report.fromMap(doc.getData());
+                            }
                         }
                     }
-                }
-                listener.onComplete(report);
-            }
-        });
+                    listener.onComplete(report);
+                });
     }
 
     public void updateReport(Report report, String reportId, EmptyListener listener) {

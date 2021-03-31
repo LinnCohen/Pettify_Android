@@ -54,6 +54,7 @@ public class ChatModelFireBase {
                 .addOnFailureListener(e -> listener.onComplete()
                 );
     }
+
     public void getChat(String id, Listener listener) {
         db.collection(CHATS_COLLECTION)
                 .document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

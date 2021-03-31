@@ -21,9 +21,11 @@ public class ChatModelSql {
 
     public ChatModelSql() {
     }
+
     public LiveData<List<Chat>> getAllChats() {
         return AppLocalDb.db.chatDao().getAll();
     }
+
     public void addChat(final Chat chat, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
