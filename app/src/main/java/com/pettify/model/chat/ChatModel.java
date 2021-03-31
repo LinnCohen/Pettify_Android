@@ -45,7 +45,6 @@ public class ChatModel {
         //1. get local last update date
         SharedPreferences sharedPreferences = PettifyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong(CHAT_LAST_UPDATED, 0);
-
         //2. get all updated records from fire base from the last update date
         chatModelFireBase.getAllChats(lastUpdated, querySnapshot -> {
             new AsyncTask<String, String, String>() {
@@ -80,7 +79,13 @@ public class ChatModel {
                     }
                     return "";
                 }
-            };
+
+                @Override
+                protected void onPostExecute(String s) {
+                    super.onPostExecute(s);
+                    if (listener != null) listener.onComplete();
+                }
+            }.execute("");
         });
     }
 
