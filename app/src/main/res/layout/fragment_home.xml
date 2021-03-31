@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:flow_verticalStyle="spread_inside"
     tools:context=".ui.home.HomeFragment">
 
 
@@ -24,15 +25,32 @@
 
     <Spinner
         android:id="@+id/spinner3"
-        style="@style/Widget.AppCompat.Spinner.DropDown.ActionBar"
-        android:layout_width="259dp"
-        android:layout_height="28dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:animateLayoutChanges="true"
+        android:background="@color/purple_200"
+        android:popupBackground="@color/purple_200"
+        android:rotationX="4"
+        android:textDirection="firstStrongLtr"
+        app:flow_firstHorizontalStyle="packed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintHorizontal_bias="0.03"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.038" />
+        app:layout_constraintVertical_bias="0.04000002" />
+
+    <Button
+        android:id="@+id/location_permission_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Allow Location Services"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.918" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

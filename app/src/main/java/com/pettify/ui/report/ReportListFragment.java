@@ -1,5 +1,7 @@
 package com.pettify.ui.report;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,28 +13,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.navigation.NavController;
-import android.widget.ProgressBar;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.pettify.R;
+import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.report.Report;
 
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
 
+import com.pettify.utilities.LocationUtils;
+import com.pettify.utilities.SortReports;
 import com.squareup.picasso.Callback;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -72,16 +75,10 @@ public class ReportListFragment extends Fragment {
             Navigation.findNavController(view).navigate(direc);
         });
 
-//        final SwipeRefreshLayout swipeRefresh = view.findViewById(R.id.report_list_refresh_by_swipe);
-//        swipeRefresh.setOnRefreshListener(() -> reportListViewModel.refreshAllReports(new EmptyListener() {
-//            @Override
-//            public void onComplete() {
-//                swipeRefresh.setRefreshing(false);
-//            }
-//        }));
-
         reportListViewModel.getReports().observe(getViewLifecycleOwner(), reports -> {
             reportData = reports;
+            if(reportData != null && ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )
+                Collections.sort(reportData, new SortReports(LocationUtils.instance.getCurrentLocation()));
             adapter.notifyDataSetChanged();
         });
         reloadData();
@@ -154,7 +151,7 @@ public class ReportListFragment extends Fragment {
         @NonNull
         @Override
         public ReportRowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.list_row, parent, false);
+            View view = LayoutInflater.from(getActivity()).inflate(R.layout.report_list_row, parent, false);
             ReportRowViewHolder viewHolder = new ReportRowViewHolder(view, listener);
             return viewHolder;
         }
@@ -186,11 +183,15 @@ public class ReportListFragment extends Fragment {
                     Navigation.findNavController(holder.itemView).navigate(direction);
                 }
             });
-            holder.bindData(report);
             if(!isUserReporter(report.getReporterId())){
                 delete_report.setVisibility(View.INVISIBLE);
                 edit_report.setVisibility(View.INVISIBLE);
+            } else {
+                delete_report.setVisibility(View.VISIBLE);
+                edit_report.setVisibility(View.VISIBLE);
             }
+            holder.bindData(report);
+
         }
 
         @Override

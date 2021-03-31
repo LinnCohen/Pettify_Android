@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_home_to_view_report"
             app:destination="@id/view_report" />
+        <action
+            android:id="@+id/action_nav_home_self"
+            app:destination="@id/nav_home" />
     </fragment>
 
     <fragment
@@ -31,7 +34,7 @@
     <fragment
         android:id="@+id/create_report"
         android:name="com.pettify.ui.report.CreateReportFragment"
-        android:label="Create Report"
+        android:label="Report"
         tools:layout="@layout/fragment_create_report" >
         <action
             android:id="@+id/action_create_report_to_reportslist_list"

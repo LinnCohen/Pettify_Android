@@ -5,12 +5,14 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.android.gms.tasks.Task;
@@ -31,10 +33,13 @@ public class RegisterFragment extends Fragment {
         View registerButton = registerView.findViewById(R.id.register_button);
         SeekBar seekBar =  registerView.findViewById(R.id.radius_eekBar);
         seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        ProgressBar pb = registerView.findViewById(R.id.register_progress_bar);
+        pb.setVisibility(View.INVISIBLE);
         int progress = seekBar.getProgress();
         tvProgressLabel =  registerView.findViewById(R.id.accountTitle_textView);
         tvProgressLabel.setText(String.valueOf(progress));
         registerButton.setOnClickListener(buttonView -> {
+            pb.setVisibility(View.VISIBLE);
             TextView email = registerView.findViewById(R.id.register_user_email);
             TextView password = registerView.findViewById(R.id.register_user_password);
             TextView name = registerView.findViewById(R.id.register_user_name);
@@ -44,6 +49,7 @@ public class RegisterFragment extends Fragment {
             int currentProgress = seekBar.getProgress();
             user.setRadius(currentProgress);
             if (fieldWasNotProvided(email, password, name, phone)) {
+                pb.setVisibility(View.INVISIBLE);
                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.VISIBLE);
             } else {
                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.INVISIBLE);
@@ -51,8 +57,11 @@ public class RegisterFragment extends Fragment {
                     @Override
                     public void onComplete(Task<AuthResult> data) {
                         if (data.isSuccessful()) {
-                            Navigation.findNavController(registerView).navigate(R.id.action_nav_register_to_nav_home);
+                            NavController navigation = Navigation.findNavController(registerView);
+                            navigation.navigateUp();
+                            navigation.navigateUp();
                         } else {
+                            pb.setVisibility(View.INVISIBLE);
                             TextView error = registerView.findViewById(R.id.register_error_msg);
                             error.setText(data.getException().getMessage());
                             error.setVisibility(View.VISIBLE);

@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.navigation.NavigationView;
 import com.pettify.R;
 import com.pettify.model.user.User;
 
@@ -34,7 +35,9 @@ public class LoginFragment extends Fragment {
             authViewModel.loginUser(email.getText().toString(), password.getText().toString(),
                     isSuccess -> {
                         if (isSuccess) {
-                            Navigation.findNavController(loginView).navigate(R.id.action_nav_login_to_nav_home);
+                            NavController navigation = Navigation.findNavController(loginView);
+                            navigation.navigateUp();
+                            navigation.navigate(R.id.nav_home);
                         } else {
                             loginView.findViewById(R.id.login_error_msg).setVisibility(View.VISIBLE);
                         }

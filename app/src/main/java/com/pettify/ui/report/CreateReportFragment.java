@@ -31,12 +31,12 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.material.snackbar.Snackbar;
 import com.pettify.R;
 import com.pettify.model.listeners.*;
 import com.pettify.utilities.LocationUtils;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.Date;
@@ -61,7 +61,9 @@ public class CreateReportFragment extends Fragment {
     Report existingReport;
     String reportId;
     View view;
-    ProgressBar progressBar;
+    ProgressBar submit_progress_bar;
+    ProgressBar image_progress_bar;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -74,8 +76,9 @@ public class CreateReportFragment extends Fragment {
 
         reportId = ViewReportFragmentArgs.fromBundle(getArguments()).getReportId();
 
-        progressBar = view.findViewById(R.id.create_report_pb);
-        progressBar.setVisibility(View.INVISIBLE);
+        submit_progress_bar = view.findViewById(R.id.create_report_pb);
+        submit_progress_bar.setVisibility(View.INVISIBLE);
+        image_progress_bar = view.findViewById(R.id.create_report_image_pb);
 
         animal_type_spinner = view.findViewById(R.id.animal_type_spinner);
         ArrayAdapter<CharSequence> animal_type_adapter = ArrayAdapter.createFromResource(PettifyApplication.context,
@@ -99,11 +102,21 @@ public class CreateReportFragment extends Fragment {
                     animal_type_spinner.setSelection(animalSpinnerPosition);
                     int reportTypeSpinnerPosition = report_type_adapter.getPosition(report.getReport_type());
                     report_type_spinner.setSelection(reportTypeSpinnerPosition);
-                    if (report.getImage_url() != null){
-                        Picasso.get().load(report.getImage_url()).placeholder(R.drawable.images).into(reportImageView);
+                    if (report.getImage_url() != null) {
+                        Picasso.get().load(report.getImage_url()).into(reportImageView, new Callback() {
+                            @Override
+                            public void onSuccess() {
+                                image_progress_bar.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onError(Exception e) { }
+                        });
                     }
                 }
             });
+        } else {
+            image_progress_bar.setVisibility(View.GONE);
         }
 
         report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -142,7 +155,10 @@ public class CreateReportFragment extends Fragment {
         report_description = view.findViewById(R.id.create_desc_text);
         report_address = view.findViewById(R.id.create_report_address);
 
-        submit_btn.setOnClickListener(v -> addReport());
+        submit_btn.setOnClickListener(v -> {
+            addReport();
+//            Navigation.findNavController(getView()).popBackStack();
+        });
 
         upload_image_btn.setOnClickListener(v -> uploadImage());
         LatLng location = LocationUtils.instance.getCurrentLocation();
@@ -155,7 +171,7 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addReport() {
-        progressBar.setVisibility(View.VISIBLE);
+        submit_progress_bar.setVisibility(View.VISIBLE);
         Date date = new Date();
         submit_btn.setEnabled(false);
         lat = String.valueOf(LocationUtils.instance.getLat());
@@ -170,18 +186,18 @@ public class CreateReportFragment extends Fragment {
         report.setLng(lng);
         report.setReport_type(report_type);
         BitmapDrawable drawable = (BitmapDrawable)reportImageView.getDrawable();
-        Bitmap bitmap = drawable.getBitmap();
 
-        if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) ||
+        if (TextUtils.isEmpty(report_title.getText()) || TextUtils.isEmpty(report_description.getText()) || drawable == null ||
                 reportImageView.getDrawable().getConstantState() == getResources().getDrawable(R.drawable.images).getConstantState()) {
             TextView error = view.findViewById(R.id.create_report_error_msg);
-            progressBar.setVisibility(View.INVISIBLE);
+            submit_progress_bar.setVisibility(View.INVISIBLE);
             error.setVisibility(View.VISIBLE);
             submit_btn.setEnabled(true);
         } else {
+            Bitmap bitmap = drawable.getBitmap();
             reportListViewModel.uploadImage(bitmap, "report_image" + date.getTime(), url -> {
                 if (url == null) {
-                    progressBar.setVisibility(View.INVISIBLE);
+                    submit_progress_bar.setVisibility(View.INVISIBLE);
                     displayFailedError();
                 } else {
                     report.setImage_url(url);
@@ -192,15 +208,17 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void addOrEditReport(Report report) {
-        EmptyListener listener = () -> {
-            NavController navController = Navigation.findNavController(getView());
-            navController.navigate(R.id.action_create_report_to_reportslist_list);
-        };
-
         if (existingReport != null) {
-            reportListViewModel.updateReport(report, reportId, listener);
+            reportListViewModel.updateReport(report, reportId, () -> {
+                NavController navController = Navigation.findNavController(getView());
+                navController.navigateUp();
+            });
         } else {
-            reportListViewModel.addReport(report, listener);
+            reportListViewModel.addReport(report, () -> {
+                NavController navController = Navigation.findNavController(getView());
+                navController.navigateUp();
+                navController.navigate(R.id.reportslist_list);
+            });
         }
     }
 
