@@ -29,6 +29,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.pettify.ui.auth.AuthViewModel;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -56,6 +57,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     private View view;
     private Button buttonRequest;
     private Boolean hasLocationPermission;
+    private AuthViewModel authViewModel;
 
 
     public HomeFragment() { // must default ctor for map
@@ -71,6 +73,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
         data = liveData.getValue();
         buttonRequest = view.findViewById(R.id.location_permission_button);
 
+        authViewModel =
+                new ViewModelProvider(this).get(AuthViewModel.class);
 
         // --------------------------------- Location premission section ----------------------//
         if (ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -149,7 +153,11 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 setMarkers();
                 NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
                 Menu menu = navigationView.getMenu();
-                menu.findItem(R.id.create_report).setVisible(true);
+                if (authViewModel.getCurrentUser() != null) {
+                    menu.findItem(R.id.create_report).setVisible(true);
+                } else {
+                    menu.findItem(R.id.create_report).setVisible(false);
+                }
             } else {
                 Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             }

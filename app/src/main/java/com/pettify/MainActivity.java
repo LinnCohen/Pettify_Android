@@ -71,13 +71,13 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void setLoggedIn(TextView navUsername, Button authButton, String currentUserName, NavController navController) {
+        setCreateReport();
         if (currentUserName == null) {
             navUsername.setText("Welcome to Pettify!");
-            setTabsVisibility(true);
         } else {
             navUsername.setText("Hello " + currentUserName);
-            setTabsVisibility(true);
         }
+        setTabsVisibility(true);
         authButton.setText("Logout");
         authButton.setOnClickListener(buttonView -> {
             authViewModel.logout();
@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void setNotLoggedIn(DrawerLayout drawer, NavController navController, TextView navUsername, Button authButton) {
+        setCreateReport();
         navUsername.setText("");
         authButton.setText("Login / Register");
 
@@ -118,16 +119,19 @@ public class MainActivity extends AppCompatActivity  {
         Menu nav_Menu = navigationView.getMenu();
 
         nav_Menu.findItem(R.id.account_tab).setVisible(isVisible);
-        nav_Menu.findItem(R.id.create_report).setVisible(isVisible);
     }
 
-    private void setCreateReport (){
+    private void setCreateReport() {
         NavigationView navigationView = findViewById(R.id.nav_view);
         Menu nav_Menu = navigationView.getMenu();
-        if(ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
+        if(checkLocationEnabled() && authViewModel.getCurrentUser() != null) {
             nav_Menu.findItem(R.id.create_report).setVisible(true);
         } else {
             nav_Menu.findItem(R.id.create_report).setVisible(false);
         }
+    }
+
+    private boolean checkLocationEnabled() {
+        return ContextCompat.checkSelfPermission(PettifyApplication.context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 }
