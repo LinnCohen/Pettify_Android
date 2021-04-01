@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.pettify.R;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.report.Report;
@@ -145,6 +147,9 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                 this.buttonRequest.setVisibility(View.INVISIBLE);
                 this.hasLocationPermission = true;
                 setMarkers();
+                NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+                Menu menu = navigationView.getMenu();
+                menu.findItem(R.id.create_report).setVisible(true);
             } else {
                 Toast.makeText(getActivity(), "Permission Denied", Toast.LENGTH_SHORT).show();
             }

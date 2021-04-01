@@ -15,8 +15,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModelFireBase;
 
 public class ChatModelFireBase {
 
@@ -54,6 +52,7 @@ public class ChatModelFireBase {
                 .addOnFailureListener(e -> listener.onComplete()
                 );
     }
+
     public void getChat(String id, Listener listener) {
         db.collection(CHATS_COLLECTION)
                 .document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -73,6 +72,4 @@ public class ChatModelFireBase {
             }
         });
     }
-
-
 }
