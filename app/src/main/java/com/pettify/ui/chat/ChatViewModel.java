@@ -1,4 +1,4 @@
-package com.pettify.ui.ChatNew;
+package com.pettify.ui.chat;
 
 import android.util.Log;
 
@@ -15,13 +15,13 @@ import com.pettify.model.user.User;
 
 import java.util.List;
 
-public class ChatNewViewModel extends ViewModel {
+public class ChatViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 
     private LiveData<List<Chat>> chats = ChatModel.instance.getAllChats();
     private ChatModel chatModel;
 
-    public ChatNewViewModel() {
+    public ChatViewModel() {
         chatModel=ChatModel.instance;
     }
 

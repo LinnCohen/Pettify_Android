@@ -82,9 +82,9 @@
         tools:layout="@layout/fragment_account" />
     <fragment
         android:id="@+id/nav_new_chat"
-        android:name="com.pettify.ui.ChatNew.ChatNewFragment"
-        android:label="chat_new_fragment"
-        tools:layout="@layout/chat_new_fragment" /><![CDATA[
+        android:name="com.pettify.ui.chat.ChatFragment"
+        android:label="Chat"
+        tools:layout="@layout/chat_fragment" /><![CDATA[
         tools:layout="@layout/fragment_register" />
 
 
