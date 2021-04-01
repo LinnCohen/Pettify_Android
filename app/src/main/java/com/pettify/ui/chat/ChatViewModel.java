@@ -1,45 +1,33 @@
 package com.pettify.ui.chat;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.pettify.model.chat.Chat;
-import com.pettify.model.chat.ChatModel;
+import com.pettify.model.message.Message;
+import com.pettify.model.message.MessageModel;
 import com.pettify.model.listeners.EmptyListener;
-import com.pettify.model.listeners.Listener;
-import com.pettify.model.report.Report;
-import com.pettify.model.user.User;
 
 
 import java.util.List;
 
 public class ChatViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
-
-    private LiveData<List<Chat>> chats = ChatModel.instance.getAllChats();
-    private ChatModel chatModel;
+    private LiveData<List<Message>> messages = MessageModel.instance.getAllMessages();
+    private MessageModel messageModel;
 
     public ChatViewModel() {
-        chatModel=ChatModel.instance;
+        messageModel = MessageModel.instance;
     }
 
-    public LiveData<List<Chat>> getChats() {
-        return chats;
+    public LiveData<List<Message>> getMessages() {
+        return messages;
     }
 
-    public void refreshAllChats(EmptyListener listener) {
-        chatModel.refreshAllChats(listener);
+    public void refreshAllMessages(EmptyListener listener) {
+        messageModel.refreshAllMessages(listener);
     }
 
-
-
-    public void addChat(Chat chat, EmptyListener listener) {
-
-
-        chatModel.addChat(chat, listener);
+    public void addMessage(Message message, EmptyListener listener) {
+        messageModel.addMessage(message, listener);
     }
-
 
 }
