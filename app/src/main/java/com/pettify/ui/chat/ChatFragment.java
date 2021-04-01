@@ -23,9 +23,11 @@ import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ChatFragment extends Fragment {
 
@@ -95,7 +97,8 @@ public class ChatFragment extends Fragment {
         Message message =new Message();
         message.setMessage(chat_typed_msg.getText().toString());
         message.setUser_name(user.getName());
-        String date=new Date().toString();
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
+        String date = format.format(new Date());
         message.setMsg_date(date);
 
 
@@ -141,17 +144,12 @@ public class ChatFragment extends Fragment {
             msg.setText(message.getMessage());
             user_name.setText(message.getUser_name());
             current_time.setText(message.getMsg_date());
-            Log.d("TAG", message.getMsg_date().toString());
-
-
         }
     }
+
     interface OnItemClickListener {
         void onClick(int position);
     }
-
-
-
 
     class ChatNewAdapter extends RecyclerView.Adapter<ChatNewRowViewHolder> {
         private ChatFragment.OnItemClickListener listener;
