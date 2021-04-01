@@ -62,12 +62,12 @@ public class ViewReportFragment extends Fragment {
                 authViewModel.getUser(report.getReporterId(), new Listener<User>() {
                     @Override
                     public void onComplete(User user) {
-                        reporter_phone.setText("Reporter Phone Number: " + user.getPhoneNumber());
+                        reporter_phone.setText("contact:" + user.getPhoneNumber());
                     }
                 });
                 report_title.setText(report.getTitle());
                 report_description.setText(report.getDescription());
-                report_location.setText("Location: " + report.getAddress());
+                report_location.setText(report.getAddress());
                 Date date = new Date(report.getLastUpdated() * 1000L);
                 SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
                 format.setTimeZone(TimeZone.getTimeZone("GMT+3"));
