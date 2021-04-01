@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -86,6 +87,9 @@ public class ChatFragment extends Fragment {
 
 
     private void addChat() {
+        if (TextUtils.isEmpty(chat_typed_msg.getText())) {
+            return;
+        }
         //submit_btn.setEnabled(false);
         Message message =new Message();
         message.setMessage(chat_typed_msg.getText().toString());
