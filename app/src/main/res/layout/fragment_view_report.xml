@@ -28,7 +28,7 @@
             android:id="@+id/report_description"
             android:layout_width="366dp"
             android:layout_height="132dp"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="#FFFFFF"
