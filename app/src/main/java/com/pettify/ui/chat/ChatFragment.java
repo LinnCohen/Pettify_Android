@@ -35,15 +35,9 @@ public class ChatFragment extends Fragment {
     List<Message> messageData = new LinkedList<>();
     AuthViewModel authViewModel;
     String currentUserId = "";
-
-
     TextView chat_typed_msg;
-
-
     Button submit_btn;
     User user;
-
-
 
     public static ChatFragment newInstance() {
         return new ChatFragment();
@@ -90,18 +84,19 @@ public class ChatFragment extends Fragment {
 
 
     private void addChat() {
-
         //submit_btn.setEnabled(false);
         Message message =new Message();
         message.setMessage(chat_typed_msg.getText().toString());
-        message.setUser_name(user.getName());
+        if (user == null) {
+            message.setUser_name("guest");
+        } else {
+            message.setUser_name(user.getName());
+        }
+
         String date=new Date().toString();
         message.setMsg_date(date);
 
-
         EmptyListener listener = () -> {
-//            NavController navController = Navigation.findNavController(getView());
-//            navController.navigateUp();
             reloadData();
             chat_typed_msg.setText("");
         };
