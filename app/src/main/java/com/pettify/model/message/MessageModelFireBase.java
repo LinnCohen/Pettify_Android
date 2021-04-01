@@ -1,4 +1,4 @@
-package com.pettify.model.chat;
+package com.pettify.model.message;
 
 import android.util.Log;
 
@@ -15,23 +15,21 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModelFireBase;
 
-public class ChatModelFireBase {
+public class MessageModelFireBase {
 
-    private static final String CHATS_COLLECTION = "chats";
-    public static final ChatModelFireBase instance = new ChatModelFireBase();
+    private static final String MESSAGES_COLLECTION = "messages";
+    public static final MessageModelFireBase instance = new MessageModelFireBase();
     private FirebaseFirestore db;
 
-    private ChatModelFireBase() {
+    private MessageModelFireBase() {
         db = FirebaseFirestore.getInstance();
     }
 
 
-    public void getAllChats(long lastUpdated, Listener<QuerySnapshot> listener) {
+    public void getAllMessages(long lastUpdated, Listener<QuerySnapshot> listener) {
         Timestamp ts = new Timestamp(lastUpdated,0);
-        db.collection(CHATS_COLLECTION)
+        db.collection(MESSAGES_COLLECTION)
                 .whereGreaterThanOrEqualTo("lastUpdated",ts)   // ask mayy
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
@@ -45,9 +43,9 @@ public class ChatModelFireBase {
                 });
     }
 
-    public void addChat(Chat chat, EmptyListener listener) {
-        db.collection(CHATS_COLLECTION)
-                .add(chat.toMap())
+    public void addMessage(Message message, EmptyListener listener) {
+        db.collection(MESSAGES_COLLECTION)
+                .add(message.toMap())
                 .addOnSuccessListener(documentReference -> {
                     listener.onComplete();
                 })
@@ -55,22 +53,22 @@ public class ChatModelFireBase {
                 );
     }
 
-    public void getChat(String id, Listener listener) {
-        db.collection(CHATS_COLLECTION)
+    public void getMessage(String id, Listener listener) {
+        db.collection(MESSAGES_COLLECTION)
                 .document(id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                Chat chat = null;
+                Message message = null;
                 if (task.isSuccessful()){
                     DocumentSnapshot doc = task.getResult();
                     if (doc != null) {
                         if (doc.exists()) {
-                            chat = new Chat();
-                            chat.fromMap(doc.getData());
+                            message = new Message();
+                            message.fromMap(doc.getData());
                         }
                     }
                 }
-                listener.onComplete(chat);
+                listener.onComplete(message);
             }
         });
     }

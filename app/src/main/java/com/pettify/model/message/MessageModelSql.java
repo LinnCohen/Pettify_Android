@@ -1,36 +1,33 @@
-package com.pettify.model.chat;
+package com.pettify.model.message;
 
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 
 import com.pettify.model.AppLocalDb;
 import com.pettify.model.listeners.EmptyListener;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModelSql;
 
 import java.util.List;
 
 
-public class ChatModelSql {
+public class MessageModelSql {
 
-    public static final ChatModelSql instance = new ChatModelSql();
+    public static final MessageModelSql instance = new MessageModelSql();
 
-    public ChatModelSql() {
+    public MessageModelSql() {
     }
 
-    public LiveData<List<Chat>> getAllChats() {
-        return AppLocalDb.db.chatDao().getAll();
+    public LiveData<List<Message>> getAllMessages() {
+        return AppLocalDb.db.messageDao().getAll();
     }
 
-    public void addChat(final Chat chat, final EmptyListener listener) {
+    public void addMessage(final Message message, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
-                AppLocalDb.db.chatDao().insertAll(chat);
+                AppLocalDb.db.messageDao().insertAll(message);
                 return null;
             }
 
@@ -46,11 +43,11 @@ public class ChatModelSql {
         task.execute();
     }
     @SuppressLint("StaticFieldLeak")
-    public void deleteChat(Chat chat,  final EmptyListener listener) {
+    public void deleteMessage(Message message, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
             protected Object doInBackground(Object[] objects) {
-                AppLocalDb.db.chatDao().delete(chat);
+                AppLocalDb.db.messageDao().delete(message);
                 return null;
             }
 

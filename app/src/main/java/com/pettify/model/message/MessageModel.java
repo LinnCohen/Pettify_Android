@@ -1,4 +1,4 @@
-package com.pettify.model.chat;
+package com.pettify.model.message;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,54 +10,50 @@ import com.google.firebase.firestore.DocumentChange;
 import com.pettify.model.PettifyApplication;
 import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
-import com.pettify.model.report.Report;
-import com.pettify.model.report.ReportModel;
-import com.pettify.model.report.ReportModelFireBase;
-import com.pettify.model.report.ReportModelSql;
 
 import java.util.List;
 
-public class ChatModel {
-    public final static ChatModel instance = new ChatModel();
+public class MessageModel {
+    public final static MessageModel instance = new MessageModel();
     public static final String CHAT_LAST_UPDATED = "chatLastUpdated";
-    private ChatModelFireBase chatModelFireBase = ChatModelFireBase.instance;
-    private ChatModelSql chatModelSql = ChatModelSql.instance;
+    private MessageModelFireBase messageModelFireBase = MessageModelFireBase.instance;
+    private MessageModelSql messageModelSql = MessageModelSql.instance;
 
-    public ChatModel() {
+    public MessageModel() {
     }
 
-    private LiveData<List<Chat>> chatsList;
+    private LiveData<List<Message>> chat;
 
-    public LiveData<List<Chat>> getAllChats() {
-        if (chatsList == null) {
-            chatsList = chatModelSql.getAllChats();
+    public LiveData<List<Message>> getAllMessages() {
+        if (chat == null) {
+            chat = messageModelSql.getAllMessages();
         }
-        return chatsList;
+        return chat;
     }
 
 
-    public void refreshAllChats(EmptyListener listener) {
+    public void refreshAllMessages(EmptyListener listener) {
         //1. get local last update date
         Log.d("TAG","we on refreshh");
         SharedPreferences sharedPreferences = PettifyApplication.context.getSharedPreferences("TAG", Context.MODE_PRIVATE);
         long lastUpdated = sharedPreferences.getLong(CHAT_LAST_UPDATED, 0);
 
         //2. get all updated records from fire base from the last update date
-        chatModelFireBase.getAllChats(lastUpdated, querySnapshot -> {
+        messageModelFireBase.getAllMessages(lastUpdated, querySnapshot -> {
             //3. insert the new updates and addition to the local db and delete from local db removed reports.
             long newLastUpdated = 0L;
             for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
-                Chat chat = new Chat();
-                chat.fromMap(documentChange.getDocument().getData());
+                Message message = new Message();
+                message.fromMap(documentChange.getDocument().getData());
                 Log.d("TAG", documentChange.getType().toString());
                 switch (documentChange.getType()) {
                     case ADDED:
                     case MODIFIED:
                         Log.d("TAG","We here :)");
-                        chat.setId(documentChange.getDocument().getId());
-                        chatModelSql.addChat(chat, null);
-                        if (chat.getLastUpdated() > newLastUpdated) {
-                            newLastUpdated = chat.getLastUpdated();
+                        message.setId(documentChange.getDocument().getId());
+                        messageModelSql.addMessage(message, null);
+                        if (message.getLastUpdated() > newLastUpdated) {
+                            newLastUpdated = message.getLastUpdated();
                         }
                         break;
 
@@ -76,11 +72,11 @@ public class ChatModel {
     }
 
 
-    public void addChat(final Chat chat, final EmptyListener listener) {
-        chatModelFireBase.addChat(chat, listener);
+    public void addMessage(final Message message, final EmptyListener listener) {
+        messageModelFireBase.addMessage(message, listener);
     }
 
-    public void getChat(String id, Listener listener) {
-        chatModelFireBase.getChat(id, listener);
+    public void getMessage(String id, Listener listener) {
+        messageModelFireBase.getMessage(id, listener);
     }
 }

@@ -1,4 +1,4 @@
-package com.pettify.model.chat;
+package com.pettify.model.message;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -6,19 +6,17 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.pettify.model.report.Report;
-
 import java.util.List;
 
 @Dao
-public interface ChatDao {
-    @Query("select * from Chat")
-    LiveData<List<Chat>> getAll();
+public interface MessageDao {
+    @Query("select * from Message")
+    LiveData<List<Message>> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Chat... chats);
+    void insertAll(Message... messages);
 
     @Delete
-    void delete(Chat chats);
+    void delete(Message chats);
 
 }

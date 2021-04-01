@@ -7,8 +7,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,13 +18,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.pettify.R;
-import com.pettify.model.chat.Chat;
+import com.pettify.model.message.Message;
 import com.pettify.model.listeners.EmptyListener;
-import com.pettify.model.listeners.Listener;
-import com.pettify.model.report.Report;
 import com.pettify.model.user.User;
 import com.pettify.ui.auth.AuthViewModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -37,7 +32,7 @@ public class ChatNewFragment extends Fragment {
     private ChatNewViewModel chatNewViewModel;
    ChatNewAdapter adapter;
     RecyclerView chats_list;
-    List<Chat> chatData = new LinkedList<>();
+    List<Message> messageData = new LinkedList<>();
     AuthViewModel authViewModel;
     String currentUserId = "";
 
@@ -76,12 +71,12 @@ public class ChatNewFragment extends Fragment {
         chat_typed_msg=view.findViewById(R.id.input_text2);
         submit_btn = view.findViewById(R.id.send_btn2);
 
-        chatNewViewModel.getChats().observe(getViewLifecycleOwner(), chats -> {
-            chatData = chats;
+        chatNewViewModel.getMessages().observe(getViewLifecycleOwner(), chats -> {
+            messageData = chats;
             adapter.notifyDataSetChanged();
         });
         submit_btn.setOnClickListener(v -> addChat());
-        Log.d("TAG",chatData.toString());
+        Log.d("TAG", messageData.toString());
         reloadData();
 
 
@@ -90,18 +85,18 @@ public class ChatNewFragment extends Fragment {
     }
 
     void reloadData() {
-        chatNewViewModel.refreshAllChats(() -> {});
+        chatNewViewModel.refreshAllMessages(() -> {});
     }
 
 
     private void addChat() {
 
         //submit_btn.setEnabled(false);
-        Chat chat=new Chat();
-        chat.setMessage(chat_typed_msg.getText().toString());
-        chat.setUser_name(user.getName());
+        Message message =new Message();
+        message.setMessage(chat_typed_msg.getText().toString());
+        message.setUser_name(user.getName());
         String date=new Date().toString();
-        chat.setMsg_date(date);
+        message.setMsg_date(date);
 
 
         EmptyListener listener = () -> {
@@ -110,7 +105,7 @@ public class ChatNewFragment extends Fragment {
             reloadData();
             chat_typed_msg.setText("");
         };
-        chatNewViewModel.addChat(chat,listener);
+        chatNewViewModel.addMessage(message,listener);
         reloadData();
 
     }
@@ -142,11 +137,11 @@ public class ChatNewFragment extends Fragment {
 
         }
 
-        public void bindData(Chat chat) {
-            msg.setText(chat.getMessage());
-            user_name.setText(chat.getUser_name());
-            current_time.setText(chat.getMsg_date());
-            Log.d("TAG",chat.getMsg_date().toString());
+        public void bindData(Message message) {
+            msg.setText(message.getMessage());
+            user_name.setText(message.getUser_name());
+            current_time.setText(message.getMsg_date());
+            Log.d("TAG", message.getMsg_date().toString());
 
 
         }
@@ -179,21 +174,21 @@ public class ChatNewFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ChatNewRowViewHolder holder, int position) {
-            Chat chat = chatData.get(position);
+            Message message = messageData.get(position);
 //            Button delete_report = holder.itemView.findViewById(R.id.listrow_delete_report);
 //            Button edit_report = holder.itemView.findViewById(R.id.listrow_edit_report);
-            String id = chatNewViewModel.getChats().getValue().get(position).getId();
+            String id = chatNewViewModel.getMessages().getValue().get(position).getId();
 
 
 
 
-            holder.bindData(chat);
+            holder.bindData(message);
 
         }
 
         @Override
         public int getItemCount() {
-            return chatData.size();
+            return messageData.size();
         }
 
 

@@ -1,4 +1,4 @@
-package com.pettify.model.chat;
+package com.pettify.model.message;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -8,12 +8,11 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FieldValue;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Chat implements Serializable {
+public class Message implements Serializable {
     @PrimaryKey
     @NonNull
     private String id = "";
@@ -39,10 +38,10 @@ public class Chat implements Serializable {
         this.lastUpdated = lastUpdated;
     }
 
-    public Chat() {
+    public Message() {
     }
 
-    public Chat(@NonNull String id, String message, String user_name) {
+    public Message(@NonNull String id, String message, String user_name) {
         this.id = id;
         this.message = message;
         this.user_name = user_name;
@@ -93,7 +92,7 @@ public class Chat implements Serializable {
 
     @Override
     public String toString() {
-        return "Report{" +
+        return "Message{" +
                 "id='" + id + '\'' +
                 ", message='" + message + '\'' +
                 ", user_name='" + user_name + '\'' + '}';
