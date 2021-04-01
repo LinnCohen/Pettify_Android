@@ -1,7 +1,5 @@
 package com.pettify.model.message;
 
-
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
@@ -42,7 +40,7 @@ public class MessageModelSql {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
-    @SuppressLint("StaticFieldLeak")
+
     public void deleteMessage(Message message, final EmptyListener listener) {
         class MyAsyncTask extends AsyncTask {
             @Override
@@ -62,8 +60,4 @@ public class MessageModelSql {
         MyAsyncTask task = new MyAsyncTask();
         task.execute();
     }
-
-
-
-
 }

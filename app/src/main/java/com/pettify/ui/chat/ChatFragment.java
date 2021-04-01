@@ -1,4 +1,4 @@
-package com.pettify.ui.ChatNew;
+package com.pettify.ui.chat;
 
 import androidx.lifecycle.ViewModelProvider;
 
@@ -27,9 +27,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ChatNewFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    private ChatNewViewModel chatNewViewModel;
+    private ChatViewModel chatNewViewModel;
    ChatNewAdapter adapter;
     RecyclerView chats_list;
     List<Message> messageData = new LinkedList<>();
@@ -45,15 +45,15 @@ public class ChatNewFragment extends Fragment {
 
 
 
-    public static ChatNewFragment newInstance() {
-        return new ChatNewFragment();
+    public static ChatFragment newInstance() {
+        return new ChatFragment();
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.chat_new_fragment, container, false);
-        chatNewViewModel = new ViewModelProvider(this).get(ChatNewViewModel.class);
+        View view = inflater.inflate(R.layout.chat_fragment, container, false);
+        chatNewViewModel = new ViewModelProvider(this).get(ChatViewModel.class);
         authViewModel =
                 new ViewModelProvider(this).get(AuthViewModel.class);
          user = authViewModel.getCurrentUser();
@@ -154,11 +154,11 @@ public class ChatNewFragment extends Fragment {
 
 
     class ChatNewAdapter extends RecyclerView.Adapter<ChatNewRowViewHolder> {
-        private ChatNewFragment.OnItemClickListener listener;
+        private ChatFragment.OnItemClickListener listener;
 
 
 
-        void setOnItemClickListener(ChatNewFragment.OnItemClickListener listener) {
+        void setOnItemClickListener(ChatFragment.OnItemClickListener listener) {
             this.listener = listener;
         }
 
