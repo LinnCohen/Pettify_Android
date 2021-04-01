@@ -55,14 +55,17 @@ public class MessageModel {
                                     newLastUpdated = message.getLastUpdated();
                                 }
                                 break;
-
                         }
                     }
 
                     //4. update the local last update date
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putLong(CHAT_LAST_UPDATED, newLastUpdated);
-                    editor.commit();
+                    if (newLastUpdated != 0) {
+                        //4. update the local last update date
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putLong(CHAT_LAST_UPDATED, newLastUpdated);
+                        editor.commit();
+                    }
+
                     //5. return the updated data to the listeners - all the data
                     if (listener != null) {
                         listener.onComplete();
