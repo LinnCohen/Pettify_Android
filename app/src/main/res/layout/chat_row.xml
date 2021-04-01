@@ -36,8 +36,8 @@
 
     <TextView
         android:id="@+id/from_user"
-        android:layout_width="67dp"
-        android:layout_height="26dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="from "
         android:textColor="#10A7EC"
