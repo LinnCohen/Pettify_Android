@@ -93,7 +93,7 @@ public class ChatFragment extends Fragment {
         //submit_btn.setEnabled(false);
         Message message =new Message();
         message.setMessage(chat_typed_msg.getText().toString());
-        message.setUser_name(user.getName());
+//        message.setUser_name(user.getName());
         SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy, HH:mm");
         String date = format.format(new Date());
         message.setMsg_date(date);
