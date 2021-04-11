@@ -15,7 +15,7 @@ We made an assistance platform for injured and lost animals. <h4>
 
 <h1>Build With:<h1>
 <ul>
-  <a href="https://developer.android.com/studio"><li>Android Studio/li><a>
+  <a href="https://developer.android.com/studio"><li>Android Studio</li><a>
   </ul>
 
  <h1>Authros</h1>
