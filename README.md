@@ -17,7 +17,7 @@ We made an assistance platform for injured and lost animals. <h4>
 
  <h1>Authros</h1>
   <a href="https://www.linkedin.com/in/eliordayari/">Linkedin Profile: Elior Dayari</a><br>
-  <a href="https://www.linkedin.com/in/eliordayari/">Linkedin Profile: Linn Cohen</a><br>
+  <a href="https://www.linkedin.com/in/linn-cohen-6057b2139/">Linkedin Profile: Linn Cohen</a><br>
   <a href="https://www.linkedin.com/in/yarin-meron">Linkedin Profile: May S </a><br>
   <a href="https://www.linkedin.com/in/eliordayari/">Linkedin Profile: Or K</a><br>
   <a href="https://www.linkedin.com/in/yarin-meron">Linkedin Profile: Yarin Meron</a><br>
