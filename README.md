@@ -1,7 +1,7 @@
 # Pettify_Android
 
 
-<h4>In this project we created an Android Application as a part of our Final Project at the College of Management Academic Studies.<br>
+<h4>In this project, we created an Android Application as a part of our Final Project at the College of Management Academic Studies.<br>
 We made an assistance platform for injured and lost animals. <h4>
   <h4>We connected Google Maps API to render the map, each marker represents a live report that is waiting for volunteers and been uploaded from a random person in the street. </h4>
 
