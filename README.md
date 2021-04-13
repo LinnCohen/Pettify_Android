@@ -19,10 +19,9 @@ We made an assistance platform for injured and lost animals. <h4>
 <h1>Build With:<h1>
 <ul>
 
-  <a href="https://developer.android.com/studio"><li>Android Studio</li><a>
-<a href="https://developer.android.com/studio"><li>Android Studio</li><a>
+  <a href="https://developer.android.com/studio"><li>Android Studio(Java)</li><a>
   </ul>
-"https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"
+  
  <h1>Authros</h1>
   <a href="https://www.linkedin.com/in/eliordayari/">Linkedin Profile: Elior Dayari</a><br>
   <a href="https://www.linkedin.com/in/linn-cohen-6057b2139/">Linkedin Profile: Linn Cohen</a><br>
