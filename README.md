@@ -20,7 +20,7 @@ We made an assistance platform for injured and lost animals. <h4>
 <ul>
 
   <a href="https://developer.android.com/studio"><li>Android Studio</li><a>
-  <a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><li>Java</li></a>
+  <a href="https://www.oracle.com/java/technologies/javase/javase-jdk8-downloads.html"><li>Java</li><a>
   </ul>
 
  <h1>Authros</h1>
