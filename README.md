@@ -5,7 +5,7 @@
 We made an assistance platform for injured and lost animals. <h4>
   <h4>We connected Google Maps API to render the map, each marker represents a live report that is waiting for volunteers and been uploaded from a random person in the street. </h4>
   
-  <h4>All the data are splited to 2 different databases, <a href="https://developer.android.com/training/data-storage/room">Local(Room) /<a>and Real Time(FireBase) Databases </h4>
+  <h4>All the data are splited to 2 different databases, <a href="https://developer.android.com/training/data-storage/room">Local(Room)</a> and Real Time(FireBase) Databases </h4>
 
 
 <img height="700" width="350" src=https://user-images.githubusercontent.com/66214295/114315519-ff958f00-9b07-11eb-8d9a-39f7a852ce05.jpeg> 
