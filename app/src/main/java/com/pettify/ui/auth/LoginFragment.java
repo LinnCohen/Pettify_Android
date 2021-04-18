@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,16 +33,25 @@ public class LoginFragment extends Fragment {
         loginButton.setOnClickListener(buttonView -> {
             TextView email = loginView.findViewById(R.id.login_email);
             TextView password = loginView.findViewById(R.id.login_password);
-            authViewModel.loginUser(email.getText().toString(), password.getText().toString(),
-                    isSuccess -> {
-                        if (isSuccess) {
-                            NavController navigation = Navigation.findNavController(loginView);
-                            navigation.navigateUp();
-                            navigation.navigate(R.id.nav_home);
-                        } else {
-                            loginView.findViewById(R.id.login_error_msg).setVisibility(View.VISIBLE);
-                        }
-                    });
+            if (TextUtils.isEmpty(email.getText()) || TextUtils.isEmpty(password.getText())) {
+                TextView loginError = loginView.findViewById(R.id.login_error_msg);
+                loginError.setText("Fill email and password!");
+                loginError.setVisibility(View.VISIBLE);
+            }
+            else {
+                authViewModel.loginUser(email.getText().toString(), password.getText().toString(),
+                        isSuccess -> {
+                            if (isSuccess) {
+                                NavController navigation = Navigation.findNavController(loginView);
+                                navigation.navigateUp();
+                                navigation.navigate(R.id.nav_home);
+                            } else {
+                                TextView loginError = loginView.findViewById(R.id.login_error_msg);
+                                loginError.setText("Failed to login");
+                                loginError.setVisibility(View.VISIBLE);                            }
+                        });
+            }
+
         });
 
         View noAccount = loginView.findViewById(R.id.noAccount_button);

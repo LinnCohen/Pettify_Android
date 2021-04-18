@@ -52,7 +52,6 @@ public class ReportModel {
                     for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
                         Report report = new Report();
                         report.fromMap(documentChange.getDocument().getData());
-                        Log.d("TAG", documentChange.getType().toString());
                         switch (documentChange.getType()) {
                             case ADDED:
                             case MODIFIED:

@@ -39,7 +39,6 @@ public class RegisterFragment extends Fragment {
         tvProgressLabel =  registerView.findViewById(R.id.accountTitle_textView);
         tvProgressLabel.setText(String.valueOf(progress));
         registerButton.setOnClickListener(buttonView -> {
-            pb.setVisibility(View.VISIBLE);
             TextView email = registerView.findViewById(R.id.register_user_email);
             TextView password = registerView.findViewById(R.id.register_user_password);
             TextView name = registerView.findViewById(R.id.register_user_name);
@@ -49,9 +48,17 @@ public class RegisterFragment extends Fragment {
             int currentProgress = seekBar.getProgress();
             user.setRadius(currentProgress);
             if (fieldWasNotProvided(email, password, name, phone)) {
-                pb.setVisibility(View.INVISIBLE);
                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.VISIBLE);
+            } else if (phone.getText().toString().matches("[0-9]+") == false) {
+                TextView error = registerView.findViewById(R.id.register_error_msg);
+                error.setText("phone number should contain digits only");
+                error.setVisibility(View.VISIBLE);
+            } else if (phone.getText().toString().length() != 10) {
+                TextView error = registerView.findViewById(R.id.register_error_msg);
+                error.setText("phone number should contain 10 digits");
+                error.setVisibility(View.VISIBLE);
             } else {
+                pb.setVisibility(View.VISIBLE);
                 registerView.findViewById(R.id.register_error_msg).setVisibility(View.INVISIBLE);
                 authViewModel.registerUser(user, password.getText().toString(), new Listener<Task<AuthResult>>() {
                     @Override
