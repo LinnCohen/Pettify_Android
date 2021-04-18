@@ -1,8 +1,10 @@
 package com.pettify.ui.report;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -29,6 +33,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.pettify.R;
@@ -63,7 +68,8 @@ public class CreateReportFragment extends Fragment {
     View view;
     ProgressBar submit_progress_bar;
     ProgressBar image_progress_bar;
-
+    private int STORAGE_PERMISSION_CODE = 2;
+    private Boolean hasStoragePermission;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -117,6 +123,19 @@ public class CreateReportFragment extends Fragment {
             });
         } else {
             image_progress_bar.setVisibility(View.GONE);
+        }
+
+
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED);
+        if (!hasPermission) { ActivityCompat.requestPermissions(this.getActivity(), new String[] {
+                android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        }
+
+        boolean hasPermissionWrite = (ContextCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
+                PackageManager.PERMISSION_GRANTED);
+        if (!hasPermissionWrite) { ActivityCompat.requestPermissions(this.getActivity(), new String[] {
+                android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
 
         report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
