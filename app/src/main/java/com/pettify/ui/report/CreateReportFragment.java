@@ -11,8 +11,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -44,6 +46,7 @@ import com.pettify.model.report.Report;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
 import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
@@ -68,7 +71,7 @@ public class CreateReportFragment extends Fragment {
     View view;
     ProgressBar submit_progress_bar;
     ProgressBar image_progress_bar;
-    private int STORAGE_PERMISSION_CODE = 2;
+    final int STORAGE_PERMISSION_CODE = 2;
     private Boolean hasStoragePermission;
 
     @Override
@@ -123,19 +126,6 @@ public class CreateReportFragment extends Fragment {
             });
         } else {
             image_progress_bar.setVisibility(View.GONE);
-        }
-
-
-        boolean hasPermission = (ContextCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED);
-        if (!hasPermission) { ActivityCompat.requestPermissions(this.getActivity(), new String[] {
-                android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
-        }
-
-        boolean hasPermissionWrite = (ContextCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED);
-        if (!hasPermissionWrite) { ActivityCompat.requestPermissions(this.getActivity(), new String[] {
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
         }
 
         report_type_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -255,24 +245,31 @@ public class CreateReportFragment extends Fragment {
     }
 
     private void uploadImage() {
-        final CharSequence[] options = { "Take Photo", "Choose from Gallery", "Cancel" };
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Choose your report picture");
-        builder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take Photo")) {
-                    Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(takePicture, 0);
-                } else if (options[item].equals("Choose from Gallery")) {
-                    Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    startActivityForResult(pickPhoto , 1);
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
+        boolean hasPermission = (ContextCompat.checkSelfPermission(this.getActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+
+        if (!hasPermission) {
+            ActivityCompat.requestPermissions(this.getActivity(), new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION_CODE);
+        } else {
+            CharSequence[] menu = new CharSequence[]{"Take Photo", "Choose from Gallery", "Cancel"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Choose your report picture");
+            Log.d("TAG", String.valueOf(menu.length));
+            builder.setItems(menu, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (menu[item].equals("Take Photo")) {
+                        Intent takePicture = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(takePicture, 0);
+                    } else if (menu[item].equals("Choose from Gallery")) {
+                        Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        startActivityForResult(pickPhoto , 1);
+                    } else if (menu[item].equals("Cancel")) {
+                        dialog.dismiss();
+                    }
                 }
-            }
-        });
-        builder.show();
+            });
+            builder.show();
+        }
     }
 
     @Override
