@@ -88,11 +88,30 @@ public class ReportModel {
                 @Override
                 protected void onPostExecute(String s) {
                     super.onPostExecute(s);
+                    cleanDeletedReport(listener);
                     if (listener != null) listener.onComplete();
                 }
             }.execute("");
         });
     }
+
+
+    private void cleanDeletedReport(EmptyListener listener) {
+        reportModelFireBase.getDeletedReportIds(data -> new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... strings) {
+                for (String id : data) {
+                    reportModelSql.deleteReport(new Report(id), () -> {
+                        if (listener != null) {
+                            listener.onComplete();
+                        }
+                    });
+                }
+                return "";
+            }
+        }.execute(""));
+    }
+
 
     public void addReport(final Report report, final EmptyListener listener) {
         reportModelFireBase.addReport(report, listener);

@@ -14,6 +14,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -23,10 +24,17 @@ import com.pettify.model.listeners.EmptyListener;
 import com.pettify.model.listeners.Listener;
 
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class ReportModelFireBase {
     private static final String REPORTS_COLLECTION = "reports";
+    private static final String DELETED_COLLECTION = "deleted";
+
     public static final ReportModelFireBase instance = new ReportModelFireBase();
     private  FirebaseFirestore db;
 
@@ -84,20 +92,35 @@ public class ReportModelFireBase {
     }
 
     public void deleteReport(String reportId, EmptyListener listener) {
-        db.collection(REPORTS_COLLECTION).document(reportId).delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (task.isSuccessful()) {
-                    if (listener != null) {
+        db.collection(REPORTS_COLLECTION).document(reportId).delete().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                Map<String,Object> deleted = new HashMap<>();
+                deleted.put("reportId", reportId);
+                db.collection(DELETED_COLLECTION).document(reportId).set(deleted).addOnCompleteListener(task1 -> {
+                    if (listener!=null){
                         listener.onComplete();
                     }
-                }
-                else {
-                    Log.w("TAG", "Failed to delete report", task.getException());
-                }
+                });
+            }
+            else {
+                Log.w("TAG", "Failed to delete report", task.getException());
             }
         });
     }
+
+    public void getDeletedReportIds(final Listener<Set<String>> listener) {
+        db.collection(DELETED_COLLECTION).get().addOnCompleteListener(task -> {
+            Set<String> deletedReportIds = new HashSet<>();
+            if (task.isSuccessful()){
+                for(QueryDocumentSnapshot doc : task.getResult()){
+                    String deleted = (String) doc.getData().get("reportId");
+                    deletedReportIds.add(deleted);
+                }
+            }
+            listener.onComplete(deletedReportIds);
+        });
+    }
+
 
     public void uploadImage(Bitmap imageBmp, String name, final Listener<String> listener){
         FirebaseStorage storage = FirebaseStorage.getInstance();

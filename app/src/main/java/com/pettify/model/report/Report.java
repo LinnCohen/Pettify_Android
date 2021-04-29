@@ -50,6 +50,10 @@ public class Report implements Serializable {
     public Report() {
     }
 
+    public Report(String id) {
+        this.id = id;
+    }
+
     public Report(@NonNull String id, String description) {
         this.id = id;
         this.description = description;
